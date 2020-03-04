@@ -30,7 +30,7 @@ namespace GiftWrapping
                     var matrix = MatrixHelper.CreateMatrix(vertexPoints.ToArray());
                     //normal = MatrixHelper.CalculateNormal(matrix);
                     var vector = new Point(dimention);
-                    //nextNormal = LinearEquations.GaussWithChoiceSolveSystem(matrix, vector);
+                    //nextNormal = LinearEquationsSolver.GaussWithChoiceSolveSystem(matrix, vector);
                     var cosNormal = VectorHelper.GetCosVectors(nextNormal, mainNormal);
                     if (cosNormal > maxValue)
                     {

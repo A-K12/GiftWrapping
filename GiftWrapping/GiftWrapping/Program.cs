@@ -33,20 +33,20 @@ namespace GiftWrapping
             var points6 = new double[3, 3]
             {
                 {1, 2, 3},
-                {1, 3, 4 },
-                {3, 5, 7}
+                {3, 5, 7},
+                {1, 3, 4 }
             };
             var matrix = new Matrix(points6);
             var vector3 = new Vector(new double[3] { 3, 0, 1 });
             var expect = new Vector(new double[3] { -4, -13, 11 });
 
-           // var result = LinearEquations.GaussWithChoiceSolveSystem(matrix, vector);
+           // var result = LinearEquationsSolver.GaussWithChoiceSolveSystem(matrix, vector);
 
             var faceFinder = new FaceFinder();
 
-            var arra = LinearEquations.GaussWithChoiceSolveSystem(matrix, vector3);
+            var arra = LinearEquationsSolver.GaussWithChoiceSolveSystem(matrix, vector3);
           // var arra = faceFinder.FindFacePoints(points4);
-            //var arra = LinearEquations.Calculate(points);
+            //var arra = LinearEquationsSolver.Calculate(points);
             Console.ReadLine();
         }
     }

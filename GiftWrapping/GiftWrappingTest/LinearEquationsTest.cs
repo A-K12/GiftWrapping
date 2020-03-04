@@ -21,7 +21,7 @@ namespace GiftWrappingTest
             var vector = new Vector(new double[3]{ 3, 0, 1 });
             var expect = new Vector(new double[3]{ -4, -13, 11 });
 
-            var result = LinearEquations.GaussWithChoiceSolveSystem(matrix, vector);
+            var result = LinearEquationsSolver.GaussWithChoiceSolveSystem(matrix, vector);
 
             Assert.AreEqual(expect, result);
         }
@@ -38,7 +38,7 @@ namespace GiftWrappingTest
             var vector = new Vector(new double[2] { 3, 0});
             var expect = new Vector(new double[3] { -4, -13, 11 });
 
-            var result = LinearEquations.GaussWithChoiceSolveSystem(matrix, vector);
+            var result = LinearEquationsSolver.GaussWithChoiceSolveSystem(matrix, vector);
 
             Assert.AreEqual(expect, result);
             //Assert.AreEqual(expect[1], result[1]);
