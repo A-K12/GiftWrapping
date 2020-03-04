@@ -6,56 +6,51 @@ using GiftWrapping.Structures;
 
 namespace GiftWrapping
 {
-    public class Matrix
+    public class MatrixHelper
     {
-        public static double[] CalculateNormal(double[][] matrix)
-        {
-            var dimension = matrix[0].Length;
-            var normal = new double[dimension];
-            for (int i = 0; i <dimension; i++)
-            {
-                var minor = GetMinorMatrix(matrix, 0, i);
-                normal[i] = GetDeterminant(minor);
-            }
+        //public static double[] CalculateNormal(double[][] matrix)
+        //{
+        //    var dimension = matrix[0].Length;
+        //    var normal = new double[dimension];
+        //    for (int i = 0; i <dimension; i++)
+        //    {
+        //        var minor = GetMinorMatrix(matrix, 0, i);
+        //        normal[i] = GetDeterminant(minor);
+        //    }
 
-            return PointHelper.GetNormalizationVector(normal);
-        }
+        //    return PointHelper.GetNormalizationVector(normal);
+        //}
 
 
 
-        public static double[][] CreateMatrix(IPoint[] points)
+        public static Point[] CreateMatrix(IPoint[] points)
         {
             if (points.Length < 2)
             {
                 throw new InvalidOperationException("Sequence contains less than two elements");
             }
 
-            var dimension = points[0].GetDimension();
-            var vertexes = new List<double[]>();
+            var dimension = points[0].Dimension();
+            var vectors = new List<Point>();
             for (int i = 1; i < points.Length; i++)
             {
-                var vertex = PointHelper.CreateVertex(points[i], points[0]);
-                vertexes.Add(vertex);
+                var vector = VectorHelper.CreateVector(points[i], points[0]);
+                vectors.Add(vector);
             }
 
-            var matrix = CreateIdentityMatrix(dimension, dimension);
+            var matrix = new Point[dimension -1];
 
-            for (int i = 0; i < vertexes.Count; i++)
+            for (int i = 0; i < vectors.Count; i++)
             {
-                matrix[i + 1] = vertexes[i];
+                matrix[i] = vectors[i];
             }
 
-            return matrix;
-        }
-        public static double[][] CreateIdentityMatrix(int row, int col)
-        {
-            var matrix = new double[row][];
-            for (int i = 0; i < row; i++)
+            int index = dimension-1;
+            for (int i = matrix.Length-1; i > vectors.Count -1 ; i--)
             {
-                matrix[i]= new double[col];
-                matrix[i][i] = 1;
+                matrix[i] = new Point(dimension);
+                matrix[i][index--] = 1.0;
             }
-
             return matrix;
         }
 

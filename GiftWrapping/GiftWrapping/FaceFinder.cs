@@ -11,9 +11,9 @@ namespace GiftWrapping
         {
             var facePoints =new List<IPoint>(); 
             var pointsList = new List<IPoint>(points);
-            var dimention = points[0].GetDimension();
-            var vector = new double[dimention];
-            vector[0] = 1;
+            var dimention = points[0].Dimension();
+            var mainNormal = new Point(dimention);
+            mainNormal[0] = 1;
             var firstPoint = FindStartingPoint(points);
             facePoints.Add(firstPoint);
             pointsList.Remove(firstPoint);
@@ -21,14 +21,17 @@ namespace GiftWrapping
             {
                 int index = 0;
                 double maxValue = 0 ;
-                double[] normal = new double[dimention];
+               
+                var nextNormal  =new Point(dimention);
                 for (int j = 0; j < pointsList.Count; j++)
                 {
                     var vertexPoints = new List<IPoint>(facePoints);
                     vertexPoints.Add(pointsList[j]);
-                    var matrix = Matrix.CreateMatrix(vertexPoints.ToArray());
-                    normal = Matrix.CalculateNormal(matrix);
-                    var cosNormal = PointHelper.GetCosVectors(vector, normal);
+                    var matrix = MatrixHelper.CreateMatrix(vertexPoints.ToArray());
+                    //normal = MatrixHelper.CalculateNormal(matrix);
+                    var vector = new Point(dimention);
+                    //nextNormal = LinearEquations.GaussWithChoiceSolveSystem(matrix, vector);
+                    var cosNormal = VectorHelper.GetCosVectors(nextNormal, mainNormal);
                     if (cosNormal > maxValue)
                     {
                         maxValue = cosNormal;
@@ -37,7 +40,7 @@ namespace GiftWrapping
                 }
                 facePoints.Add(pointsList[index]);
                 pointsList.RemoveAt(index);
-                vector = normal;
+                mainNormal = nextNormal;
             }
 
             return facePoints.ToArray();

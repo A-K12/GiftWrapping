@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace GiftWrapping.Structures
 {
-    public interface IPoint: IEquatable<IPoint>
+    public interface IPoint:IComparable<IPoint>
     {
         double this[int index]
         {
@@ -11,7 +11,7 @@ namespace GiftWrapping.Structures
             set;
         }
 
-        int GetDimension();
+        int Dimension();
 
         double[] ToArray();
     }

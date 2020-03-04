@@ -40,7 +40,7 @@ namespace GiftWrappingTest
             var exceptDimension = 555;
             var point = new Point(new double[exceptDimension]);
 
-            var resultingDimension = point.GetDimension();
+            var resultingDimension = point.Dimension();
 
             Assert.AreEqual(exceptDimension, resultingDimension);
         }
