@@ -28,7 +28,6 @@ namespace GiftWrapping
                 equations = ChangeMatrix(equations, i);
             }
             equations.SetVariable(equations.Cols-1, 1.0);
-            
 
             return FindVariables(equations);
         }

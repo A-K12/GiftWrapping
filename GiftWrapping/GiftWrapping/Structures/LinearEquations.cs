@@ -23,9 +23,9 @@ namespace GiftWrapping.Structures
         {
             matrix = leftSide;
             vector = rightSide;
-            Rows = leftSide.Cols;
+            Rows = leftSide.Rows;
             Cols = leftSide.Cols;
-            variables = new double[Rows];
+            variables = new double[Cols];
             rowIndexes = GetIndexArray(leftSide.Rows);
             colsIndexes = GetIndexArray(leftSide.Cols);
         }
@@ -73,18 +73,18 @@ namespace GiftWrapping.Structures
 
         public void SetVariable(int index, double value)
         {
-            variables[rowIndexes[index]] = value;
+            variables[colsIndexes[index]] = value;
         }
 
         public double GetVariable(int index)
         {
-            return variables[rowIndexes[index]];
+            return variables[colsIndexes[index]];
         }
 
         public Vector GetVariables()
         {
-            var sortVar = new double[Rows];
-            for (int i = 0; i < Rows; ++i)
+            var sortVar = new double[Cols];
+            for (int i = 0; i < Cols; ++i)
                 sortVar[i] = variables[colsIndexes[i]];
 
             return new Vector(sortVar);
