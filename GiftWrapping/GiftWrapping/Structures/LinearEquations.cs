@@ -5,6 +5,7 @@ namespace GiftWrapping.Structures
     public class LinearEquations
     {
         private int[] rowIndexes, colsIndexes;
+        private bool[] colsMap;
         private double[,] matrix;
         private double[] vector;
         private double[] variables;
@@ -81,13 +82,14 @@ namespace GiftWrapping.Structures
             return variables[colsIndexes[index]];
         }
 
+
         public Vector GetVariables()
         {
-            var sortVar = new double[Cols];
-            for (int i = 0; i < Cols; ++i)
-                sortVar[i] = variables[colsIndexes[i]];
+            //var sortVar = new double[Cols];
+            //for (int i = 0; i < Cols; ++i)
+            //    sortVar[i] = variables[colsIndexes[i]];
 
-            return new Vector(sortVar);
+            return new Vector(variables);
         }
 
         public void SwapRows(int index1, int index2)

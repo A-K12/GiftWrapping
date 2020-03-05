@@ -27,8 +27,11 @@ namespace GiftWrapping
                 Show(equations,"После свайпа");
                 equations = ChangeMatrix(equations, i);
             }
-            equations.SetVariable(equations.Cols-1, 1.0);
 
+            if (matrix.Rows < matrix.Cols)
+            {
+                equations.SetVariable(equations.Cols - 1, 1.0);
+            }
             return FindVariables(equations);
         }
 
@@ -53,6 +56,7 @@ namespace GiftWrapping
         {
             for (int i = equations.Rows - 1; i >= 0; i--)
             {
+                if(equations.GetVariable(i) > _eps) continue;
                 var x = equations[i];
                 for (int j = equations.Cols-1; j > i; --j)
                 {

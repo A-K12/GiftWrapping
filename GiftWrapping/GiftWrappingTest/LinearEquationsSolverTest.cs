@@ -38,7 +38,7 @@ namespace GiftWrappingTest
             };
             var matrix = new Matrix(points);
             var vector = new Vector(new double[2] { 3, 0});
-            var expect = new Vector(new double[3] { -4, -11, 1 });
+            var expect = new Vector(new double[3] {-11, 1, 4});
             var solver = new LinearEquationsSolver();
 
             var result = solver.GaussWithChoiceSolveSystem(matrix, vector);
