@@ -9,81 +9,67 @@ using GiftWrapping.Structures;
 
 namespace GiftWrapping
 {
-    public static class LinearEquationsSolver
+    public class LinearEquationsSolver
     {
         static private double _eps = 1e-8;
 
-        public static Vector GaussWithChoiceSolveSystem(Matrix matrix, Vector vector)
+        public Vector GaussWithChoiceSolveSystem(Matrix matrix, Vector vector)
         {
             var equations = new LinearEquations(matrix, vector); ;
-            var dim = matrix.Cols;
             
             for (int i = 0; i < equations.Rows; i++)
             {
-                var majorColumn = i;
-                var majorRow = i;
-                for (int j = i; j < equations.Rows; j++)
-                {
-                    for (int k = 0; k < equations.Cols; k++)
-                    {
-                        if (Math.Abs(equations[j,k]) > 
-                            Math.Abs(equations[majorRow,majorColumn]))
-                        {
-                            majorColumn = k;
-                            majorRow = j;
-                        }
-                    }
-                }
+                var majorCoord = equations.FindCoordinatesMaxItem(i, i);
                 Show(equations, "Начальная матрица");
-                Console.Out.WriteLine("Максимальный вектор = {0}", equations[majorRow,majorColumn]);
-                Console.Out.WriteLine(" Индексы = Строка {0}, Колонка{1}", majorRow,majorColumn);
-
-                equations.SwapRows(i, majorRow);
-                Show(equations, "После свайпа строк");
-                
-                equations.SwapColumns(i, majorColumn);
-                Show(equations,"После свайпа столбцов");
-
-                Show(equations, "После свайпа");
-                var index =i;
-                for (int j = i + 1; j < matrix.Rows; j++)
-                {
-                    Console.Out.WriteLine("Line = {0}", j);
-                    var multiplier = equations[j,i] / equations[index,i];
-                    Console.Out.WriteLine("multiplier = {0}", multiplier);
-                    equations[j,i] = 0;
-                    for (int k = i + 1; k < dim; k++)
-                    {
-                        equations[j,k] -= multiplier * equations[index,k];
-                    }
-
-                    equations[j] -= multiplier * equations[index];
-                    Show(equations, "После умножения");
-                    
-                }
+                Console.Out.WriteLine("Максимальный вектор = {0}", equations[majorCoord.Item1,majorCoord.Item2]);
+                equations.SwapRows(i, majorCoord.Item1);
+                equations.SwapColumns(i, majorCoord.Item2);
+                Show(equations,"После свайпа");
+                equations = ChangeMatrix(equations, i);
             }
-            equations.SetVariable(dim-1, 1.0);
-            for (int i = matrix.Rows-1; i >= 0; i--)
-            {   
-                var x = equations[i];
-                for (int j = dim - 1; j > i; --j)
-                {
-                    x -= equations[i,j] * equations.GetVariable(j);
-                }
-                if (Math.Abs(equations[i,i]) > _eps)
-                {
-                    x /= equations[i,i];
-                }
-                equations.SetVariable(i,x);
-            }
+            equations.SetVariable(equations.Cols-1, 1.0);
             
+
+            return FindVariables(equations);
+        }
+
+
+        private LinearEquations ChangeMatrix(LinearEquations equations,int startSubMatrix)
+        {
+            for (int j = startSubMatrix + 1; j < equations.Rows; j++)
+            {
+                var multiplier = equations[j, startSubMatrix] / equations[startSubMatrix, startSubMatrix];
+                equations[j, startSubMatrix] = 0;
+                for (int k = startSubMatrix+ 1; k < equations.Cols; k++)
+                {
+                    equations[j, k] -= multiplier * equations[startSubMatrix, k];
+                }
+
+                equations[j] -= multiplier * equations[startSubMatrix];
+            }
+
+            return equations;
+        }
+        private Vector FindVariables(LinearEquations equations)
+        {
+            for (int i = equations.Rows - 1; i >= 0; i--)
+            {
+                var x = equations[i];
+                for (int j = equations.Cols-1; j > i; --j)
+                {
+                    x -= equations[i, j] * equations.GetVariable(j);
+                }
+                if (Math.Abs(equations[i, i]) > _eps)
+                {
+                    x /= equations[i, i];
+                }
+                equations.SetVariable(i, x);
+            }
+
             return equations.GetVariables();
         }
 
-      
-
-
-        private static void Show(LinearEquations equations, string text)
+        private void Show(LinearEquations equations, string text)
         {
             Console.Out.WriteLine(text);
             Console.Out.WriteLine("---------------");
@@ -99,40 +85,5 @@ namespace GiftWrapping
             }
         }
 
-
-        private static void SwapRows(ref double[,] matrix, int indexA, int indexB)
-        {
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                var temp = matrix[indexA, i];
-                matrix[indexA, i] = matrix[indexB, i];
-                matrix[indexB, i] = temp;
-            }
-            
-        }
-
-        private static void SwapColumn(ref double[,] matrix, int indexA, int indexB)
-        {
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                var temp = matrix[i,indexA];
-                matrix[i, indexA] = matrix[i, indexB];
-                matrix[i, indexB] = temp;
-            }
-        }
-
-        private static void SwapCoordinates(ref double[] vector, int indexA, int indexB)
-        {
-            var temp = vector[indexA];
-            vector[indexA] = vector[indexB];
-            vector[indexB] = temp;
-        }
-
-        private static void SwapCoordinates(ref int[] vector, int indexA, int indexB)
-        {
-            var temp = vector[indexA];
-            vector[indexA] = vector[indexB];
-            vector[indexB] = temp;
-        }
     }
 }

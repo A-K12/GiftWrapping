@@ -41,6 +41,25 @@ namespace GiftWrapping.Structures
             return array;
         }
 
+        public (int, int) FindCoordinatesMaxItem(int rowSubMatrix = 0, int colSubMatrix = 0)
+        {
+            var majorColumn = colSubMatrix;
+            var majorRow = rowSubMatrix;
+            for (int j = rowSubMatrix; j < Rows; j++)
+            {
+                for (int k = colSubMatrix; k < Cols; k++)
+                {
+                    if (Math.Abs(this[j, k]) >
+                        Math.Abs(this[majorRow, majorColumn]))
+                    {
+                        majorColumn = k;
+                        majorRow = j;
+                    }
+                }
+            }
+
+            return (majorRow, majorColumn);
+        }
         public double this[int i]
         {
             set => vector[rowIndexes[i]] = value;
