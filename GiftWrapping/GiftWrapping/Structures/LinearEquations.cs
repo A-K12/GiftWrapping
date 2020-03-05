@@ -5,7 +5,6 @@ namespace GiftWrapping.Structures
     public class LinearEquations
     {
         private int[] rowIndexes, colsIndexes;
-        private bool[] colsMap;
         private double[,] matrix;
         private double[] vector;
         private double[] variables;
@@ -61,23 +60,23 @@ namespace GiftWrapping.Structures
 
             return (majorRow, majorColumn);
         }
-        public double this[int i]
+        public double this[Index i]
         {
             set => vector[rowIndexes[i]] = value;
             get => vector[rowIndexes[i]];
         }
-        public double this[int i, int j]
+        public double this[Index i, Index j]
         {
             set => matrix[rowIndexes[i], colsIndexes[j]] = value;
             get => matrix[rowIndexes[i], colsIndexes[j]];
         }
 
-        public void SetVariable(int index, double value)
+        public void SetVariable(Index index, double value)
         {
             variables[colsIndexes[index]] = value;
         }
 
-        public double GetVariable(int index)
+        public double GetVariable(Index index)
         {
             return variables[colsIndexes[index]];
         }
@@ -85,23 +84,24 @@ namespace GiftWrapping.Structures
 
         public Vector GetVariables()
         {
-            //var sortVar = new double[Cols];
-            //for (int i = 0; i < Cols; ++i)
-            //    sortVar[i] = variables[colsIndexes[i]];
-
-            return new Vector(variables);
+            var sortVariables = new double[Cols];
+            for (int i = 0; i < Cols; i++)
+            {
+                sortVariables[i] = variables[colsIndexes[i]];
+            }
+           return new Vector(variables);
         }
 
-        public void SwapRows(int index1, int index2)
+        public void SwapRows(Index index1, Index index2)
         {
             SwapCoordinates(ref rowIndexes, index1, index2);
         }
 
-        public void SwapColumns(int index1, int index2)
+        public void SwapColumns(Index index1, Index index2)
         {
             SwapCoordinates(ref colsIndexes, index1, index2);
         }
-        private void SwapCoordinates(ref int[] vector, int index1, int index2)
+        private void SwapCoordinates(ref int[] vector, Index index1, Index index2)
         {
             var temp = vector[index1];
             vector[index1] = vector[index2];

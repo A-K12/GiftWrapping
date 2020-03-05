@@ -27,15 +27,22 @@ namespace GiftWrapping
                 Show(equations,"После свайпа");
                 equations = ChangeMatrix(equations, i);
             }
-
             if (matrix.Rows < matrix.Cols)
             {
-                equations.SetVariable(equations.Cols - 1, 1.0);
+                FillFreeVariables(equations);
             }
+            
             return FindVariables(equations);
         }
 
-
+        private void FillFreeVariables(LinearEquations equations)
+        {
+            var numberFreedomVariables = equations.Cols - equations.Rows;
+            for (int i = 1; i < numberFreedomVariables + 1; i++)
+            {
+                equations.SetVariable(^i, 1.0); 
+            }
+        }
         private LinearEquations ChangeMatrix(LinearEquations equations,int startSubMatrix)
         {
             for (int j = startSubMatrix + 1; j < equations.Rows; j++)
@@ -56,7 +63,7 @@ namespace GiftWrapping
         {
             for (int i = equations.Rows - 1; i >= 0; i--)
             {
-                if(equations.GetVariable(i) > _eps) continue;
+              //  if(equations.GetVariable(i) > _eps) continue;
                 var x = equations[i];
                 for (int j = equations.Cols-1; j > i; --j)
                 {
@@ -65,6 +72,10 @@ namespace GiftWrapping
                 if (Math.Abs(equations[i, i]) > _eps)
                 {
                     x /= equations[i, i];
+                }
+                else
+                {
+                    throw new InvalidOperationException();
                 }
                 equations.SetVariable(i, x);
             }
@@ -85,6 +96,11 @@ namespace GiftWrapping
                 }
                 Console.Out.Write(" | "+ equations[i]);
                 Console.Out.WriteLine("");
+            }
+            Console.Out.WriteLine("_______________________");
+            for (int j = 0; j < equations.Cols; j++)
+            {
+                Console.Out.Write("{0:0.###} ", equations.GetVariable(j));
             }
         }
 
