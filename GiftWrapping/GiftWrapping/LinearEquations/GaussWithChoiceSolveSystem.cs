@@ -7,8 +7,6 @@ namespace GiftWrapping.LinearEquations
 {
     public class GaussWithChoiceSolveSystem
     {
-        static private double _eps = 1e-8;
-
         public Vector GetRandomAnswer(Matrix matrix, Vector vector)
         {
             var equations = new LinearEquations(matrix, vector); ;
@@ -87,7 +85,7 @@ namespace GiftWrapping.LinearEquations
                     x -= equations.Matrix[i, j] * equations.Variables[j];
                 }
 
-                if (Math.Abs(equations.Matrix[i, i]) > _eps)
+                if (Tools.NE(Math.Abs(equations.Matrix[i, i])))
                 {
                     x /= equations.Matrix[i, i];
                 }
