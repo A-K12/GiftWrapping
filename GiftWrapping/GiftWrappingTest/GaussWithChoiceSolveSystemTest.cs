@@ -2,52 +2,31 @@
 using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace GiftWrappingTest
 {
     [TestFixture]
     public class GaussWithChoiceSolveSystemTest
     {
-        [Test]
-        public void GetRandomAnswer_DeterminateMatrix_ReturnVector()
+       
+        private static readonly object[] SetLinearEquationsSystems =
         {
-            var points = new double[3,3]
-            {
-                {1, 2, 3}, 
-                {3, 5, 7},
-                {1, 3, 4}
-            };
-            var matrix = new Matrix(points);
-            var vector = new Vector(new double[3]{ 3, 0, 1 });
-            var expect = new Vector(new double[3]{ -4, -13, 11 });
-            var solver = new GaussWithChoiceSolveSystem();
+             new object[] {new Matrix(2, 3, new double[] {1, 2, 3, 3, 5, 7}), new Vector(new double[] {3, 0})}
+        };
 
-
-            var result = solver.GetRandomAnswer(matrix, vector);
-
-            Assert.AreEqual(expect, result);
-        }
-
-        [Test]
-        public void GetRandomAnswer_AnyMatrix_ReturnVector() //Matrix matrix, Vector vector
+        [Test, TestCaseSource(nameof(SetLinearEquationsSystems))]
+        public void GetRandomAnswer_AnyMatrix_ReturnVector(Matrix matrix, Vector vector)
         {
-            var points = new double[2, 3]
-            {
-                {1, 2, 3},
-                {3, 5, 7}
-            };
-            var matrix = new Matrix(points);
-            var vector = new Vector(new double[2] { 3, 0});
-           // var expect = new Vector(new double[3] {-11, 1, 4});
             var solver = new GaussWithChoiceSolveSystem();
 
             var result = solver.GetRandomAnswer(matrix, vector);
-            var rigthSide = CalculateRightSide(matrix, result);
+            var rightSide = CalculateRightSide(matrix, result);
 
-            Assert.AreEqual(vector, rigthSide);
+            Assert.AreEqual(vector, rightSide);
         }
 
-
+ 
         private Vector CalculateRightSide(Matrix matrix, Vector variables)
         {
             var rigtSide = new double[matrix.Rows];
@@ -60,6 +39,26 @@ namespace GiftWrappingTest
             }
 
             return new Vector(rigtSide);
+        }
+
+        [Test]
+        public void GetRandomAnswer_DeterminateMatrix_ReturnVector()
+        {
+            var points = new double[3, 3]
+            {
+                {1, 2, 3},
+                {3, 5, 7},
+                {1, 3, 4}
+            };
+            var matrix = new Matrix(points);
+            var vector = new Vector(new double[3] { 3, 0, 1 });
+            var expect = new Vector(new double[3] { -4, -13, 11 });
+            var solver = new GaussWithChoiceSolveSystem();
+
+
+            var result = solver.GetRandomAnswer(matrix, vector);
+
+            Assert.AreEqual(expect, result);
         }
     }
 }
