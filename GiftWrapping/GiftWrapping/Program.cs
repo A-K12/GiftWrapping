@@ -1,4 +1,5 @@
 ﻿using System;
+using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 
 namespace GiftWrapping
@@ -19,9 +20,9 @@ namespace GiftWrapping
             var expect = new Vector(new double[3] { -4, -13, 11 });
 
 
-            var solver = new LinearEquationsSolver();
+            var solver = new GaussWithChoiceSolveSystem();
 
-            var arra = solver.GaussWithChoiceSolveSystem(matrix, vector3);
+            var arra = solver.GetRandomAnswer(matrix, vector3);
 
             Console.ReadLine();
         }
