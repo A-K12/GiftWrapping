@@ -5,6 +5,6 @@
         IPolyhedron[] Edges { get; set; }
         int Dim { get; set; }
 
-        IPoint[] Boundary { get; set; }
+        Point[] Boundary { get; set; }
     }
 }

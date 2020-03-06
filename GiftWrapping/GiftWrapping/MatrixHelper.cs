@@ -8,37 +8,37 @@ namespace GiftWrapping
 {
     public class MatrixHelper
     {
-        //public static double[] CalculateNormal(double[][] matrix)
-        //{
-        //    var dimension = matrix[0].Length;
-        //    var normal = new double[dimension];
-        //    for (int i = 0; i <dimension; i++)
-        //    {
-        //        var minor = GetMinorMatrix(matrix, 0, i);
-        //        normal[i] = GetDeterminant(minor);
-        //    }
-
-        //    return PointHelper.GetNormalizationVector(normal);
-        //}
-
-
-
-        public static Point[] CreateMatrix(IPoint[] points)
+        public static double[] CalculateNormal(double[][] matrix)
         {
-            if (points.Length < 2)
+            var dimension = matrix[0].Length;
+            var normal = new double[dimension];
+            for (int i = 0; i <dimension; i++)
+            {
+                var minor = GetMinorMatrix(matrix, 0, i);
+                normal[i] = GetDeterminant(minor);
+            }
+
+            return new Vector(normal).Normalize();
+        }
+
+
+
+        public static Vector[] CreateMatrix(Vector[] Vectors)
+        {
+            if (Vectors.Length < 2)
             {
                 throw new InvalidOperationException("Sequence contains less than two elements");
             }
 
-            var dimension = points[0].Dimension();
-            var vectors = new List<Point>();
-            for (int i = 1; i < points.Length; i++)
+            var dimension = Vectors[0].Dim;
+            var vectors = new List<Vector>();
+            for (int i = 1; i < Vectors.Length; i++)
             {
-                var vector = VectorHelper.CreateVector(points[i], points[0]);
+                var vector = VectorHelper.CreateVector(Vectors[i], Vectors[0]);
                 vectors.Add(vector);
             }
 
-            var matrix = new Point[dimension -1];
+            var matrix = new Vector[dimension -1];
 
             for (int i = 0; i < vectors.Count; i++)
             {
@@ -48,8 +48,8 @@ namespace GiftWrapping
             int index = dimension-1;
             for (int i = matrix.Length-1; i > vectors.Count -1 ; i--)
             {
-                matrix[i] = new Point(dimension);
-                matrix[i][index--] = 1.0;
+                matrix[i] = new Vector(dimension); 
+                //matrix[i][index--] = 1.0;
             }
             return matrix;
         }

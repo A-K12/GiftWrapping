@@ -33,7 +33,7 @@ namespace GiftWrapping.LinearEquations
             for (int i = 0; i < equations.Matrix.Rows; i++)
             {
 
-                for (int j = 0; j < equations.Matrix.Cols; j++)
+                for (int j = 0; j < equations.Matrix.Cols; j++) 
                 {
                     Console.Out.Write("{0:0.###} ", equations.Matrix[i, j]);
                 }

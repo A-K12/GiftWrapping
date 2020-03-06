@@ -9,23 +9,23 @@ namespace GiftWrappingTest
     public class FaceFinderTest
     {
         [Test]
-        public void test_WhenCall_GetMinimalPoint()
+        public void test_WhenCall_GetMinimalVector()
         {
-            var points = new Point[4] {
-                new Point(1, 1,0),
-                new Point(6, 1,0),
-                new Point(3,3,0),
-                new Point(3,3,6)
+            var Vectors = new Vector[4] {
+                new Vector(new double[]{1, 1,0 }),
+                new Vector(new double[]{6, 1,0}),
+                new Vector(new double[]{3,3,0}),
+                new Vector(new double[]{3,3,6})
             };
-            var expect = new Point[3] {
-                new Point(1, 1,0),
-                new Point(3,3,0),
-                new Point(3,3,6)
+            var expect = new Vector[3] {
+                new Vector(new double[]{1, 1,0}),
+                new Vector(new double[]{3,3,0}),
+                new Vector(new double[]{3,3,6})
             };
 
             var faceFinder = new FaceFinder();
 
-            var result = faceFinder.FindFacePoints(points);
+            var result = faceFinder.FindFacePoints(Vectors);
 
             Assert.AreEqual(expect, result);
             //Assert.AreEqual(expect[1], result[1]);
@@ -34,27 +34,27 @@ namespace GiftWrappingTest
         }
 
         [Test]
-        public void FindStartingPoint_WhenCall_GetMinimalPoint()
+        public void FindStartingVector_WhenCall_GetMinimalVector()
         {
-            var points = new Point[2] {
-                new Point(1, 5), 
-                new Point(2, 2)};
-            var faceFinder = new FaceFinder();
+            //var Vectors = new Vector[2] {
+            //    new Vector(1, 5), 
+            //    new Vector(2, 2)};
+            //var faceFinder = new FaceFinder();
 
-            var result = faceFinder.FindStartingPoint(points);
+            //var result = faceFinder.FindFacePoints(Vectors);
 
-            Assert.AreSame(points[0], result);
+            //Assert.AreSame(Vectors[0], result);
         }
 
         [Test]
-        public void FindStartingPoint_EmptyArray_ThrowsException()
+        public void FindStartingVector_EmptyArray_ThrowsException()
         {
-            var points = new Point[0];
+            var Vectors = new Vector[0];
             var faceFinder = new FaceFinder();
 
             var ex = Assert.Catch<Exception>(() =>
             {
-                var i = faceFinder.FindStartingPoint(points);
+                var i = faceFinder.FindFacePoints(Vectors);
             });
 
             StringAssert.Contains("Sequence contains no elements", ex.Message);

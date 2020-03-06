@@ -22,17 +22,6 @@ namespace GiftWrappingTest
             StringAssert.Contains("Index was outside the bounds of the array", ex.Message);
         }
 
-        [Test]
-        public void Set_CorrectIndex_ReturnInt()
-        {
-            var point = new Point(new double[3]);
-            var exceptNumber = 555; 
-            point[0] = exceptNumber;
-
-            var resultingNumber = point[0];
-
-            Assert.AreEqual(exceptNumber, resultingNumber);
-        }
 
         [Test]
         public void GetDimension_WhenCall_ReturnDimension()
@@ -40,7 +29,7 @@ namespace GiftWrappingTest
             var exceptDimension = 555;
             var point = new Point(new double[exceptDimension]);
 
-            var resultingDimension = point.Dimension();
+            var resultingDimension = point.Dim;
 
             Assert.AreEqual(exceptDimension, resultingDimension);
         }

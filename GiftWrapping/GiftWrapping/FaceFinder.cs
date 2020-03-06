@@ -7,29 +7,28 @@ namespace GiftWrapping
 {
     public class FaceFinder
     {
-        public IPoint[] FindFacePoints(IPoint[] points)
+        public Vector[] FindFacePoints(Vector[] points)
         {
-            var facePoints =new List<IPoint>(); 
-            var pointsList = new List<IPoint>(points);
-            var dimention = points[0].Dimension();
-            var mainNormal = new Point(dimention);
-            mainNormal[0] = 1;
+            var facePoints = new List<Vector>();
+            var pointsList = new List<Vector>(points);
+            var dim = points[0].Dim;
+            var mainNormal = new Vector(dim);
             var firstPoint = FindStartingPoint(points);
             facePoints.Add(firstPoint);
             pointsList.Remove(firstPoint);
-            for (int i = 0; i < dimention-1; i++)
+            for (int i = 0; i < dim - 1; i++)
             {
                 int index = 0;
-                double maxValue = 0 ;
-               
-                var nextNormal  =new Point(dimention);
+                double maxValue = 0;
+
+                var nextNormal = new Vector(dim);
                 for (int j = 0; j < pointsList.Count; j++)
                 {
-                    var vertexPoints = new List<IPoint>(facePoints);
+                    var vertexPoints = new List<Vector>(facePoints);
                     vertexPoints.Add(pointsList[j]);
                     var matrix = MatrixHelper.CreateMatrix(vertexPoints.ToArray());
                     //normal = MatrixHelper.CalculateNormal(matrix);
-                    var vector = new Point(dimention);
+                    var vector = new Point(dim);
                     //nextNormal = GaussWithChoiceSolveSystem.GetRandomAnswer(matrix, vector);
                     var cosNormal = VectorHelper.GetCosVectors(nextNormal, mainNormal);
                     if (cosNormal > maxValue)
@@ -46,7 +45,7 @@ namespace GiftWrapping
             return facePoints.ToArray();
         }
 
-        public IPoint FindStartingPoint(IPoint[] points)
+        public Vector FindStartingPoint(Vector[] points)
         {
             if (points.Length == 0)
             {
@@ -56,7 +55,7 @@ namespace GiftWrapping
             return FindFirstPoint(points);
         }
 
-        private IPoint FindFirstPoint(IPoint[] points)
+        private Vector FindFirstPoint(Vector[] points)
         {
             var startPoint = points[0];
             foreach (var point in points)
