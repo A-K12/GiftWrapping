@@ -42,7 +42,7 @@ namespace GiftWrapping.LinearEquations
             indexVector[index2] = temp;
         }
 
-        public (int, int) FindMaxAbsItem(int rowSubMatrix = 0, int colSubMatrix = 0)
+        public (int row, int col) FindMaxAbsItem(int rowSubMatrix = 0, int colSubMatrix = 0)
         {
             var majorColumn = colSubMatrix;
             var majorRow = rowSubMatrix;

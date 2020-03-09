@@ -14,8 +14,8 @@ namespace GiftWrapping.LinearEquations
             for (int i = 0; i < equations.Matrix.Rows; i++)
             {
                 var coords = equations.Matrix.FindMaxAbsItem(i, i);
-                equations.SwapRows(i, coords.Item1);
-                equations.SwapColumns(i, coords.Item2);
+                equations.SwapRows(i, coords.row);
+                equations.SwapColumns(i, coords.col);
                 equations = DecreaseValuesOfEquations(equations, i);
             }
             if (matrix.Rows < matrix.Cols)
@@ -46,6 +46,8 @@ namespace GiftWrapping.LinearEquations
                 Console.Out.Write("{0:0.###} ", equations.Variables[j]);
             }
         }
+
+
         private LinearEquations DecreaseValuesOfEquations(LinearEquations equations, int startSubMatrix)
         {
             var j = startSubMatrix;

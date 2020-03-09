@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 
 namespace GiftWrapping
 {
     public class FaceFinder
     {
-        public Vector[] FindFacePoints(Vector[] points)
+        public Point[] FindFacePoints(Point[] points)
         {
-            var facePoints = new List<Vector>();
-            var pointsList = new List<Vector>(points);
+            var gauss = new GaussWithChoiceSolveSystem();
+            var facePoints = new List<Point>();
+            var pointsList = new List<Point>(points);
             var dim = points[0].Dim;
-            var mainNormal = new Vector(dim);
+            var mainNormal = GetFirstNormal(dim);
             var firstPoint = FindStartingPoint(points);
             facePoints.Add(firstPoint);
             pointsList.Remove(firstPoint);
@@ -20,17 +22,15 @@ namespace GiftWrapping
             {
                 int index = 0;
                 double maxValue = 0;
-
                 var nextNormal = new Vector(dim);
                 for (int j = 0; j < pointsList.Count; j++)
                 {
-                    var vertexPoints = new List<Vector>(facePoints);
+                    var vertexPoints = new List<Point>(facePoints);
                     vertexPoints.Add(pointsList[j]);
-                    var matrix = MatrixHelper.CreateMatrix(vertexPoints.ToArray());
-                    //normal = MatrixHelper.CalculateNormal(matrix);
-                    var vector = new Point(dim);
-                    //nextNormal = GaussWithChoiceSolveSystem.GetRandomAnswer(matrix, vector);
-                    var cosNormal = VectorHelper.GetCosVectors(nextNormal, mainNormal);
+                    var matrix = MatrixHelper.CreateMatrix(vertexPoints);
+                    var vector = new Vector(dim);
+                    nextNormal = gauss.GetRandomAnswer(matrix, vector);
+                    var cosNormal = Vector.Angle(nextNormal, mainNormal);
                     if (cosNormal > maxValue)
                     {
                         maxValue = cosNormal;
@@ -45,7 +45,14 @@ namespace GiftWrapping
             return facePoints.ToArray();
         }
 
-        public Vector FindStartingPoint(Vector[] points)
+        private Vector GetFirstNormal(int dimension)
+        {
+            var v = new double[dimension];
+            v[0] = 1;
+            return new Vector(v);
+        }
+
+        public Point FindStartingPoint(Point[] points)
         {
             if (points.Length == 0)
             {
@@ -55,7 +62,7 @@ namespace GiftWrapping
             return FindFirstPoint(points);
         }
 
-        private Vector FindFirstPoint(Vector[] points)
+        private Point FindFirstPoint(Point[] points)
         {
             var startPoint = points[0];
             foreach (var point in points)

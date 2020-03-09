@@ -11,21 +11,21 @@ namespace GiftWrappingTest
         [Test]
         public void test_WhenCall_GetMinimalVector()
         {
-            var Vectors = new Vector[4] {
-                new Vector(new double[]{1, 1,0 }),
-                new Vector(new double[]{6, 1,0}),
-                new Vector(new double[]{3,3,0}),
-                new Vector(new double[]{3,3,6})
+            var Points = new Point[4] {
+                new Point(new double[]{1, 1,0 }),
+                new Point(new double[]{6, 1,0}),
+                new Point(new double[]{3,3,0}),
+                new Point(new double[]{3,3,6})
             };
-            var expect = new Vector[3] {
-                new Vector(new double[]{1, 1,0}),
-                new Vector(new double[]{3,3,0}),
-                new Vector(new double[]{3,3,6})
+            var expect = new Point[3] {
+                new Point(new double[]{1, 1,0}),
+                new Point(new double[]{3,3,0}),
+                new Point(new double[]{3,3,6})
             };
 
             var faceFinder = new FaceFinder();
 
-            var result = faceFinder.FindFacePoints(Vectors);
+            var result = faceFinder.FindFacePoints(Points);
 
             Assert.AreEqual(expect, result);
             //Assert.AreEqual(expect[1], result[1]);
@@ -49,7 +49,7 @@ namespace GiftWrappingTest
         [Test]
         public void FindStartingVector_EmptyArray_ThrowsException()
         {
-            var Vectors = new Vector[0];
+            var Vectors = new Point[0];
             var faceFinder = new FaceFinder();
 
             var ex = Assert.Catch<Exception>(() =>
