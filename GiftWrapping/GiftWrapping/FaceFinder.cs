@@ -10,6 +10,10 @@ namespace GiftWrapping
     {
         public Point[] FindFacePoints(Point[] points)
         {
+            if (points.Length == 0)
+            {
+                throw new InvalidOperationException("Sequence contains no elements");
+            }
             var gauss = new GaussWithChoiceSolveSystem();
             var facePoints = new List<Point>();
             var pointsList = new List<Point>(points);

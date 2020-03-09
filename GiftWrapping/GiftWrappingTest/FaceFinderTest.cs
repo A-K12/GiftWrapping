@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GiftWrapping;
 using GiftWrapping.Structures;
 using NUnit.Framework;
@@ -9,41 +10,59 @@ namespace GiftWrappingTest
     public class FaceFinderTest
     {
         [Test]
-        public void test_WhenCall_GetMinimalVector()
+        public void FindFacePoints_WhenCall_ReturnPoints()
         {
-            var Points = new Point[4] {
-                new Point(new double[]{1, 1,0 }),
-                new Point(new double[]{6, 1,0}),
-                new Point(new double[]{3,3,0}),
-                new Point(new double[]{3,3,6})
+            var Points = new Point[] {
+                new Point(new double[]{4, 0, 0}),
+                new Point(new double[]{0, 4, 0}),
+                new Point(new double[]{0, 0, 4}),
+                new Point(new double[]{0, 0, 0}),
+                new Point(new double[]{1.5, 1.5, 1}),
+                new Point(new double[]{2, 2, 1.5})
             };
-            var expect = new Point[3] {
-                new Point(new double[]{1, 1,0}),
-                new Point(new double[]{3,3,0}),
-                new Point(new double[]{3,3,6})
+            var expect1 = new Point[3] {
+                new Point(new double[]{4, 0, 0}),
+                new Point(new double[]{0, 4, 0}),
+                new Point(new double[]{0, 0, 0})
             };
-
+            var expect2 = new Point[3] {
+                new Point(new double[]{4, 0, 0}),
+                new Point(new double[]{0, 4, 0}),
+                new Point(new double[]{0, 0, 4})
+            };
+            var expect3 = new Point[3] {
+                new Point(new double[]{4, 0, 0}),
+                new Point(new double[]{0, 0, 4}),
+                new Point(new double[]{0, 0, 0})
+            };
+            var expect4 = new Point[3] {
+                new Point(new double[]{0, 0, 4}),
+                new Point(new double[]{0, 4, 0}),
+                new Point(new double[]{0, 0, 0})
+            };
             var faceFinder = new FaceFinder();
 
             var result = faceFinder.FindFacePoints(Points);
 
-            Assert.AreEqual(expect, result);
-            //Assert.AreEqual(expect[1], result[1]);
-            //Assert.AreEqual(expect[2], result[2]);
-
+            Assert.That(result, Is.EquivalentTo(expect1).Or.EquivalentTo(expect2).
+                Or.EquivalentTo(expect3).Or.EquivalentTo(expect4));
         }
 
         [Test]
         public void FindStartingVector_WhenCall_GetMinimalVector()
         {
-            //var Vectors = new Vector[2] {
-            //    new Vector(1, 5), 
-            //    new Vector(2, 2)};
-            //var faceFinder = new FaceFinder();
+            var Vectors = new Point[5] {
+                new Point(new double[]{2, 3}),
+                new Point(new double[]{3, 2}),
+                new Point(new double[]{1, 2}),
+                new Point(new double[]{5, 5}),
+                new Point(new double[]{2, 2})};
 
-            //var result = faceFinder.FindFacePoints(Vectors);
+            var faceFinder = new FaceFinder();
 
-            //Assert.AreSame(Vectors[0], result);
+            var result = faceFinder.FindStartingPoint(Vectors);
+
+            Assert.AreSame(Vectors[2], result);
         }
 
         [Test]
