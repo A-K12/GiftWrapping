@@ -20,7 +20,7 @@ namespace GiftWrappingTest
         {
             var solver = new GaussWithChoiceSolveSystem();
 
-            var result = solver.GetRandomAnswer(matrix, vector);
+            var result = solver.FindAnswer(matrix, vector);
             var rightSide = CalculateRightSide(matrix, result);
 
             Assert.AreEqual(vector, rightSide);
@@ -56,7 +56,7 @@ namespace GiftWrappingTest
             var solver = new GaussWithChoiceSolveSystem();
 
 
-            var result = solver.GetRandomAnswer(matrix, vector);
+            var result = solver.FindAnswer(matrix, vector);
 
             Assert.AreEqual(expect, result);
         }

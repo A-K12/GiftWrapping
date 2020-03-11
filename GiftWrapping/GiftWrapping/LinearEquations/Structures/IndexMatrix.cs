@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace GiftWrapping.LinearEquations
 {
@@ -37,24 +38,26 @@ namespace GiftWrapping.LinearEquations
 
         private void SwapCoordinates(ref IndexMap indexVector, Index index1, Index index2)
         {
-            var temp = indexVector[index1];
+            int temp = indexVector[index1];
             indexVector[index1] = indexVector[index2];
             indexVector[index2] = temp;
         }
 
         public (int row, int col) FindMaxAbsItem(int rowSubMatrix = 0, int colSubMatrix = 0)
         {
-            var majorColumn = colSubMatrix;
-            var majorRow = rowSubMatrix;
+            int majorColumn = colSubMatrix;
+            int majorRow = rowSubMatrix;
+            double maxItem = double.MinValue, currentItem;
             for (int j = rowSubMatrix; j < Rows; j++)
             {
                 for (int k = colSubMatrix; k < Cols; k++)
                 {
-                    if (Math.Abs(this[j, k]) >
-                        Math.Abs(this[majorRow, majorColumn]))
+                    currentItem = Math.Abs(this[j, k]);
+                    if (currentItem > maxItem)
                     {
                         majorColumn = k;
                         majorRow = j;
+                        maxItem = currentItem;
                     }
                 }
             }

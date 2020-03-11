@@ -19,7 +19,7 @@ namespace GiftWrapping.LinearEquations
 
         private int[] InitIndexMap(int length)
         {
-            var array = new int[length];
+            int[] array = new int[length];
             for (int i = 0; i < length; i++)
             {
                 array[i] = i;

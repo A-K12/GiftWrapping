@@ -6,7 +6,7 @@ using GiftWrapping.Structures;
 
 namespace GiftWrapping
 {
-    public static class MatrixHelper
+    public static class MatrixBuilder
     {
        public static Matrix CreateMatrix(List<Point> points)
         {

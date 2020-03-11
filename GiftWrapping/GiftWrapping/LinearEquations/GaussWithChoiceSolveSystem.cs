@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using GiftWrapping.Structures;
 using GiftWrapping.LinearEquations;
 
@@ -7,16 +8,16 @@ namespace GiftWrapping.LinearEquations
 {
     public class GaussWithChoiceSolveSystem
     {
-        public Vector GetRandomAnswer(Matrix matrix, Vector vector)
+        public Vector FindAnswer(Matrix matrix, Vector vector)
         {
-            var equations = new LinearEquations(matrix, vector); ;
+            LinearEquations equations = new LinearEquations(matrix, vector); 
             
             for (int i = 0; i < equations.Matrix.Rows; i++)
             {
-                var coords = equations.Matrix.FindMaxAbsItem(i, i);
-                equations.SwapRows(i, coords.row);
-                equations.SwapColumns(i, coords.col);
-                equations = DecreaseValuesOfEquations(equations, i);
+                (int row, int col)  = equations.Matrix.FindMaxAbsItem(i, i);
+                equations.SwapRows(i, row);
+                equations.SwapColumns(i, col);
+                equations = ExcludeMaximumElement(equations, i);
             }
             if (matrix.Rows < matrix.Cols)
             {
@@ -48,12 +49,12 @@ namespace GiftWrapping.LinearEquations
         }
 
 
-        private LinearEquations DecreaseValuesOfEquations(LinearEquations equations, int startSubMatrix)
+        private LinearEquations ExcludeMaximumElement(LinearEquations equations, int startSubMatrix)
         {
-            var j = startSubMatrix;
+            int j = startSubMatrix;
             for (int i = j + 1; i < equations.Matrix.Rows; i++)
             {
-                var multiplier = equations.Matrix[i, j] / equations.Matrix[j, j];
+                double multiplier = equations.Matrix[i, j] / equations.Matrix[j, j];
                 equations.Matrix[i, j] = 0;
 
                 for (int k = j+ 1; k < equations.Matrix.Cols; k++)
@@ -69,7 +70,7 @@ namespace GiftWrapping.LinearEquations
 
         private void FillFreeVariables(LinearEquations equations)
         {
-            var numberFreedomVariables = equations.Matrix.Cols - equations.Matrix.Rows;
+            int numberFreedomVariables = equations.Matrix.Cols - equations.Matrix.Rows;
             for (int i = 1; i < numberFreedomVariables + 1; i++)
             {
                 equations.Variables[^i] = 1.0;
@@ -80,7 +81,7 @@ namespace GiftWrapping.LinearEquations
         {
             for (int i = equations.Matrix.Rows - 1; i >= 0; i--)
             {
-                var x = equations.Vector[i];
+                double x = equations.Vector[i];
 
                 for (int j = equations.Matrix.Cols-1; j > i; --j)
                 {

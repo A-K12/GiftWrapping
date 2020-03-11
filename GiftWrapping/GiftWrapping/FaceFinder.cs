@@ -8,13 +8,19 @@ namespace GiftWrapping
 {
     public class FaceFinder
     {
+        private readonly GaussWithChoiceSolveSystem _gauss;
+
+        public FaceFinder()
+        {
+            _gauss = new GaussWithChoiceSolveSystem();
+        }
+
         public Point[] FindFacePoints(Point[] points)
         {
             if (points.Length == 0)
             {
                 throw new InvalidOperationException("Sequence contains no elements");
             }
-            var gauss = new GaussWithChoiceSolveSystem();
             var facePoints = new List<Point>();
             var pointsList = new List<Point>(points);
             var dim = points[0].Dim;
@@ -31,9 +37,9 @@ namespace GiftWrapping
                 {
                     var vertexPoints = new List<Point>(facePoints);
                     vertexPoints.Add(pointsList[j]);
-                    var matrix = MatrixHelper.CreateMatrix(vertexPoints);
+                    var matrix = MatrixBuilder.CreateMatrix(vertexPoints);
                     var vector = new Vector(dim);
-                    nextNormal = gauss.GetRandomAnswer(matrix, vector);
+                    nextNormal = _gauss.FindAnswer(matrix, vector);
                     var cosNormal = Vector.Angle(nextNormal, mainNormal);
                     if (cosNormal > maxValue)
                     {
@@ -52,7 +58,7 @@ namespace GiftWrapping
         private Vector GetFirstNormal(int dimension)
         {
             var v = new double[dimension];
-            v[0] = 1;
+            v[0] = 1;//-1
             return new Vector(v);
         }
 
@@ -63,11 +69,6 @@ namespace GiftWrapping
                 throw new InvalidOperationException("Sequence contains no elements");
             }
 
-            return FindFirstPoint(points);
-        }
-
-        private Point FindFirstPoint(Point[] points)
-        {
             var startPoint = points[0];
             foreach (var point in points)
             {
@@ -79,5 +80,6 @@ namespace GiftWrapping
 
             return startPoint;
         }
+
     }
 }

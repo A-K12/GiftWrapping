@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace GiftWrappingTest
 {
     [TestFixture]
-    public class MatrixHelperTest
+    public class MatrixBuilderTest
     {
 
         [Test]
@@ -18,7 +18,7 @@ namespace GiftWrappingTest
 
             var ex = Assert.Catch<Exception>(() =>
             {
-                MatrixHelper.CreateMatrix(emptyArray.ToList());
+                MatrixBuilder.CreateMatrix(emptyArray.ToList());
             });
 
             StringAssert.Contains("Sequence contains less than two elements", ex.Message);
@@ -36,7 +36,7 @@ namespace GiftWrappingTest
 
             var ex = Assert.Catch<Exception>(() =>
             {
-                MatrixHelper.CreateMatrix(points.ToList());
+                MatrixBuilder.CreateMatrix(points.ToList());
             });
 
             StringAssert.Contains("Sequence contains more elements than point dimension", ex.Message);
@@ -58,7 +58,7 @@ namespace GiftWrappingTest
             };
             var expectMatrix = new Matrix(expect);
 
-            var matrix = MatrixHelper.CreateMatrix(points.ToList());
+            var matrix = MatrixBuilder.CreateMatrix(points.ToList());
 
             Assert.AreEqual(expectMatrix, matrix);
         }

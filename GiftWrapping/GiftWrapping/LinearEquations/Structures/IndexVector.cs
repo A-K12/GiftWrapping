@@ -26,7 +26,7 @@ namespace GiftWrapping.LinearEquations
 
         public void SwapCoordinates(Index index1, Index index2)
         {
-            var temp = _rowIndexes[index1];
+            int temp = _rowIndexes[index1];
             _rowIndexes[index1] = _rowIndexes[index2];
             _rowIndexes[index2] = temp;
         }
