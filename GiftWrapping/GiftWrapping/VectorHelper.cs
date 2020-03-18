@@ -14,7 +14,9 @@ namespace GiftWrapping
             //{
             //    vertor[i] = startVector[i] -endVector[i];
             //}
+
             //return vertor;
+           
             return new Vector(1);
         }
 

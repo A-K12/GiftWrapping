@@ -2,7 +2,7 @@
 
 namespace GiftWrapping.Structures
 {
-    public class Point:IComparable<Point>
+    public class Point : IComparable<Point>
     {
         #region Internal storage, access properties, and convertors
         /// <summary>
@@ -24,10 +24,10 @@ namespace GiftWrapping.Structures
         {
             get
             {
-            #if DEBUG
+#if DEBUG
                 if (i < 0 || i >= Dim)
                     throw new IndexOutOfRangeException();
-            #endif
+#endif
                 return _v[i];
             }
         }
@@ -62,10 +62,10 @@ namespace GiftWrapping.Structures
         public int CompareTo(Point v)
         {
             int d = Dim, res;
-        #if DEBUG
+#if DEBUG
             if (d != v.Dim)
-                throw new ArgumentException("Cannot compare points of different dimensions");  
-        #endif
+                throw new ArgumentException("Cannot compare points of different dimensions");
+#endif
             for (int i = 0; i < d; i++)
             {
                 res = Tools.CMP(this[i], v[i]);
@@ -82,7 +82,7 @@ namespace GiftWrapping.Structures
         /// <param name="p1">The first point</param>
         /// <param name="p2">The second point</param>
         /// <returns>true, if the point coincide; false, otherwise</returns>
-        static public bool operator ==(Point p1, Point p2)
+        static public bool operator ==( Point p1, Point p2)
         {
             int d = p1.Dim, res;
 #if DEBUG
@@ -171,7 +171,7 @@ namespace GiftWrapping.Structures
 
         public static Vector ToVector(Point head, Point tail)
         {
-            var vector = head - tail;
+            Point vector = head - tail;
             
             return new Vector(vector);
         }
@@ -190,7 +190,7 @@ namespace GiftWrapping.Structures
             if (d != p2.Dim)
                 throw new ArgumentException("Cannot subtract two point of different dimensions");
         #endif
-            var v = p1 - p2;
+            Point v = p1 - p2;
             for (int i = 0; i < p1.Dim; i++)
             {
                 sum += v[i] * v[i];
@@ -206,7 +206,7 @@ namespace GiftWrapping.Structures
             if (!(obj is Point))
                 throw new ArgumentException();
         #endif
-            var v = (Point)obj;
+            Point v = (Point)obj;
             return this.CompareTo(v) == 0;
         }
 

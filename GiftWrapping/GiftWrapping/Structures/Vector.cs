@@ -191,6 +191,7 @@ namespace GiftWrapping.Structures
       Vector res = new Vector(Dim);
       for (int i = 0; i < Dim; i++)
         res._v[i] = _v[i] / Length;
+      res.Length = 1.0;
       return res;
     }
 

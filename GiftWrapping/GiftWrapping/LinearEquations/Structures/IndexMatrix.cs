@@ -43,7 +43,7 @@ namespace GiftWrapping.LinearEquations
             indexVector[index2] = temp;
         }
 
-        public (int row, int col) FindMaxAbsItem(int rowSubMatrix = 0, int colSubMatrix = 0)
+        public (int row, int col) FindIndexMaxAbsItem(int rowSubMatrix = 0, int colSubMatrix = 0)
         {
             int majorColumn = colSubMatrix;
             int majorRow = rowSubMatrix;

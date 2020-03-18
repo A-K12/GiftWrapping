@@ -8,13 +8,13 @@ namespace GiftWrapping.LinearEquations
 {
     public class GaussWithChoiceSolveSystem
     {
-        public Vector FindAnswer(Matrix matrix, Vector vector)
+        public static Vector FindAnswer(Matrix matrix, Vector vector )
         {
             LinearEquations equations = new LinearEquations(matrix, vector); 
             
             for (int i = 0; i < equations.Matrix.Rows; i++)
             {
-                (int row, int col)  = equations.Matrix.FindMaxAbsItem(i, i);
+                (int row, int col)  = equations.Matrix.FindIndexMaxAbsItem(i, i);
                 equations.SwapRows(i, row);
                 equations.SwapColumns(i, col);
                 equations = ExcludeMaximumElement(equations, i);
@@ -49,7 +49,7 @@ namespace GiftWrapping.LinearEquations
         }
 
 
-        private LinearEquations ExcludeMaximumElement(LinearEquations equations, int startSubMatrix)
+        private static LinearEquations ExcludeMaximumElement(LinearEquations equations, int startSubMatrix)
         {
             int j = startSubMatrix;
             for (int i = j + 1; i < equations.Matrix.Rows; i++)
@@ -68,7 +68,7 @@ namespace GiftWrapping.LinearEquations
             return equations;
         }
 
-        private void FillFreeVariables(LinearEquations equations)
+        private static void FillFreeVariables(LinearEquations equations)
         {
             int numberFreedomVariables = equations.Matrix.Cols - equations.Matrix.Rows;
             for (int i = 1; i < numberFreedomVariables + 1; i++)
@@ -77,7 +77,7 @@ namespace GiftWrapping.LinearEquations
             }
         }
 
-        private Vector FindVariables(LinearEquations equations)
+        private static Vector FindVariables(LinearEquations equations)
         {
             for (int i = equations.Matrix.Rows - 1; i >= 0; i--)
             {

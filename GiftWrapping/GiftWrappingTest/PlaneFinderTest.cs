@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using GiftWrapping;
 using GiftWrapping.Structures;
 using NUnit.Framework;
@@ -7,73 +7,73 @@ using NUnit.Framework;
 namespace GiftWrappingTest
 {
     [TestFixture]
-    public class FaceFinderTest
+    public class PlaneFinderTest
     {
         [Test]
-        public void FindFacePoints_WhenCall_ReturnPoints()
+        public void FindFirstPlane_WhenCall_ReturnPoints()
         {
-            var Points = new Point[] {
+            Point[] points = new Point[] {
                 new Point(new double[]{4, 0, 0}),
                 new Point(new double[]{0, 4, 0}),
                 new Point(new double[]{0, 0, 4}),
                 new Point(new double[]{0, 0, 0}),
                 new Point(new double[]{1.5, 1.5, 1}),
-                new Point(new double[]{2, 2, 1.5})
+                new Point(new double[]{1.4, 1.4, 1}),
+                new Point(new double[]{1, 1, 0.5}),
+                new Point(new double[]{1.5, 1, 0.4})
             };
-            var expect1 = new Point[3] {
+            Point[] expect1 = new Point[3] {
                 new Point(new double[]{4, 0, 0}),
                 new Point(new double[]{0, 4, 0}),
                 new Point(new double[]{0, 0, 0})
             };
-            var expect2 = new Point[3] {
+            Point[] expect2 = new Point[3] {
                 new Point(new double[]{4, 0, 0}),
                 new Point(new double[]{0, 4, 0}),
                 new Point(new double[]{0, 0, 4})
             };
-            var expect3 = new Point[3] {
+            Point[] expect3 = new Point[3] {
                 new Point(new double[]{4, 0, 0}),
                 new Point(new double[]{0, 0, 4}),
                 new Point(new double[]{0, 0, 0})
             };
-            var expect4 = new Point[3] {
+            Point[] expect4 = new Point[3] {
                 new Point(new double[]{0, 0, 4}),
                 new Point(new double[]{0, 4, 0}),
                 new Point(new double[]{0, 0, 0})
             };
-            var faceFinder = new FaceFinder();
+            PlaneFinder faceFinder = new PlaneFinder(points.ToList());
 
-            var result = faceFinder.FindFacePoints(Points);
+            Hyperplane result = faceFinder.FindFirstPlane();
 
-            Assert.That(result, Is.EquivalentTo(expect1).Or.EquivalentTo(expect2).
+            Assert.That(result.Points, Is.EquivalentTo(expect1).Or.EquivalentTo(expect2).
                 Or.EquivalentTo(expect3).Or.EquivalentTo(expect4));
         }
 
         [Test]
         public void FindStartingVector_WhenCall_GetMinimalVector()
         {
-            var Vectors = new Point[5] {
+            Point[] points = new Point[5] {
                 new Point(new double[]{2, 3}),
                 new Point(new double[]{3, 2}),
                 new Point(new double[]{1, 2}),
                 new Point(new double[]{5, 5}),
                 new Point(new double[]{2, 2})};
 
-            var faceFinder = new FaceFinder();
+            Point result = PlaneFinder.FindStartingPoint(points.ToList());
 
-            var result = faceFinder.FindStartingPoint(Vectors);
-
-            Assert.AreSame(Vectors[2], result);
+            Assert.AreSame(points[2], result);
         }
 
         [Test]
         public void FindStartingVector_EmptyArray_ThrowsException()
         {
-            var Vectors = new Point[0];
-            var faceFinder = new FaceFinder();
+            Point[] points = new Point[0];
+            
 
-            var ex = Assert.Catch<Exception>(() =>
+            Exception ex = Assert.Catch<ArgumentException>(() =>
             {
-                var i = faceFinder.FindFacePoints(Vectors);
+                PlaneFinder faceFinder = new PlaneFinder(points.ToList());
             });
 
             StringAssert.Contains("Sequence contains no elements", ex.Message);
