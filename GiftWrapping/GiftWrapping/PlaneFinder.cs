@@ -24,8 +24,8 @@ namespace GiftWrapping
         public Hyperplane FindFirstPlane()
         {
             Vector firstNormal = GetFirstNormal(dim);
-            Hyperplane mainPlane = new Hyperplane(firstNormal);
             Point firstPoint = FindStartingPoint(points);
+            Hyperplane mainPlane = new Hyperplane(firstPoint,firstNormal);
             planePoints.Add(firstPoint);
             points.Remove(firstPoint);
             for (int i = 0; i < dim - 1; i++)
@@ -38,8 +38,9 @@ namespace GiftWrapping
                     List<Point> vertexPoints = new List<Point>(planePoints)
                     {
                         this.points[j]
-                    };
-                    Hyperplane nextPlane = new Hyperplane(vertexPoints.ToArray());
+                    }; 
+                    Vector normal = FindNormal(vertexPoints.ToArray());
+                    Hyperplane nextPlane = new Hyperplane(vertexPoints[0], normal);
                     double angle = mainPlane.Angle(nextPlane);
                     if (angle > maxValue)
                     {
@@ -51,11 +52,19 @@ namespace GiftWrapping
                 planePoints.Add(this.points[index]);
                 this.points.RemoveAt(index);
                 mainPlane = maxPlane;
+                maxPlane.TryAddPoints(planePoints.ToArray());
             }
 
             return mainPlane;
         }
 
+        private Vector FindNormal(Point[] points)
+        {
+            Matrix leftSide = MatrixBuilder.CreateMatrix(points);
+            Vector rightSide = new Vector(points[0].Dim);
+
+            return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide).Normalize();
+        }
         private Vector GetFirstNormal(int dimension)
         {
             double[] v = new double[dimension];
