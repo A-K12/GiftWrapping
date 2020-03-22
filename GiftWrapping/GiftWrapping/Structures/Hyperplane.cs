@@ -9,13 +9,9 @@ namespace GiftWrapping.Structures
     public class Hyperplane
     {
         public int Dim { get; protected set; }
-
         public Point MainPoint { get => _points.First(); }
-
         public Vector Normal { get; protected set; }
-
         protected List<Point> _points;
-
         public IList<Point> Points => _points.AsReadOnly();
 
 
@@ -33,17 +29,12 @@ namespace GiftWrapping.Structures
                 throw new ArgumentException("Value cannot be an empty collection.", nameof(vectors));
             }
             Dim = point.Dim;
+            if (Dim < vectors.Length)
+            {
+                throw new ArgumentException("The plane cannot be found . There are not enough vectors.");
+            }
             _points = new List<Point> { point };
             Normal = FindNormal(vectors);
-
-        }
-
-        private Vector FindNormal(Vector[] vectors)
-        {
-            Matrix leftSide = MatrixBuilder.CreateMatrix(vectors);
-            Vector rightSide = new Vector(Dim);
-
-            return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide).Normalize();
         }
 
         public Hyperplane(Point[] points)
@@ -52,7 +43,7 @@ namespace GiftWrapping.Structures
             {
                 throw new ArgumentException("Value cannot be an empty collection.", nameof(points));
             }
-            if (!HaveSameDimension(points))
+            if (!points.HaveSameDimension())
             {
                 throw new ArgumentException("Points don't have same dimension");
             }
@@ -65,22 +56,17 @@ namespace GiftWrapping.Structures
             _points = new List<Point>(points);
         }
 
-        private static bool HaveSameDimension(Point[] points)
-        {
-            for (int i = 1; i < points.Length; i++)
-            {
-                if (points[i].Dim == points[0].Dim)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
 
         private Vector FindNormal(Point[] points)
         {
-            Matrix leftSide = MatrixBuilder.CreateMatrix(points);
+            Vector[] vectors = points.ToVectors();
+
+            return FindNormal(vectors);
+        }
+
+        private Vector FindNormal(Vector[] vectors)
+        {
+            Matrix leftSide = vectors.ToMatrix();
             Vector rightSide = new Vector(Dim);
 
             return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide).Normalize();
@@ -113,16 +99,16 @@ namespace GiftWrapping.Structures
             }
 
             if (Tools.NE(result)) return false;
-            _points.Add(point);
+            _points.Add(point); 
 
             return true;
         }
 
         public void TryAddPoints(Point[] points)
         {
-            for (int i = 0; i < points.Length; i++)
+            foreach (Point point in points)
             {
-                TryAddPoint(points[i]);
+                TryAddPoint(point);
             }
         }
     }   

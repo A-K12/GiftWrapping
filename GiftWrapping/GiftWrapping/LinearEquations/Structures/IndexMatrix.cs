@@ -47,12 +47,12 @@ namespace GiftWrapping.LinearEquations
         {
             int majorColumn = colSubMatrix;
             int majorRow = rowSubMatrix;
-            double maxItem = double.MinValue, currentItem;
+            double maxItem = double.MinValue;
             for (int j = rowSubMatrix; j < Rows; j++)
             {
                 for (int k = colSubMatrix; k < Cols; k++)
                 {
-                    currentItem = Math.Abs(this[j, k]);
+                    double currentItem = Math.Abs(this[j, k]);
                     if (currentItem > maxItem)
                     {
                         majorColumn = k;

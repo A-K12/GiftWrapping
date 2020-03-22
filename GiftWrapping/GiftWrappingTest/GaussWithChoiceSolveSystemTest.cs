@@ -14,6 +14,8 @@ namespace GiftWrappingTest
             new object[] {new Matrix(2, 3, new double[] {1, 2, 3, 3, 5, 7}), new Vector(new double[] {3, 0})}
         };
 
+
+
         [Test, TestCaseSource(nameof(SetLinearEquationsSystems))]
         public void GetRandomAnswer_AnyMatrix_ReturnVector(Matrix matrix, Vector vector)
         {
@@ -39,6 +41,8 @@ namespace GiftWrappingTest
             return new Vector(rigtSide);
         }
 
+
+
         [Test]
         public void GetRandomAnswer_DeterminateMatrix_ReturnVector()
         {
@@ -57,5 +61,6 @@ namespace GiftWrappingTest
 
             Assert.AreEqual(expect, result);
         }
+
     }
 }

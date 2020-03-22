@@ -18,7 +18,7 @@ namespace GiftWrappingTest
 
             Exception ex = Assert.Catch<Exception>(() =>
             {
-                MatrixBuilder.CreateMatrix(emptyArray);
+                MatrixHelper.CreateMatrix(emptyArray);
             });
 
             StringAssert.Contains("Sequence contains less than two elements", ex.Message);
@@ -36,31 +36,27 @@ namespace GiftWrappingTest
 
             Exception ex = Assert.Catch<Exception>(() =>
             {
-                MatrixBuilder.CreateMatrix(points);
+                MatrixHelper.CreateMatrix(points);
             });
 
             StringAssert.Contains("Sequence contains more elements than point dimension", ex.Message);
         }
 
         [Test]
-        public void CreateMatrix_UsualArray_ThrowException()
+        public void ConvertVectorToMatrix_RightVector_ReturnMatrix()
         {
-            Point[] points = new Point[3];
-            points[0] = new Point(new double[] { 2, 2, 2, 2, 2 });
-            points[1] = new Point(new double[] { 3, 4, 5, 6, 7 });
-            points[2] = new Point(new double[] { 5, 6, 7, 8, 9 });
-            double[,] expect = new double[4, 5]
-            {
-                {1, 2, 3, 4, 5}, 
-                {3, 4, 5, 6, 7}, 
-                {0, 0, 0, 1, 0}, 
-                {0, 0, 0, 0, 1}
-            };
-            Matrix expectMatrix = new Matrix(expect);
+            Vector[] vectors = new Vector[3];
+            vectors[0] = new Vector(new double[] { 2, 2, 2 });
+            vectors[1] = new Vector(new double[] { 3, 4, 5 });
+            vectors[2] = new Vector(new double[] { 5, 6, 7 });
+            double[] expect = new double[] {2, 2, 2, 3, 4, 5, 5, 6, 7};
+            Matrix expectMatrix = new Matrix(vectors.Length, vectors[0].Dim, expect);
+   
+            Matrix result = MatrixHelper.ConvertVectorToMatrix(vectors);
 
-            Matrix matrix = MatrixBuilder.CreateMatrix(points);
-
-            Assert.AreEqual(expectMatrix, matrix);
+            Assert.AreEqual(expectMatrix, result);
         }
+
+
     }
 }

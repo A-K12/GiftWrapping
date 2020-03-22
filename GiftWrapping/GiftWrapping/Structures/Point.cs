@@ -169,9 +169,9 @@ namespace GiftWrapping.Structures
 
         #region Miscellaneous procedures
 
-        public static Vector ToVector(Point head, Point tail)
+        public static Vector ToVector(Point end, Point begin)
         {
-            Point vector = head - tail;
+            Point vector = end - begin;
             
             return new Vector(vector);
         }

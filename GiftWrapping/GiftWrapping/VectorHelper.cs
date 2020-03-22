@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using GiftWrapping.Structures;
@@ -7,29 +8,27 @@ namespace GiftWrapping
 {
     public static class VectorHelper
     {
-        public static Vector CreateVector(Vector startVector, Vector endVector)
-        {
-            //var vertor = new Vector(startVector.Dim);
-            //for (int i = 0; i < startVector.Dim; i++)
-            //{
-            //    vertor[i] = startVector[i] -endVector[i];
-            //}
 
-            //return vertor;
-           
-            return new Vector(1);
+        public static bool HaveSameDimension(this IList<Vector> vectors)
+        {
+            return vectors.All(v => v.Dim == vectors[0].Dim);
         }
 
-
-        public static double GetCosVectors(Vector vector1, Vector vector2)
+        public static Matrix ToMatrix(this IList<Vector> vectors)
         {
-            //var length1 = GetVectorLength(vector1);
-            //var length2 = GetVectorLength(vector2);
-            //var scalar = GetScalarProduct(vector1, vector2);
+            if (!vectors.HaveSameDimension())
+            {
+                throw new ArgumentException("Points don't have same dimension");
+            }
+            int n = vectors.Count, m = vectors[0].Dim;
+            double[] cells = new double[n * m];
 
-           // return scalar / (length1 * length2);
-           return -4;
+            for (int i = 0; i < n; i++)
+            {
+                Array.Copy(vectors[i], 0, cells, m * i, m);
+            }
+
+            return new Matrix(n, m, cells.ToArray());
         }
-
     }
 }
