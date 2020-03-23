@@ -23,20 +23,18 @@ namespace GiftWrapping.Structures
             Dim = hyperplane.Dim;
             Normal = hyperplane.Normal;
             _points = new List<Point>(hyperplane._points);
-            D = CalculateD();
-            Normalize();
+            D = hyperplane.D;
         }
         public Hyperplane(Point point, Vector normal)
         {
             Dim = normal.Dim;
             Normal = normal;
             _points = new List<Point>{point};
-            D = CalculateD();
+            D = ComputeD();
             Normalize();
-
         }
 
-        private double CalculateD()
+        private double ComputeD()
         {
             double d = 0;
 
@@ -48,80 +46,57 @@ namespace GiftWrapping.Structures
             return d;
         }
 
-        public Hyperplane(Point point, Matrix matrix)
-        {
-            Dim = point.Dim;
-            if (Dim-1 > matrix.Rows)
-            {
-                throw new ArgumentException("The plane cannot be found . There are not enough matrix.");
-            }
-            _points = new List<Point> { point };
-            Normal = FindNormal(matrix);
-            D = CalculateD();
-            Normalize();
-        }
-
-        public Hyperplane(Point point, Vector[] vectors)
-        {
-            if (vectors.Length == 0)
-            {
-                throw new ArgumentException("Value cannot be an empty collection.", nameof(vectors));
-            }
-            Dim = point.Dim;
-            if (Dim-1 > vectors.Length)
-            {
-                throw new ArgumentException("The plane cannot be found . There are not enough matrix.");
-            }
-            _points = new List<Point> { point };
-            Normal = FindNormal(vectors);
-            D = CalculateD();
-            Normalize();
-
-        }
-
-        public Hyperplane(IList<Point> points)
-        {
-            if (points.Count == 0)
-            {
-                throw new ArgumentException("Value cannot be an empty collection.", nameof(points));
-            }
-            if (!points.HaveSameDimension())
-            {
-                throw new ArgumentException("Points don't have same dimension");
-            }
-            this.Dim = points[0].Dim;
-            if (points.Count != Dim)
-            {
-                throw new ArgumentException("Number of points is not equal to dimension.");
-            }
-            Normal = FindNormal(points);
-            _points = new List<Point>(points);
-            D = CalculateD();
-            Normalize();
-
-        }
-
         private void Normalize()
         {
             D /= Normal.Length;
             Normal = Normal.Normalize();
         }
 
-        private Vector FindNormal(IList<Point> points)
+        public static Hyperplane CreatePlane(IList<Point> points)
         {
+            if (!points.HaveSameDimension())
+            {
+                throw new ArgumentException("Points don't have same dimension");
+            }
+            if (points.Count != points[0].Dim)
+            {
+                throw new ArgumentException("Number of points is not equal to dimension.");
+            }
             Vector[] vectors = points.ToVectors();
+            Matrix matrix = vectors.ToMatrix(); 
 
-            return FindNormal(vectors);
+            Hyperplane hyperplane = CreatePlane(points.Last(), matrix);
+            hyperplane._points.AddRange(points.SkipLast(1));
+
+            return hyperplane;
         }
-
-        private Vector FindNormal(IList<Vector> vectors)
+        public static Hyperplane CreatePlane(Point point, IList<Vector> vectors)
         {
-            Matrix leftSide = vectors.ToMatrix();
-            
-            return FindNormal(leftSide);
+            if (!vectors.HaveSameDimension())
+            {
+                throw new ArgumentException("Vectors don't have same dimension");
+            }
+            if (point.Dim != vectors[0].Dim)
+            {
+                throw new ArgumentException("Vectors and points have different dimensions..");
+            }
+
+            return  CreatePlane(point, vectors.ToMatrix());
+        }
+        public static Hyperplane CreatePlane(Point point, Matrix matrix)
+        {
+            if (point.Dim - 1 > matrix.Rows)
+            {
+                throw new ArgumentException("The plane cannot be found . There are not enough vectors.");
+            }
+
+            Vector normal = ComputeNormal(matrix);
+            Hyperplane hyperplane = new Hyperplane(point, normal);
+
+            return hyperplane;
         }
 
-        private Vector FindNormal(Matrix leftSide)
+        private static Vector ComputeNormal(Matrix leftSide)
         {
             Vector rightSide = new Vector(leftSide.Rows);
 

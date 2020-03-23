@@ -16,6 +16,10 @@ namespace GiftWrapping
 
         public static Matrix ToMatrix(this IList<Vector> vectors)
         {
+            if (vectors.Count == 0)
+            {
+                throw new ArgumentException("Value cannot be an empty collection.", nameof(vectors));
+            }
             if (!vectors.HaveSameDimension())
             {
                 throw new ArgumentException("Points don't have same dimension");
