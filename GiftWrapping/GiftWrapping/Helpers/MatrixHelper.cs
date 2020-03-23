@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Security.Cryptography;
-using GiftWrapping.Structures;
+﻿using GiftWrapping.Structures;
 
-namespace GiftWrapping
+namespace GiftWrapping.Helpers
 {
     public static class MatrixHelper
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using GiftWrapping.Helpers;
 using GiftWrapping.LinearEquations;
 
 namespace GiftWrapping.Structures
@@ -9,14 +10,16 @@ namespace GiftWrapping.Structures
     public class Hyperplane: IEquatable<Hyperplane>
     {
         public int Dim { get; }
+
+        protected readonly List<Point> _points;
+
+        public IList<Point> Points => _points.AsReadOnly();
+
         public Point MainPoint { get => _points.First(); }
+        
         public Vector Normal { get; protected set; }
         
         public double D { get; protected set; }
-
-        protected readonly List<Point> _points;
-        public IList<Point> Points => _points.AsReadOnly();
-
 
         public Hyperplane(Hyperplane hyperplane)
         {
@@ -155,22 +158,6 @@ namespace GiftWrapping.Structures
         {
             return HashCode.Combine(Normal, D);
         }
-        
-        //What is it????
-        public bool TryAddPoint(Point point)
-        {
-            if (_points.Contains(point)) return false;
-            double result = 0;
-            for (int i = 0; i < Normal.Dim; i++)
-            {
-                result += Normal[i] * (point[i] - MainPoint[i]);
-            }
-
-            if (Tools.NE(result)) return false;
-            _points.Add(point);
-
-            return true;
-        }
 
         public void TryAddPoints(Point[] points)
         {
@@ -178,6 +165,25 @@ namespace GiftWrapping.Structures
             {
                 TryAddPoint(point);
             }
+        }
+        public bool TryAddPoint(Point point)
+        {
+            if (_points.Contains(point)) return true;
+            if (!IsPointInPlane(point)) return false;
+            _points.Add(point);
+
+            return true;
+        }
+
+        public bool IsPointInPlane(Point point)
+        {
+            double result = 0;
+            for (int i = 0; i < Normal.Dim; i++)
+            {
+                result += Normal[i] * (point[i] - MainPoint[i]);
+            }
+
+            return Tools.EQ(result);
         }
 
     }   

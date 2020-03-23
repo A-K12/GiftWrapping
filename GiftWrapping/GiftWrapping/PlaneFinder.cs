@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GiftWrapping.Helpers;
 using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 
@@ -41,7 +42,9 @@ namespace GiftWrapping
                     }; 
                     Vector[] vectors = vertexPoints.ToVectors();
 
-                    Hyperplane nextPlane = new Hyperplane(vertexPoints[0], vectors);
+                    Vector[] planeVectors = CreatePlaneVectors(vectors);
+
+                    Hyperplane nextPlane = Hyperplane.CreatePlane(vertexPoints[0], planeVectors);
                     double angle = mainPlane.Angle(nextPlane);
                     if (angle > maxValue)
                     {
@@ -59,6 +62,24 @@ namespace GiftWrapping
             return mainPlane;
         }
 
+        private Vector[] CreatePlaneVectors(IList<Vector> vectors)
+        {
+            int dim = vectors[0].Dim;
+            Vector[] planeVectors = new Vector[dim - 1];
+            for (int i = 0; i < vectors.Count; i++)
+            {
+                planeVectors[i] = vectors[i];
+            }
+
+            for (int i = vectors.Count; i < planeVectors.Length; i++)
+            {
+                double[] vector = new double[dim];
+                vector[^i] = 1;
+                planeVectors[i] = new Vector(vector);
+            }
+
+            return planeVectors;
+        }
 
         private Vector GetFirstNormal(int dimension)
         {

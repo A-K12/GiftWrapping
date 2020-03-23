@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GiftWrapping.Structures;
 
-namespace GiftWrapping
+namespace GiftWrapping.Helpers
 {
     public static class PointHelper
     {
