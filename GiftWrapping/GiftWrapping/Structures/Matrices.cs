@@ -379,7 +379,7 @@ namespace GiftWrapping.Structures
     }
 
     /// <summary>
-    /// Horizontal concatenation of two matrces (with equal number of rows)
+    /// s
     /// </summary>
     /// <param name="m1">The left concatenated matrix</param>
     /// <param name="m2">The right concatenated matrix</param>

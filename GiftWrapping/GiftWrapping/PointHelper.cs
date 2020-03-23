@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GiftWrapping.Structures;
 
@@ -21,6 +22,27 @@ namespace GiftWrapping
             }
 
             return vectors;
+        }
+
+        public static Matrix ToMatrix(this IList<Point> points)
+        {
+            if (!points.HaveSameDimension())
+            {
+                throw new ArgumentException("Points don't have same dimension");
+            }
+            int n = points.Count, m = points[0].Dim;
+            double[] cells = new double[n * m];
+
+            for (int i = 0; i < n; i++)
+            {
+                Array.Copy(points[i], 0, cells, m * i, m);
+            }
+
+            return new Matrix(n, m, cells.ToArray());
+        }
+        public static Matrix ToMatrix(this Point point)
+        {
+            return new Matrix(1, point.Dim, point);
         }
     }
 }

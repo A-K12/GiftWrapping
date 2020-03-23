@@ -30,5 +30,11 @@ namespace GiftWrapping
 
             return new Matrix(n, m, cells.ToArray());
         }
+
+        public static Matrix ToMatrix(this Vector vector)
+        {
+            return new Matrix(1, vector.Dim, vector);
+        }
+
     }
 }

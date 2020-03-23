@@ -39,8 +39,8 @@ namespace GiftWrapping
                     {
                         this.points[j]
                     }; 
-                    // Vector normal = FindNormal(vertexPoints.ToArray());
-                    Vector[] vectors = CreateVectors(vertexPoints);
+                    Vector[] vectors = vertexPoints.ToVectors();
+
                     Hyperplane nextPlane = new Hyperplane(vertexPoints[0], vectors);
                     double angle = mainPlane.Angle(nextPlane);
                     if (angle > maxValue)
