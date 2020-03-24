@@ -10,19 +10,22 @@ namespace GiftWrapping
 {
     public class PlaneFinder
     {
+
         public static Hyperplane FindFirstPlane(IList<Point> points)
         {
+           
             if (points.Count == 0)
             {
                 throw new ArgumentException("Sequence contains no elements");
             }
             int dim = points[0].Dim;
+            PlaneVectors planeVectors = new PlaneVectors(dim);
+
             Vector firstNormal = GetFirstNormal(dim); 
             int firstIndex = points.FindIndexMinimumPoint();
             int[] indexes = new int[dim];
             indexes[0] = firstIndex;
             Hyperplane mainPlane = new Hyperplane(points[firstIndex],firstNormal);
-            List<Vector> planeVectors = new List<Vector>();
             for (int i = 1; i < dim; i++)
             {
                 int index = 0;
@@ -34,7 +37,7 @@ namespace GiftWrapping
                      if(indexes.Contains(j)) continue;
                     Vector vector = Point.ToVector(points[firstIndex], points[j]);
 
-                    Vector[] vectors = CreatePlaneVectors(new List<Vector>(planeVectors){vector});//really? 
+                    Vector[] vectors =  planeVectors.SetVectorAndGet(vector);
 
                     Hyperplane nextPlane = Hyperplane.Create(points[j], vectors);
 
@@ -48,7 +51,7 @@ namespace GiftWrapping
                         maxVector = vector;
                     }
                 }
-                planeVectors.Add(maxVector);
+                planeVectors.SetVector(maxVector);
                 indexes[i] = index;
                 maxPlane.TryAddPoints(mainPlane.Points);
                 mainPlane = maxPlane;
@@ -56,6 +59,7 @@ namespace GiftWrapping
 
             return mainPlane;
         }
+
 
         private static Vector[] CreatePlaneVectors(IList<Vector> vectors)
         {

@@ -18,11 +18,13 @@ namespace GiftWrappingTest
                 new Point(new double[]{0, 4, 0}),
                 new Point(new double[]{0, 0, 4}),
                 new Point(new double[]{0, 0, 0}),
-                new Point(new double[]{1.5, 1.5, 1}),
-                new Point(new double[]{1.4, 1.4, 1}),
-                new Point(new double[]{1, 1, 0.5}),
-                new Point(new double[]{1.5, 1, 0.4})
+                new Point(new double[] { 1.5, 1.5, 1 }),
+                new Point(new double[] { 1.4, 1.4, 1 }),
+                new Point(new double[] { 1, 1, 0.5 }),
+                new Point(new double[] { 1.5, 1, 0.4 })
             };
+
+          
             Point[] expect1 = new Point[3] {
                 new Point(new double[]{4, 0, 0}),
                 new Point(new double[]{0, 4, 0}),
