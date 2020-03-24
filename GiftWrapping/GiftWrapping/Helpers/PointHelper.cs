@@ -44,5 +44,19 @@ namespace GiftWrapping.Helpers
         {
             return new Matrix(1, point.Dim, point);
         }
+
+        public static int FindIndexMinimumPoint(this IList<Point> points)
+        {
+            int index = 0;
+            for (int i = 0; i < points.Count; i++)
+            {
+                if (points[i] < points[index])
+                {
+                    index = i;
+                }
+            }
+
+            return index;
+        }
     }
 }

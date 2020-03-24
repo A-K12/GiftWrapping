@@ -1,68 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GiftWrapping.Helpers;
 using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
+using Microsoft.VisualBasic;
 
 namespace GiftWrapping
 {
     public class PlaneFinder
     {
-        private List<Point> planePoints, points;
-        private int dim;
-
-        public PlaneFinder(List<Point> points)
+        public static Hyperplane FindFirstPlane(IList<Point> points)
         {
             if (points.Count == 0)
             {
                 throw new ArgumentException("Sequence contains no elements");
             }
-            this.points = points;
-            planePoints = new List<Point>();
-            dim = points[0].Dim;
-        }
-
-        public Hyperplane FindFirstPlane()
-        {
-            Vector firstNormal = GetFirstNormal(dim);
-            Point firstPoint = FindStartingPoint(points);
-            Hyperplane mainPlane = new Hyperplane(firstPoint,firstNormal);
-            planePoints.Add(firstPoint);
-            points.Remove(firstPoint);
-            for (int i = 0; i < dim - 1; i++)
+            int dim = points[0].Dim;
+            Vector firstNormal = GetFirstNormal(dim); 
+            int firstIndex = points.FindIndexMinimumPoint();
+            int[] indexes = new int[dim];
+            indexes[0] = firstIndex;
+            Hyperplane mainPlane = new Hyperplane(points[firstIndex],firstNormal);
+            List<Vector> planeVectors = new List<Vector>();
+            for (int i = 1; i < dim; i++)
             {
                 int index = 0;
-                double maxValue = double.MinValue;
+                double maxAngle = double.MinValue;
                 Hyperplane maxPlane = mainPlane;
-                for (int j = 0; j < this.points.Count; j++)
+                Vector maxVector = default;
+                for (int j = 0; j < points.Count; j++)
                 {
-                    List<Point> vertexPoints = new List<Point>(planePoints)
-                    {
-                        this.points[j]
-                    }; 
-                    Vector[] vectors = vertexPoints.ToVectors();
+                     if(indexes.Contains(j)) continue;
+                    Vector vector = Point.ToVector(points[firstIndex], points[j]);
 
-                    Vector[] planeVectors = CreatePlaneVectors(vectors);
+                    Vector[] vectors = CreatePlaneVectors(new List<Vector>(planeVectors){vector});//really? 
 
-                    Hyperplane nextPlane = Hyperplane.CreatePlane(vertexPoints[0], planeVectors);
+                    Hyperplane nextPlane = Hyperplane.Create(points[j], vectors);
+
                     double angle = mainPlane.Angle(nextPlane);
-                    if (angle > maxValue)
+
+                    if (angle > maxAngle)
                     {
-                        maxValue = angle;
+                        maxAngle = angle;
                         index = j;
                         maxPlane= nextPlane;
+                        maxVector = vector;
                     }
                 }
-                planePoints.Add(this.points[index]);
-                this.points.RemoveAt(index);
+                planeVectors.Add(maxVector);
+                indexes[i] = index;
+                maxPlane.TryAddPoints(mainPlane.Points);
                 mainPlane = maxPlane;
-                maxPlane.TryAddPoints(planePoints.ToArray());
             }
 
             return mainPlane;
         }
 
-        private Vector[] CreatePlaneVectors(IList<Vector> vectors)
+        private static Vector[] CreatePlaneVectors(IList<Vector> vectors)
         {
             int dim = vectors[0].Dim;
             Vector[] planeVectors = new Vector[dim - 1];
@@ -81,30 +76,11 @@ namespace GiftWrapping
             return planeVectors;
         }
 
-        private Vector GetFirstNormal(int dimension)
+        private static Vector GetFirstNormal(int dimension)
         {
             double[] v = new double[dimension];
             v[0] = -1;
             return new Vector(v);
-        }
-
-        public static Point FindStartingPoint(List<Point> points)
-        {
-            if (points.Count == 0)
-            {
-                throw new InvalidOperationException("Sequence contains no elements");
-            }
-
-            Point startPoint = points[0];
-            foreach (Point point in points)
-            {
-                if (point[0] < startPoint[0])
-                {
-                    startPoint = point;
-                }
-            }
-
-            return startPoint;
         }
 
     }

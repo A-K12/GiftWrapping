@@ -55,7 +55,7 @@ namespace GiftWrapping.Structures
             Normal = Normal.Normalize();
         }
 
-        public static Hyperplane CreatePlane(IList<Point> points)
+        public static Hyperplane Create(IList<Point> points)
         {
             if (!points.HaveSameDimension())
             {
@@ -68,12 +68,12 @@ namespace GiftWrapping.Structures
             Vector[] vectors = points.ToVectors();
             Matrix matrix = vectors.ToMatrix(); 
 
-            Hyperplane hyperplane = CreatePlane(points.Last(), matrix);
+            Hyperplane hyperplane = Create(points.Last(), matrix);
             hyperplane._points.AddRange(points.SkipLast(1));
 
             return hyperplane;
         }
-        public static Hyperplane CreatePlane(Point point, IList<Vector> vectors)
+        public static Hyperplane Create(Point point, IList<Vector> vectors)
         {
             if (!vectors.HaveSameDimension())
             {
@@ -84,9 +84,9 @@ namespace GiftWrapping.Structures
                 throw new ArgumentException("Vectors and points have different dimensions..");
             }
 
-            return  CreatePlane(point, vectors.ToMatrix());
+            return  Create(point, vectors.ToMatrix());
         }
-        public static Hyperplane CreatePlane(Point point, Matrix matrix)
+        public static Hyperplane Create(Point point, Matrix matrix)
         {
             if (point.Dim - 1 > matrix.Rows)
             {
@@ -159,7 +159,7 @@ namespace GiftWrapping.Structures
             return HashCode.Combine(Normal, D);
         }
 
-        public void TryAddPoints(Point[] points)
+        public void TryAddPoints(IList<Point> points)
         {
             foreach (Point point in points)
             {

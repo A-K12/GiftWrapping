@@ -88,10 +88,11 @@ namespace GiftWrappingTest
             Vector n1 = new Vector(new double[] { 1, 1, 1 });
             Hyperplane h1 = new Hyperplane(p1, n1);
             Vector n2 = new Vector(new double[] { -1, -1, -1 });
+            Hyperplane h2 = new Hyperplane(p1, n2);
 
             h1.ReorientNormal();
 
-            Assert.AreEqual(n2, h1.Normal);
+            Assert.AreEqual(h2.Normal, h1.Normal);
         }
 
         [Test]

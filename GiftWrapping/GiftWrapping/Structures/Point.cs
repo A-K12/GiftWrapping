@@ -169,7 +169,7 @@ namespace GiftWrapping.Structures
 
         #region Miscellaneous procedures
 
-        public static Vector ToVector(Point end, Point begin)
+        public static Vector ToVector(Point begin, Point end)
         {
             Point vector = end - begin;
             

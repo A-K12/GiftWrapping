@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using GiftWrapping;
+using GiftWrapping.Helpers;
 using GiftWrapping.Structures;
 using NUnit.Framework;
 
@@ -42,16 +43,15 @@ namespace GiftWrappingTest
                 new Point(new double[]{0, 4, 0}),
                 new Point(new double[]{0, 0, 0})
             };
-            PlaneFinder faceFinder = new PlaneFinder(points.ToList());
 
-            Hyperplane result = faceFinder.FindFirstPlane();
+            Hyperplane result = PlaneFinder.FindFirstPlane(points);
 
             Assert.That(result.Points, Is.EquivalentTo(expect1).Or.EquivalentTo(expect2).
                 Or.EquivalentTo(expect3).Or.EquivalentTo(expect4));
         }
 
         [Test]
-        public void FindStartingVector_WhenCall_GetMinimalVector()
+        public void FindStartingVector_WhenCall_ReturnIndexVector()
         {
             Point[] points = new Point[5] {
                 new Point(new double[]{2, 3}),
@@ -60,9 +60,9 @@ namespace GiftWrappingTest
                 new Point(new double[]{5, 5}),
                 new Point(new double[]{2, 2})};
 
-            Point result = PlaneFinder.FindStartingPoint(points.ToList());
+            int result = points.FindIndexMinimumPoint();
 
-            Assert.AreSame(points[2], result);
+            Assert.AreEqual(2, result);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace GiftWrappingTest
 
             Exception ex = Assert.Catch<ArgumentException>(() =>
             {
-                PlaneFinder faceFinder = new PlaneFinder(points.ToList());
+                Hyperplane hyperplane= PlaneFinder.FindFirstPlane(points.ToList());
             });
 
             StringAssert.Contains("Sequence contains no elements", ex.Message);
