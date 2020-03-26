@@ -44,14 +44,7 @@ namespace GiftWrapping.Structures
 
         private double ComputeD()
         {
-            double d = 0;
-
-            for (int i = 0; i < Normal.Dim; i++)
-            {
-                d -= Normal[i] * MainPoint[i];
-            }
-
-            return d;
+            return  MainPoint*Normal;
         }
 
         private void Normalize()
@@ -86,7 +79,7 @@ namespace GiftWrapping.Structures
             }
             if (point.Dim != vectors[0].Dim)
             {
-                throw new ArgumentException("Vectors and points have different dimensions..");
+                throw new ArgumentException("Vectors and points have different dimensions.");
             }
 
             Vector normal = ComputeNormal(vectors.ToMatrix());

@@ -57,14 +57,14 @@ namespace GiftWrapping
 
             return hyperplane;
         }
-        private Hyperplane GetMaxPlane(Hyperplane mainPlane)
+        private Hyperplane GetMaxPlane(Hyperplane mainPlane)    
         {
             double maxAngle = double.MinValue;
             Hyperplane maxPlane = mainPlane;
             foreach (Point point in _pointIterator)
             {
                 Vector vector = Point.ToVector(_pointIterator.MinimumPoint, point);
-                IList <Vector> vectors = SetVector(mainPlane.BaseVectors, vector);
+                IList<Vector> vectors = SetVector(mainPlane.BaseVectors, vector);
                 Hyperplane plane = Hyperplane.Create(point, vectors);
                 double angle = mainPlane.Angle(plane);
 
@@ -91,7 +91,7 @@ namespace GiftWrapping
         }
 
 
-        private IList<Vector> SetVector(IList<Vector> vectors, Vector vector)
+        private IList<Vector> SetVector(ICollection<Vector> vectors, Vector vector)
         {
             List<Vector> newVectors = new List<Vector>(vectors);
             if (vectors.Any(t => Vector.AreParallel(t, vector)))

@@ -43,6 +43,16 @@ namespace GiftWrapping.Structures
         }
 
         /// <summary>
+        /// Convert a point to a vector
+        /// </summary>
+        /// <param name="p">The point to be converted</param>
+        /// <returns>The resultant vector</returns>
+        public static implicit operator Vector(Point p)
+        {
+            return new Vector(p);
+        }
+
+        /// <summary>
         /// Converting a one-dimensional array to a point
         /// </summary>
         /// <param name="p">Array to be converted</param>
