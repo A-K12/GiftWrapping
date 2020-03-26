@@ -9,17 +9,20 @@ namespace GiftWrapping.Structures
 {
     public class Hyperplane: IEquatable<Hyperplane>
     {
-        public int Dim { get; }
-
+        protected readonly List<Vector> _baseVectors;
         protected readonly List<Point> _points;
 
         public IList<Point> Points => _points.AsReadOnly();
 
         public Point MainPoint { get => _points.First(); }
-        
+
         public Vector Normal { get; protected set; }
         
         public double D { get; protected set; }
+
+        public int Dim { get; }
+
+        public IList<Vector> BaseVectors=> _baseVectors.AsReadOnly();
 
         public Hyperplane(Hyperplane hyperplane)
         {
@@ -27,12 +30,14 @@ namespace GiftWrapping.Structures
             Normal = hyperplane.Normal;
             _points = new List<Point>(hyperplane._points);
             D = hyperplane.D;
+            _baseVectors = hyperplane._baseVectors;
         }
         public Hyperplane(Point point, Vector normal)
         {
             Dim = normal.Dim;
             Normal = normal;
             _points = new List<Point>{point};
+            _baseVectors = new List<Vector>();
             D = ComputeD();
             Normalize();
         }
@@ -84,10 +89,18 @@ namespace GiftWrapping.Structures
                 throw new ArgumentException("Vectors and points have different dimensions..");
             }
 
-            return  Create(point, vectors.ToMatrix());
+            Vector normal = ComputeNormal(vectors.ToMatrix());
+            Hyperplane hyperplane = new Hyperplane(point, normal);
+            hyperplane._baseVectors.AddRange(vectors);
+            
+            return hyperplane;
         }
         public static Hyperplane Create(Point point, Matrix matrix)
         {
+            if (point.Dim != matrix.Rows)
+            {
+                throw new ArgumentException("Vectors and points have different dimensions..");
+            }
             if (point.Dim - 1 > matrix.Rows)
             {
                 throw new ArgumentException("The plane cannot be found . There are not enough vectors.");
@@ -95,6 +108,7 @@ namespace GiftWrapping.Structures
 
             Vector normal = ComputeNormal(matrix);
             Hyperplane hyperplane = new Hyperplane(point, normal);
+            hyperplane._baseVectors.AddRange(matrix.ToRowVectors());
 
             return hyperplane;
         }
@@ -110,6 +124,7 @@ namespace GiftWrapping.Structures
         {
             return Vector.Angle(this.Normal, hyperplane.Normal);
         }
+
 
         public int Side(Point point)
         {

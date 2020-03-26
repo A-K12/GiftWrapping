@@ -34,22 +34,12 @@ namespace GiftWrapping.Helpers
             return new Matrix(n, m, cells.ToArray());
         }
 
-        public static int CountZeros(this Vector vector)
-        {
-            int count = 0;
-            for (int i = 0; i < vector.Dim; i++)
-            {
-                if (Tools.NE(vector[i])) 
-                    continue;
-                count++;
-            }
-
-            return count;
-        }
         public static Matrix ToMatrix(this Vector vector)
         {
             return new Matrix(1, vector.Dim, vector);
         }
+
+
 
     }
 }

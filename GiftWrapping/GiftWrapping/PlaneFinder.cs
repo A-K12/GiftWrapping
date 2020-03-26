@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
 using GiftWrapping.Helpers;
 using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
@@ -10,81 +13,99 @@ namespace GiftWrapping
 {
     public class PlaneFinder
     {
+        private PointIterator _pointIterator;
 
-        public static Hyperplane FindFirstPlane(IList<Point> points)
+        private int _dim;
+
+        private bool[] _indexMap;
+
+        public PlaneFinder(IList<Point> points)
         {
-           
             if (points.Count == 0)
             {
                 throw new ArgumentException("Sequence contains no elements");
             }
-            int dim = points[0].Dim;
-            PlaneVectors planeVectors = new PlaneVectors(dim);
-
-            Vector firstNormal = GetFirstNormal(dim); 
-            int firstIndex = points.FindIndexMinimumPoint();
-            int[] indexes = new int[dim];
-            indexes[0] = firstIndex;
-            Hyperplane mainPlane = new Hyperplane(points[firstIndex],firstNormal);
-            for (int i = 1; i < dim; i++)
+            if (!points.HaveSameDimension())
             {
-                int index = 0;
-                double maxAngle = double.MinValue;
-                Hyperplane maxPlane = mainPlane;
-                Vector maxVector = default;
-                for (int j = 0; j < points.Count; j++)
-                {
-                     if(indexes.Contains(j)) continue;
-                    Vector vector = Point.ToVector(points[firstIndex], points[j]);
+                throw new ArgumentException("Points don't have same dimension");
+            }
 
-                    Vector[] vectors =  planeVectors.SetVectorAndGet(vector);
+            this._pointIterator = new PointIterator(points);
+            _dim = points[0].Dim;
+            _indexMap = new bool[_dim-1];
+        }
 
-                    Hyperplane nextPlane = Hyperplane.Create(points[j], vectors);
-
-                    double angle = mainPlane.Angle(nextPlane);
-
-                    if (angle > maxAngle)
-                    {
-                        maxAngle = angle;
-                        index = j;
-                        maxPlane= nextPlane;
-                        maxVector = vector;
-                    }
-                }
-                planeVectors.SetVector(maxVector);
-                indexes[i] = index;
+        public Hyperplane FindFirstPlane()
+        {
+            Hyperplane mainPlane = GetStartPlane();
+            for (int i = 1; i < _dim; i++)
+            {
+                _pointIterator.ExcludePoint(mainPlane.MainPoint);
+                Hyperplane maxPlane = GetMaxPlane(mainPlane);
                 maxPlane.TryAddPoints(mainPlane.Points);
                 mainPlane = maxPlane;
+                mainPlane.ReorientNormal();
             }
 
             return mainPlane;
         }
-
-
-        private static Vector[] CreatePlaneVectors(IList<Vector> vectors)
+        private Hyperplane GetStartPlane()
         {
-            int dim = vectors[0].Dim;
-            Vector[] planeVectors = new Vector[dim - 1];
-            for (int i = 0; i < vectors.Count; i++)
+            Vector[] firstVectors = GetFirstVectors();
+            Hyperplane hyperplane = Hyperplane.Create(_pointIterator.MinimumPoint, firstVectors);
+            hyperplane.ReorientNormal();
+
+            return hyperplane;
+        }
+        private Hyperplane GetMaxPlane(Hyperplane mainPlane)
+        {
+            double maxAngle = double.MinValue;
+            Hyperplane maxPlane = mainPlane;
+            foreach (Point point in _pointIterator)
             {
-                planeVectors[i] = vectors[i];
+                Vector vector = Point.ToVector(_pointIterator.MinimumPoint, point);
+                IList <Vector> vectors = SetVector(mainPlane.BaseVectors, vector);
+                Hyperplane plane = Hyperplane.Create(point, vectors);
+                double angle = mainPlane.Angle(plane);
+
+                if (angle < maxAngle) continue;
+                maxAngle = angle;
+                maxPlane = plane;
             }
 
-            for (int i = vectors.Count; i < planeVectors.Length; i++)
+            return maxPlane;
+        }
+        
+
+        private Vector[] GetFirstVectors()
+        {
+            Vector[] vectors = new Vector[_dim-1];
+            for (int i = 0; i < vectors.Length; i++)
             {
-                double[] vector = new double[dim];
-                vector[^i] = 1;
-                planeVectors[i] = new Vector(vector);
+                double[] cells = new double[_dim];
+                cells[i + 1] = 1;
+                vectors[i] = new Vector(cells);
             }
 
-            return planeVectors;
+            return vectors;
         }
 
-        private static Vector GetFirstNormal(int dimension)
+
+        private IList<Vector> SetVector(IList<Vector> vectors, Vector vector)
         {
-            double[] v = new double[dimension];
-            v[0] = -1;
-            return new Vector(v);
+            List<Vector> newVectors = new List<Vector>(vectors);
+            if (vectors.Any(t => Vector.AreParallel(t, vector)))
+            {
+                return newVectors;
+            }
+            for (int i = 0; i < vectors.Count; i++)
+            {
+                if (_indexMap[i]) continue;
+                newVectors[i] = vector;
+                return newVectors;
+            }
+
+            throw new ArgumentException("Cannot insert a vector");
         }
 
     }

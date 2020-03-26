@@ -11,15 +11,18 @@ namespace GiftWrappingTest
     {
         private static readonly object[] SetLinearEquationsSystems =
         {
+            new object[] {new Matrix(2, 3, new double[] {0, 1, 0, 0, 0, 1}), new Vector(new double[] {0, 0})},
+            new object[] {new Matrix(2, 3, new double[] {0, 0, 1, 0, 1, 0}), new Vector(new double[] {0, 0})},
             new object[] {new Matrix(2, 3, new double[] {1, 2, 3, 3, 5, 7}), new Vector(new double[] {3, 0})},
             new object[] {new Matrix(2, 3, new double[] {4, 0, 4, 0, 0, 1}), new Vector(new double[] {0, 0})},
-            new object[] {new Matrix(2, 3, new double[] {4, 0, 4, 0, 1, 0}), new Vector(new double[] {0, 0})}
+            new object[] {new Matrix(2, 3, new double[] {4, 0, 4, 0, 1, 0}), new Vector(new double[] {0, 0})},
+           
         };
 
 
 
         [Test, TestCaseSource(nameof(SetLinearEquationsSystems))]
-        public void GetRandomAnswer_AnyMatrix_ReturnVector(Matrix matrix, Vector vector)
+        public void GetAnswer_AnyMatrix_ReturnVector(Matrix matrix, Vector vector)
         {
 
             Vector result = GaussWithChoiceSolveSystem.FindAnswer(matrix, vector);
@@ -46,7 +49,7 @@ namespace GiftWrappingTest
 
 
         [Test]
-        public void GetRandomAnswer_DeterminateMatrix_ReturnVector()
+        public void GetAnswer_DeterminateMatrix_ReturnVector()
         {
             double[,] points = new double[3, 3]
             {
