@@ -9,7 +9,7 @@ namespace GiftWrapping.Structures
         /// The internal storage of the point as a one-dimensional array
         /// </summary>
         private readonly double[] _v;
-
+       
         /// <summary>
         /// Dimension of the point
         /// </summary>

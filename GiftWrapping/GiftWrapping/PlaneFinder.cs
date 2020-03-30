@@ -21,6 +21,7 @@ namespace GiftWrapping
 
         public PlaneFinder(IList<Point> points)
         {
+            
             if (points.Count == 0)
             {
                 throw new ArgumentException("Sequence contains no elements");
