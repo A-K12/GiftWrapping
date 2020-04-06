@@ -12,6 +12,7 @@ namespace GiftWrappingTest
         [Test]
         public void Set_IndexOutOfRange_ThrowsException()
         {
+
             Point point = new Point(new double[3]);
 
             Exception ex = Assert.Catch<Exception>(() =>
