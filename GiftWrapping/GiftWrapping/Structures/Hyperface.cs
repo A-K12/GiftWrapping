@@ -8,18 +8,21 @@ namespace GiftWrapping.Structures
     {
         public int Dim { get; }
 
-        private ICollection<IHyperface> hyperfaces;
+        private ICollection<IHyperface> _hyperfaces;
 
-        private IDictionary<int, int[]> NeighboringFaces { get;  }
+        private IDictionary<int, int[]> _neighboringFaces;
+        public int[] NeighboringFaces(int i) => _neighboringFaces[i];
 
         public Hyperface()
         {
-            hyperfaces = new List<IHyperface>();
+            _hyperfaces = new List<IHyperface>();
+            _neighboringFaces = new Dictionary<int, int[]>();
         }
 
         public void AddHyperface(Hyperface hyperface)
         {
-            hyperfaces.Add(hyperface);
+            _hyperfaces.Add(hyperface);
         }
+
     }
 }
