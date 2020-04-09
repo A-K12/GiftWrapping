@@ -36,13 +36,13 @@ namespace GiftWrapping
             _indexMap = new bool[_dim-1];
         }
 
-        public Hyperplane FindFirstPlane()
+        public ConvexHull FindFirstPlane()
         {
-            Hyperplane mainPlane = GetStartPlane();
+            ConvexHull mainPlane = GetStartPlane();
             for (int i = 1; i < _dim; i++)
             {
                 _pointIterator.ExcludePoint(mainPlane.MainPoint);
-                Hyperplane maxPlane = GetMaxPlane(mainPlane);
+                ConvexHull maxPlane = GetMaxPlane(mainPlane);
                 maxPlane.TryAddPoints(mainPlane.Points);
                 mainPlane = maxPlane;
                 mainPlane.ReorientNormal();
@@ -50,23 +50,23 @@ namespace GiftWrapping
 
             return mainPlane;
         }
-        private Hyperplane GetStartPlane()
+        private ConvexHull GetStartPlane()
         {
             Vector[] firstVectors = GetFirstVectors();
-            Hyperplane hyperplane = Hyperplane.Create(_pointIterator.MinimumPoint, firstVectors);
+            ConvexHull hyperplane = ConvexHull.Create(_pointIterator.MinimumPoint, firstVectors);
             hyperplane.ReorientNormal();
 
             return hyperplane;
         }
-        private Hyperplane GetMaxPlane(Hyperplane mainPlane)    
+        private ConvexHull GetMaxPlane(ConvexHull mainPlane)    
         {
             double maxAngle = double.MinValue;
-            Hyperplane maxPlane = mainPlane;
+            ConvexHull maxPlane = mainPlane;
             foreach (Point point in _pointIterator)
             {
                 Vector vector = Point.ToVector(_pointIterator.MinimumPoint, point);
                 IList<Vector> vectors = SetVector(mainPlane.BaseVectors, vector);
-                Hyperplane plane = Hyperplane.Create(point, vectors);
+                ConvexHull plane = ConvexHull.Create(point, vectors);
                 double angle = mainPlane.Angle(plane);
 
                 if (angle < maxAngle) continue;

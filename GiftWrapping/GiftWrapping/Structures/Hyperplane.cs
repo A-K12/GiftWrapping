@@ -7,7 +7,7 @@ using GiftWrapping.LinearEquations;
 
 namespace GiftWrapping.Structures
 {
-    public class Hyperplane: IEquatable<Hyperplane>
+    public class ConvexHull: IEquatable<ConvexHull>
     {
         protected readonly List<Vector> _baseVectors;
         protected readonly List<Point> _points;
@@ -24,7 +24,7 @@ namespace GiftWrapping.Structures
 
         public IList<Vector> BaseVectors=> _baseVectors.AsReadOnly();
 
-        public Hyperplane(Hyperplane hyperplane)
+        public ConvexHull(ConvexHull hyperplane)
         {
             Dim = hyperplane.Dim;
             Normal = hyperplane.Normal;
@@ -32,7 +32,7 @@ namespace GiftWrapping.Structures
             D = hyperplane.D;
             _baseVectors = hyperplane._baseVectors;
         }
-        public Hyperplane(Point point, Vector normal)
+        public ConvexHull(Point point, Vector normal)
         {
             Dim = normal.Dim;
             Normal = normal;
@@ -53,7 +53,7 @@ namespace GiftWrapping.Structures
             Normal = Normal.Normalize();
         }
 
-        public static Hyperplane Create(IList<Point> points)
+        public static ConvexHull Create(IList<Point> points)
         {
             if (!points.HaveSameDimension())
             {
@@ -66,12 +66,12 @@ namespace GiftWrapping.Structures
             Vector[] vectors = points.ToVectors();
             Matrix matrix = vectors.ToMatrix(); 
 
-            Hyperplane hyperplane = Create(points.Last(), matrix);
+            ConvexHull hyperplane = Create(points.Last(), matrix);
             hyperplane._points.AddRange(points.SkipLast(1));
 
             return hyperplane;
         }
-        public static Hyperplane Create(Point point, IList<Vector> vectors)
+        public static ConvexHull Create(Point point, IList<Vector> vectors)
         {
             if (!vectors.HaveSameDimension())
             {
@@ -83,12 +83,12 @@ namespace GiftWrapping.Structures
             }
 
             Vector normal = ComputeNormal(vectors.ToMatrix());
-            Hyperplane hyperplane = new Hyperplane(point, normal);
+            ConvexHull hyperplane = new ConvexHull(point, normal);
             hyperplane._baseVectors.AddRange(vectors);
             
             return hyperplane;
         }
-        public static Hyperplane Create(Point point, Matrix matrix)
+        public static ConvexHull Create(Point point, Matrix matrix)
         {
             if (point.Dim != matrix.Rows)
             {
@@ -100,7 +100,7 @@ namespace GiftWrapping.Structures
             }
 
             Vector normal = ComputeNormal(matrix);
-            Hyperplane hyperplane = new Hyperplane(point, normal);
+            ConvexHull hyperplane = new ConvexHull(point, normal);
             hyperplane._baseVectors.AddRange(matrix.ToRowVectors());
 
             return hyperplane;
@@ -113,7 +113,7 @@ namespace GiftWrapping.Structures
             return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide);
         }
 
-        public double Angle(Hyperplane hyperplane)
+        public double Angle(ConvexHull hyperplane)
         {
             return Vector.Angle(this.Normal, hyperplane.Normal);
         }
@@ -131,7 +131,7 @@ namespace GiftWrapping.Structures
             Normal = -Normal;
         }
 
-        public bool Equals(Hyperplane other)
+        public bool Equals(ConvexHull other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -159,7 +159,7 @@ namespace GiftWrapping.Structures
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((Hyperplane) obj);
+            return Equals((ConvexHull) obj);
         }
 
         public override int GetHashCode() 

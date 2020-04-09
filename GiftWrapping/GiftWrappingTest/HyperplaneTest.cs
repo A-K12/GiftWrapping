@@ -15,8 +15,8 @@ namespace GiftWrappingTest
             Point p1 = new Point(3);
             Vector n1 = new Vector(new double[]{1,0,0});
             Vector n2 = new Vector(new double[] { 0, 1, 0 });
-            Hyperplane h1 = new Hyperplane(p1, n1);
-            Hyperplane h2 = new Hyperplane(p1, n2);
+            ConvexHull h1 = new ConvexHull(p1, n1);
+            ConvexHull h2 = new ConvexHull(p1, n2);
             const double expect = Math.PI/2;
 
             double result = h1.Angle(h2);
@@ -29,7 +29,7 @@ namespace GiftWrappingTest
         {
             Point p1 = new Point(3);
             Vector n1 = new Vector(new double[] { 1, 0, 0 });
-            Hyperplane h1 = new Hyperplane(p1, n1);
+            ConvexHull h1 = new ConvexHull(p1, n1);
             const double expect = 0;
 
             double result = h1.Angle(h1);
@@ -44,7 +44,7 @@ namespace GiftWrappingTest
         {
             Point p1 = new Point(3);
             Vector n1 = new Vector(new double[] { 1, 0, 0 });
-            Hyperplane h1 = new Hyperplane(p1, n1);
+            ConvexHull h1 = new ConvexHull(p1, n1);
             Point p2 = new Point(new double[]{1,1,1});
             const int expect = 1;
 
@@ -58,7 +58,7 @@ namespace GiftWrappingTest
         {
             Point p1 = new Point(3);
             Vector n1 = new Vector(new double[] { 1, 0, 0 });
-            Hyperplane h1 = new Hyperplane(p1, n1);
+            ConvexHull h1 = new ConvexHull(p1, n1);
             Point p2 = new Point(new double[] { -1, -1, -1 });
             const int expect = -1;
 
@@ -72,7 +72,7 @@ namespace GiftWrappingTest
         {
             Point p1 = new Point(3);
             Vector n1 = new Vector(new double[] { 1, 0, 0 });
-            Hyperplane h1 = new Hyperplane(p1, n1);
+            ConvexHull h1 = new ConvexHull(p1, n1);
             Point p2 = new Point(new double[] { 0, 4, 4 });
             const int expect = 0;
 
@@ -86,9 +86,9 @@ namespace GiftWrappingTest
         {
             Point p1 = new Point(3);
             Vector n1 = new Vector(new double[] { 1, 1, 1 });
-            Hyperplane h1 = new Hyperplane(p1, n1);
+            ConvexHull h1 = new ConvexHull(p1, n1);
             Vector n2 = new Vector(new double[] { -1, -1, -1 });
-            Hyperplane h2 = new Hyperplane(p1, n2);
+            ConvexHull h2 = new ConvexHull(p1, n2);
 
             h1.ReorientNormal();
 
@@ -100,10 +100,10 @@ namespace GiftWrappingTest
         {
             Point p1 = new Point(new double[]{1, 7, 0});
             Vector n1 = new Vector(new double[] { 2, -1, 0 });
-            Hyperplane h1 = new Hyperplane(p1, n1);
+            ConvexHull h1 = new ConvexHull(p1, n1);
             Point p2 = new Point(new double[] { -1, 3, 0 });
             Vector n2 = new Vector(new double[] { -4, 2, 0 });
-            Hyperplane h2 = new Hyperplane(p2, n2);
+            ConvexHull h2 = new ConvexHull(p2, n2);
 
              bool result = h1.Equals(h2);
 
@@ -116,10 +116,10 @@ namespace GiftWrappingTest
         {
             Point p1 = new Point(new double[] { 1, 7, 0 });
             Vector n1 = new Vector(new double[] { 1, -1, 0 });
-            Hyperplane h1 = new Hyperplane(p1, n1);
+            ConvexHull h1 = new ConvexHull(p1, n1);
             Point p2 = new Point(new double[] { -1, 3, 0 });
             Vector n2 = new Vector(new double[] { -4, 2, 0 });
-            Hyperplane h2 = new Hyperplane(p2, n2);
+            ConvexHull h2 = new ConvexHull(p2, n2);
 
             bool result = h1.Equals(h2);
 
@@ -132,10 +132,10 @@ namespace GiftWrappingTest
         {
             Point p1 = new Point(new double[] { 1, 7, 0 });
             Vector n1 = new Vector(new double[] { -2, 1, 0 });
-            Hyperplane h1 = new Hyperplane(p1, n1);
+            ConvexHull h1 = new ConvexHull(p1, n1);
             Point p2 = new Point(new double[] { -1, 3, 0 });
             Vector n2 = new Vector(new double[] { -4, 2, 0 });
-            Hyperplane h2 = new Hyperplane(p2, n2);
+            ConvexHull h2 = new ConvexHull(p2, n2);
 
             int result1 = h1.GetHashCode();
             int result2 = h2.GetHashCode();

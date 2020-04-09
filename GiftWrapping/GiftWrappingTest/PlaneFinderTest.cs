@@ -47,7 +47,7 @@ namespace GiftWrappingTest
             };
             PlaneFinder planeFinder = new PlaneFinder(points);
 
-            Hyperplane result = planeFinder.FindFirstPlane();
+            ConvexHull result = planeFinder.FindFirstPlane();
 
             Assert.That(result.Points, Is.EquivalentTo(expect1).Or.EquivalentTo(expect2).
                 Or.EquivalentTo(expect3).Or.EquivalentTo(expect4));
@@ -104,7 +104,7 @@ namespace GiftWrappingTest
             };
             PlaneFinder planeFinder = new PlaneFinder(points);
 
-            Hyperplane result = planeFinder.FindFirstPlane();
+            ConvexHull result = planeFinder.FindFirstPlane();
 
             Assert.That(result.Points, Is.EquivalentTo(expect1).Or.EquivalentTo(expect2).
                 Or.EquivalentTo(expect3).Or.EquivalentTo(expect4).Or.EquivalentTo(expect5));
@@ -171,7 +171,7 @@ namespace GiftWrappingTest
 
 
             PlaneFinder planeFinder = new PlaneFinder(points);
-            Hyperplane result = planeFinder.FindFirstPlane();
+            ConvexHull result = planeFinder.FindFirstPlane();
 
             Assert.That(result.Points, Is.EquivalentTo(expect[0]).Or.EquivalentTo(expect[1]).
                 Or.EquivalentTo(expect[2]).Or.EquivalentTo(expect[3]));
