@@ -7,7 +7,7 @@ using GiftWrapping.LinearEquations;
 
 namespace GiftWrapping.Structures
 {
-    public class ConvexHull: IEquatable<ConvexHull>
+    public class Hyperplane: IEquatable<Hyperplane>
     {
         protected readonly List<Vector> _baseVectors;
         protected readonly List<Point> _points;
@@ -24,7 +24,7 @@ namespace GiftWrapping.Structures
 
         public IList<Vector> BaseVectors=> _baseVectors.AsReadOnly();
 
-        public ConvexHull(ConvexHull hyperplane)
+        public Hyperplane(Hyperplane hyperplane)
         {
             Dim = hyperplane.Dim;
             Normal = hyperplane.Normal;
@@ -32,7 +32,7 @@ namespace GiftWrapping.Structures
             D = hyperplane.D;
             _baseVectors = hyperplane._baseVectors;
         }
-        public ConvexHull(Point point, Vector normal)
+        public Hyperplane(Point point, Vector normal)
         {
             Dim = normal.Dim;
             Normal = normal;
@@ -53,7 +53,7 @@ namespace GiftWrapping.Structures
             Normal = Normal.Normalize();
         }
 
-        public static ConvexHull Create(IList<Point> points)
+        public static Hyperplane Create(IList<Point> points)
         {
             if (!points.HaveSameDimension())
             {
@@ -64,14 +64,14 @@ namespace GiftWrapping.Structures
                 throw new ArgumentException("Number of points is not equal to dimension.");
             }
             Vector[] vectors = points.ToVectors();
-            Matrix matrix = vectors.ToMatrix(); 
+            Matrix matrix = vectors.ToMatrix();
 
-            ConvexHull hyperplane = Create(points.Last(), matrix);
+            Hyperplane hyperplane = Create(points.Last(), matrix);
             hyperplane._points.AddRange(points.SkipLast(1));
 
             return hyperplane;
         }
-        public static ConvexHull Create(Point point, IList<Vector> vectors)
+        public static Hyperplane Create(Point point, IList<Vector> vectors)
         {
             if (!vectors.HaveSameDimension())
             {
@@ -83,12 +83,12 @@ namespace GiftWrapping.Structures
             }
 
             Vector normal = ComputeNormal(vectors.ToMatrix());
-            ConvexHull hyperplane = new ConvexHull(point, normal);
+            Hyperplane hyperplane = new Hyperplane(point, normal);
             hyperplane._baseVectors.AddRange(vectors);
             
             return hyperplane;
         }
-        public static ConvexHull Create(Point point, Matrix matrix)
+        public static Hyperplane Create(Point point, Matrix matrix)
         {
             if (point.Dim != matrix.Rows)
             {
@@ -100,7 +100,7 @@ namespace GiftWrapping.Structures
             }
 
             Vector normal = ComputeNormal(matrix);
-            ConvexHull hyperplane = new ConvexHull(point, normal);
+            Hyperplane hyperplane = new Hyperplane(point, normal);
             hyperplane._baseVectors.AddRange(matrix.ToRowVectors());
 
             return hyperplane;
@@ -113,7 +113,7 @@ namespace GiftWrapping.Structures
             return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide);
         }
 
-        public double Angle(ConvexHull hyperplane)
+        public double Angle(Hyperplane hyperplane)
         {
             return Vector.Angle(this.Normal, hyperplane.Normal);
         }
@@ -131,7 +131,7 @@ namespace GiftWrapping.Structures
             Normal = -Normal;
         }
 
-        public bool Equals(ConvexHull other)
+        public bool Equals(Hyperplane other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

@@ -5,24 +5,22 @@ using System.ComponentModel;
 
 namespace GiftWrapping.Structures
 {
-    public class ConvexHull:IConvexHull
+    public class ConvexHull : IConvexHull
     {
-       
-
         public int Dim { get; }
 
         private ICollection<IConvexHull> _hyperfaces;
 
-        private IDictionary<int, int[]> _neighboringFaces;
-        public int[] NeighboringFaces(int i) => _neighboringFaces[i];
+        public IConvexHull NeighboringFace { get; set; }
+
+        public IConvexHull ParentFace { get; set; }
 
         public ConvexHull()
         {
             _hyperfaces = new List<IConvexHull>();
-            _neighboringFaces = new Dictionary<int, int[]>();
         }
 
-        public void AddHyperface(ConvexHull hyperface)
+        public void AddHyperface(IConvexHull hyperface)
         {
             _hyperfaces.Add(hyperface);
         }
@@ -31,7 +29,7 @@ namespace GiftWrapping.Structures
         protected bool Equals(ConvexHull other)
         {
             return other.Dim.Equals(Dim) && other._hyperfaces.Equals(_hyperfaces) &&
-                   other._neighboringFaces.Equals(_neighboringFaces);
+                   other.NeighboringFace.Equals(NeighboringFace)&& ParentFace.Equals(other.ParentFace);
         }
 
         public override bool Equals(object obj)
@@ -44,7 +42,7 @@ namespace GiftWrapping.Structures
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_hyperfaces, Dim,_neighboringFaces);
+            return HashCode.Combine(_hyperfaces, Dim, NeighboringFace, ParentFace);
         }
     }
 }
