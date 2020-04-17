@@ -5,30 +5,30 @@ using System.ComponentModel;
 
 namespace GiftWrapping.Structures
 {
-    public class ConvexHull : IConvexHull
+    public class Hyperface : IHypeface
     {
         public int Dim { get; }
 
-        private ICollection<IConvexHull> _hyperfaces;
+        private ICollection<IHypeface> Hyperfaces { get; }
 
-        public IConvexHull NeighboringFace { get; set; }
+        public IHypeface NeighboringFace { get; set; }
 
-        public IConvexHull ParentFace { get; set; }
+        public IHypeface ParentFace { get; set; }
 
-        public ConvexHull()
+        public Hyperface()
         {
-            _hyperfaces = new List<IConvexHull>();
+            Hyperfaces = new List<IHypeface>();
         }
 
-        public void AddHyperface(IConvexHull hyperface)
+        public void AddHyperface(IHypeface hyperface)
         {
-            _hyperfaces.Add(hyperface);
+            Hyperfaces.Add(hyperface);
         }
 
 
-        protected bool Equals(ConvexHull other)
+        public bool Equals(Hyperface other)
         {
-            return other.Dim.Equals(Dim) && other._hyperfaces.Equals(_hyperfaces) &&
+            return other.Dim.Equals(Dim) && other.Hyperfaces.Equals(Hyperfaces) &&
                    other.NeighboringFace.Equals(NeighboringFace)&& ParentFace.Equals(other.ParentFace);
         }
 
@@ -37,12 +37,12 @@ namespace GiftWrapping.Structures
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((ConvexHull)obj);
+            return Equals((Hyperface)obj);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_hyperfaces, Dim, NeighboringFace, ParentFace);
+            return HashCode.Combine(Hyperfaces, Dim, NeighboringFace, ParentFace);
         }
     }
 }

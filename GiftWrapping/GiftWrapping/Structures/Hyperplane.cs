@@ -159,7 +159,7 @@ namespace GiftWrapping.Structures
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((ConvexHull) obj);
+            return Equals((Hyperface) obj);
         }
 
         public override int GetHashCode() 
