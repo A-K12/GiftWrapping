@@ -30,6 +30,8 @@ namespace GiftWrapping
 
         private void FindFirstFace()
         {
+            Point mainPoint;
+            Vector normal;
 
         }
     }

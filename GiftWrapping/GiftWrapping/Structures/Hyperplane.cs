@@ -185,13 +185,8 @@ namespace GiftWrapping.Structures
 
         public bool IsPointInPlane(Point point)
         {
-            double result = 0;
-            for (int i = 0; i < Normal.Dim; i++)
-            {
-                result += Normal[i] * (point[i] - MainPoint[i]);
-            }
-
-            return Tools.EQ(result);
+            Vector v = Point.ToVector(MainPoint, point);
+            return Tools.EQ(Normal*v);
         }
 
     }   

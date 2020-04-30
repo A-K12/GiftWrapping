@@ -49,7 +49,7 @@ namespace GiftWrapping.Structures
         /// <returns>The resultant vector</returns>
         public static implicit operator Vector(Point p)
         {
-            return new Vector(p);
+            return new Vector((double[])p);
         }
 
         /// <summary>
