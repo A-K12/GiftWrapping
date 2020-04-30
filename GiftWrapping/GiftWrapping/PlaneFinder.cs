@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using GiftWrapping.Helpers;
 using GiftWrapping.Structures;
 
@@ -14,31 +15,20 @@ namespace GiftWrapping
 
         private bool[] _indexMap;
 
-        public PlaneFinder(IList<Point> points)
-        {
-            
-            if (points.Count == 0)
-            {
-                throw new ArgumentException("Sequence contains no elements");
-            }
-            if (!points.HaveSameDimension())
-            {
-                throw new ArgumentException("Points don't have same dimension");
-            }
+        private Vector[] vectors;
 
+
+        public Hyperplane FindFirstPlane(IList<Point> points)
+        {
             this._pointIterator = new PointIterator(points);
             _dim = points[0].Dim;
-            _indexMap = new bool[_dim-1];
-        }
-
-        public Hyperplane FindFirstPlane()
-        {
+            _indexMap = new bool[_dim - 1];
             Hyperplane mainPlane = GetStartPlane();
+            vectors = GetFirstVectors();
             for (int i = 1; i < _dim; i++)
             {
                 _pointIterator.ExcludePoint(mainPlane.MainPoint);
                 Hyperplane maxPlane = GetMaxPlane(mainPlane);
-                maxPlane.TryAddPoints(mainPlane.Points);
                 mainPlane = maxPlane;
                 mainPlane.ReorientNormal();
             }
@@ -48,7 +38,7 @@ namespace GiftWrapping
         private Hyperplane GetStartPlane()
         {
             Vector[] firstVectors = GetFirstVectors();
-            Hyperplane hyperplane = Hyperplane.Create(_pointIterator.MinimumPoint, firstVectors);
+            Hyperplane hyperplane = HyperplaneHelper.Create(_pointIterator.MinimumPoint, firstVectors);
             hyperplane.ReorientNormal();
 
             return hyperplane;
@@ -57,21 +47,22 @@ namespace GiftWrapping
         {
             double maxAngle = double.MinValue;
             Hyperplane maxPlane = mainPlane;
+            Vector[] tempVectors = vectors;
             foreach (Point point in _pointIterator)
             {
                 Vector vector = Point.ToVector(_pointIterator.MinimumPoint, point);
-                IList<Vector> vectors = SetVector(mainPlane.BaseVectors, vector);
-                Hyperplane plane = Hyperplane.Create(point, vectors);
+                tempVectors = SetVector(vector);
+                Hyperplane plane = HyperplaneHelper.Create(_pointIterator.MinimumPoint, tempVectors);
                 double angle = mainPlane.Angle(plane);
-
                 if (angle < maxAngle) continue;
                 maxAngle = angle;
                 maxPlane = plane;
             }
 
+            vectors = tempVectors;
             return maxPlane;
         }
-        
+
 
         private Vector[] GetFirstVectors()
         {
@@ -87,14 +78,14 @@ namespace GiftWrapping
         }
 
 
-        private IList<Vector> SetVector(ICollection<Vector> vectors, Vector vector)
+        private Vector[] SetVector(Vector vector)
         {
-            List<Vector> newVectors = new List<Vector>(vectors);
+            Vector[] newVectors = (Vector[]) vectors.Clone();
             if (vectors.Any(t => Vector.AreParallel(t, vector)))
             {
                 return newVectors;
             }
-            for (int i = 0; i < vectors.Count; i++)
+            for (int i = 0; i < vectors.Length; i++)
             {
                 if (_indexMap[i]) continue;
                 newVectors[i] = vector;

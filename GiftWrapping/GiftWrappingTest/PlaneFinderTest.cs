@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GiftWrapping;
@@ -11,8 +12,7 @@ namespace GiftWrappingTest
     [TestFixture]
     public class PlaneFinderTest
     {
-        [Test]
-        public void FindFirstPlane_3DSimplex_ReturnPoints()
+        private static IEnumerable SetPoints()
         {
             Point[] points = new Point[] {
                 new Point(new double[]{4, 0, 0}),
@@ -23,40 +23,21 @@ namespace GiftWrappingTest
                 new Point(new double[]{1, 1, 1}),
                 new Point(new double[]{1, 1, 0.5})
             };
-
-          
-            Point[] expect1 = new Point[3] {
-                new Point(new double[]{4, 0, 0}),
-                new Point(new double[]{0, 4, 0}),
-                new Point(new double[]{0, 0, 0})
+            Vector v1 = new Vector(new double[] { 0, 0, -1 });
+            Vector v2 = new Vector(new double[] { 0, -1, 0 });
+            Vector v3 = new Vector(new double[] { -1, 0, 0 });
+            Vector v4 = new Vector(new double[] { -1, -1, -1 });
+            Hyperplane[] expect = new Hyperplane[]
+            {
+                new Hyperplane(points[3], v1),
+                new Hyperplane(points[3], v2),
+                new Hyperplane(points[3], v3),
+                new Hyperplane(points[3], v4)
             };
-            Point[] expect2 = new Point[3] {
-                new Point(new double[]{4, 0, 0}),
-                new Point(new double[]{0, 4, 0}),
-                new Point(new double[]{0, 0, 4})
-            };
-            Point[] expect3 = new Point[3] {
-                new Point(new double[]{4, 0, 0}),
-                new Point(new double[]{0, 0, 4}),
-                new Point(new double[]{0, 0, 0})
-            };
-            Point[] expect4 = new Point[3] {
-                new Point(new double[]{0, 0, 4}),
-                new Point(new double[]{0, 4, 0}),
-                new Point(new double[]{0, 0, 0})
-            };
-            PlaneFinder planeFinder = new PlaneFinder(points);
 
-            Hyperplane result = planeFinder.FindFirstPlane();
+            yield return new object[] {points, expect};
 
-            Assert.That(result.Points, Is.EquivalentTo(expect1).Or.EquivalentTo(expect2).
-                Or.EquivalentTo(expect3).Or.EquivalentTo(expect4));
-        }
-
-        [Test]
-        public void FindFirstPlane_4DSimplex_ReturnPoints()
-        {
-            Point[] points = new Point[] {
+            points = new Point[] {
                 new Point(new double[]{4, 0, 0, 0}),
                 new Point(new double[]{0, 4, 0, 0}),
                 new Point(new double[]{0, 0, 4, 0}),
@@ -71,49 +52,23 @@ namespace GiftWrappingTest
                 new Point(new double[]{1, 1, 1, 1})
             };
 
+            v1 = new Vector(new double[] { 0, 0, 0, -1 });
+            v2 = new Vector(new double[] { 0, 0, -1, 0 });
+            v3 = new Vector(new double[] { 0, -1, 0, 0 });
+            v4 = new Vector(new double[] { -1, 0, 0, 0 });
+            Vector v5 = new Vector(new double[] { -1, -1, -1, -1 });
+            expect = new Hyperplane[]
+            {
+                new Hyperplane(points[4], v1),
+                new Hyperplane(points[4], v2),
+                new Hyperplane(points[4], v3),
+                new Hyperplane(points[4], v4),
+                new Hyperplane(points[4], v5)
+            };
 
-            Point[] expect1 = new Point[] {
-                new Point(new double[]{4, 0, 0, 0}),
-                new Point(new double[]{0, 4, 0, 0}),
-                new Point(new double[]{0, 0, 4, 0}),
-                new Point(new double[]{0, 0, 0, 4})
-            };
-            Point[] expect2 = new Point[] {
-                new Point(new double[]{0, 4, 0, 0}),
-                new Point(new double[]{0, 0, 4, 0}),
-                new Point(new double[]{0, 0, 0, 4}),
-                new Point(new double[]{0, 0, 0, 0})
-            };
-            Point[] expect3 = new Point[] {
-                new Point(new double[]{4, 0, 0, 0}),
-                new Point(new double[]{0, 0, 4, 0}),
-                new Point(new double[]{0, 0, 0, 4}),
-                new Point(new double[]{0, 0, 0, 0})
-            };
-            Point[] expect4 = new Point[] {
-                new Point(new double[]{4, 0, 0, 0}),
-                new Point(new double[]{0, 4, 0, 0}),
-                new Point(new double[]{0, 0, 0, 4}),
-                new Point(new double[]{0, 0, 0, 0})
-            };
-            Point[] expect5 = new Point[] {
-                new Point(new double[]{4, 0, 0, 0}),
-                new Point(new double[]{0, 4, 0, 0}),
-                new Point(new double[]{0, 0, 4, 0}),
-                new Point(new double[]{0, 0, 0, 0})
-            };
-            PlaneFinder planeFinder = new PlaneFinder(points);
+            yield return new object[] { points, expect };
 
-            Hyperplane result = planeFinder.FindFirstPlane();
-
-            Assert.That(result.Points, Is.EquivalentTo(expect1).Or.EquivalentTo(expect2).
-                Or.EquivalentTo(expect3).Or.EquivalentTo(expect4).Or.EquivalentTo(expect5));
-        }
-
-        [Test]
-        public void FindFirstPlane_5DSimplex_ReturnPoints()
-        {
-            Point[] points = new Point[] {
+            points = new Point[] {
                 new Point(new double[]{4, 0, 0, 0, 0}),
                 new Point(new double[]{0, 4, 0, 0, 0}),
                 new Point(new double[]{0, 0, 4, 0, 0}),
@@ -129,52 +84,32 @@ namespace GiftWrappingTest
                 new Point(new double[]{1, 1, 1, 1, 3}),
                 new Point(new double[]{1, 1, 1, 1, 1})
             };
-
-
-            Point[][] expect = new Point[5][];
-            expect[0] = new Point[]
+            v1 = new Vector(new double[] { 0, 0, 0, 0, -1 });
+            v2 = new Vector(new double[] { 0, 0, 0, -1, 0 });
+            v3 = new Vector(new double[] { 0, 0, -1, 0, 0 });
+            v4 = new Vector(new double[] { 0, -1, 0, 0, 0 });
+            v5 = new Vector(new double[] { -1, 0, 0, 0, 0 });
+            Vector v6 = new Vector(new double[] { -1, -1, -1, -1 });
+            expect = new Hyperplane[]
             {
-                new Point(new double[] {4, 0, 0, 0, 0}),
-                new Point(new double[] {0, 4, 0, 0, 0}),
-                new Point(new double[] {0, 0, 4, 0, 0}),
-                new Point(new double[] {0, 0, 0, 4, 0}),
-                new Point(new double[] {0, 0, 0, 0, 4})
-            };
-            expect[1] = new Point[] {
-                new Point(new double[]{0, 4, 0, 0, 0}),
-                new Point(new double[]{0, 0, 4, 0, 0}),
-                new Point(new double[]{0, 0, 0, 4, 0}),
-                new Point(new double[]{0, 0, 0, 0, 4}),
-                new Point(new double[]{0, 0, 0, 0, 0})
-            };
-            expect[2] = new Point[] {
-                new Point(new double[]{4, 0, 0, 0, 0}),
-                new Point(new double[]{0, 0, 4, 0, 0}),
-                new Point(new double[]{0, 0, 0, 4, 0}),
-                new Point(new double[]{0, 0, 0, 0, 4}),
-                new Point(new double[]{0, 0, 0, 0, 0})
-            };
-            expect[3]= new Point[] {
-                new Point(new double[]{4, 0, 0, 0, 0}),
-                new Point(new double[]{0, 4, 0, 0, 0}),
-                new Point(new double[]{0, 0, 0, 4, 0}),
-                new Point(new double[]{0, 0, 0, 0, 4}),
-                new Point(new double[]{0, 0, 0, 0, 0})
-            };
-            expect[4] = new Point[] {
-                new Point(new double[]{4, 0, 0, 0, 0}),
-                new Point(new double[]{0, 4, 0, 0, 0}),
-                new Point(new double[]{0, 0, 4, 0, 0}),
-                new Point(new double[]{0, 0, 0, 4, 0}),
-                new Point(new double[]{0, 0, 0, 0, 0})
+                new Hyperplane(points[5], v1),
+                new Hyperplane(points[5], v2),
+                new Hyperplane(points[5], v3),
+                new Hyperplane(points[5], v4),
+                new Hyperplane(points[5], v5)
             };
 
+            yield return new object[] { points, expect };
+        }
 
-            PlaneFinder planeFinder = new PlaneFinder(points);
-            Hyperplane result = planeFinder.FindFirstPlane();
+        [Test, TestCaseSource(nameof(SetPoints))]
+        public void FindFirstPlane_Simplex_ReturnPoints(Point[] points, Hyperplane[] expected)
+        {
+            PlaneFinder planeFinder = new PlaneFinder();
 
-            Assert.That(result.Points, Is.EquivalentTo(expect[0]).Or.EquivalentTo(expect[1]).
-                Or.EquivalentTo(expect[2]).Or.EquivalentTo(expect[3]));
+            Hyperplane result = planeFinder.FindFirstPlane(points);
+
+            Assert.True(expected.Contains(result));
         }
 
         [Test]
@@ -197,11 +132,12 @@ namespace GiftWrappingTest
         public void PlaneFinder_EmptyArray_ThrowsException()
         {
             Point[] points = new Point[0];
-           
+            PlaneFinder planeFinder = new PlaneFinder();
+
 
             Exception ex = Assert.Catch<ArgumentException>(() =>
             {
-                PlaneFinder planeFinder = new PlaneFinder(points);
+             
             });
 
             StringAssert.Contains("Sequence contains no elements", ex.Message);

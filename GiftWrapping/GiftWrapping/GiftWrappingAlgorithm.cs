@@ -22,16 +22,15 @@ namespace GiftWrapping
         public ConvexFace Create(Point points)
         {
             
-            FindFirstFace();
+            Hyperplane firstPlane =  FindFirstFace();
 
             return new ConvexFace();
-
         }
 
-        private void FindFirstFace()
+        private Hyperplane FindFirstFace()
         {
-            Point mainPoint;
-            Vector normal;
+            return default;
+
 
         }
     }
