@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using GiftWrapping.Helpers;
+using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 
 namespace GiftWrapping
@@ -15,16 +16,21 @@ namespace GiftWrapping
 
         private bool[] _indexMap;
 
-        private Vector[] vectors;
+        private Vector[] _vectors;
 
+        private IndexMap _mask;
 
-        public Hyperplane FindFirstPlane(IList<Point> points)
+        private Point _minimalPoint;
+
+        public Hyperplane FindFirstPlane(IList<Point> points, IndexMap mask)
         {
             this._pointIterator = new PointIterator(points);
-            _dim = points[0].Dim;
+            this._mask = mask;
+            _dim = mask.Length;
             _indexMap = new bool[_dim - 1];
+            _minimalPoint = points.FindMinimumPoint(mask);
             Hyperplane mainPlane = GetStartPlane();
-            vectors = GetFirstVectors();
+            _vectors = GetFirstVectors();
             for (int i = 1; i < _dim; i++)
             {
                 _pointIterator.ExcludePoint(mainPlane.MainPoint);
@@ -38,7 +44,7 @@ namespace GiftWrapping
         private Hyperplane GetStartPlane()
         {
             Vector[] firstVectors = GetFirstVectors();
-            Hyperplane hyperplane = HyperplaneHelper.Create(_pointIterator.MinimumPoint, firstVectors);
+            Hyperplane hyperplane = HyperplaneHelper.Create(_minimalPoint, firstVectors, _mask);
             hyperplane.ReorientNormal();
 
             return hyperplane;
@@ -47,20 +53,31 @@ namespace GiftWrapping
         {
             double maxAngle = double.MinValue;
             Hyperplane maxPlane = mainPlane;
-            Vector[] tempVectors = vectors;
+            Vector[] tempVectors = _vectors;
             foreach (Point point in _pointIterator)
             {
-                Vector vector = Point.ToVector(_pointIterator.MinimumPoint, point);
+                Vector vector = ConvertToVector(_minimalPoint, point);
                 tempVectors = SetVector(vector);
-                Hyperplane plane = HyperplaneHelper.Create(_pointIterator.MinimumPoint, tempVectors);
+                Hyperplane plane = HyperplaneHelper.Create(_minimalPoint, tempVectors, _mask);
                 double angle = mainPlane.Angle(plane);
                 if (angle < maxAngle) continue;
                 maxAngle = angle;
                 maxPlane = plane;
             }
 
-            vectors = tempVectors;
+            _vectors = tempVectors;
             return maxPlane;
+        }
+
+        private Vector ConvertToVector(Point begin, Point end)
+        {
+            double[] coordinates = new double[_mask.Length];
+            for (int i = 0; i < _mask.Length; i++)
+            {
+                coordinates[i] = end[_mask[i]] - begin[_mask[i]];
+            }
+
+            return new Vector(coordinates);
         }
 
 
@@ -80,12 +97,12 @@ namespace GiftWrapping
 
         private Vector[] SetVector(Vector vector)
         {
-            Vector[] newVectors = (Vector[]) vectors.Clone();
-            if (vectors.Any(t => Vector.AreParallel(t, vector)))
+            Vector[] newVectors = (Vector[]) _vectors.Clone();
+            if (_vectors.Any(t => Vector.AreParallel(t, vector)))
             {
                 return newVectors;
             }
-            for (int i = 0; i < vectors.Length; i++)
+            for (int i = 0; i < _vectors.Length; i++)
             {
                 if (_indexMap[i]) continue;
                 newVectors[i] = vector;

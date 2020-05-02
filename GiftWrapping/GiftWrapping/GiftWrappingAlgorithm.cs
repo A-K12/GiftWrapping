@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using GiftWrapping.Helpers;
+using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 
 namespace GiftWrapping
@@ -19,19 +22,44 @@ namespace GiftWrapping
 
         private Queue<IConvexFace> unprocessedFaces;
 
-        public ConvexFace Create(Point points)
+        public ConvexFace Create(List<Point> points)
         {
-            
-            Hyperplane firstPlane =  FindFirstFace();
+            FindFirstFace(points);
 
             return new ConvexFace();
         }
 
-        private Hyperplane FindFirstFace()
+        protected void FindFirstFace(List<Point> points)
+        {
+            IndexMap mask = new IndexMap(points[0].Dim);
+            FindFirstFace(points,mask);
+
+
+        }
+        protected void FindFirstFace(List<Point> points, IndexMap map)
+        {
+            Hyperplane hyperplane = FindFirstPlane(points, map);
+            IList<Point> planePoints = hyperplane.GetPlanePoints(points);
+            if (planePoints[0].Dim == 2)
+            {
+                //Find ConvexHull
+            }//planePoint!=0
+            IndexMap newMap = GetIndexMap(points);
+
+
+        }
+
+        private IndexMap GetIndexMap(IList<Point> points)
         {
             return default;
+        }
 
+        protected Hyperplane FindFirstPlane(List<Point> points, IndexMap mask)
+        {
+            int dim = mask.Length;                 
+            PlaneFinder planeFinder = new PlaneFinder();
 
+            return planeFinder.FindFirstPlane(points, mask);
         }
     }
 }

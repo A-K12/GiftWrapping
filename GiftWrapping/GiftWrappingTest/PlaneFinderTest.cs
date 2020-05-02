@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GiftWrapping;
 using GiftWrapping.Helpers;
+using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 using NUnit.Framework;
 
@@ -103,11 +104,12 @@ namespace GiftWrappingTest
         }
 
         [Test, TestCaseSource(nameof(SetPoints))]
-        public void FindFirstPlane_Simplex_ReturnPoints(Point[] points, Hyperplane[] expected)
+        public void FindFirstPlane_Simplex_ReturnHyperplane(Point[] points, Hyperplane[] expected)
         {
             PlaneFinder planeFinder = new PlaneFinder();
+            IndexMap mask = new IndexMap(points[0].Dim);
 
-            Hyperplane result = planeFinder.FindFirstPlane(points);
+            Hyperplane result = planeFinder.FindFirstPlane(points, mask);
 
             Assert.True(expected.Contains(result));
         }
@@ -127,22 +129,6 @@ namespace GiftWrappingTest
 
             Assert.AreEqual(points[2], result);
         }
-
-        [Test]
-        public void PlaneFinder_EmptyArray_ThrowsException()
-        {
-            Point[] points = new Point[0];
-            PlaneFinder planeFinder = new PlaneFinder();
-
-
-            Exception ex = Assert.Catch<ArgumentException>(() =>
-            {
-             
-            });
-
-            StringAssert.Contains("Sequence contains no elements", ex.Message);
-        }
-
 
     }
 }

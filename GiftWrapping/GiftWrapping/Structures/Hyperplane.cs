@@ -17,39 +17,52 @@ namespace GiftWrapping.Structures
         
         private double D;
 
-        private bool[] _map;
-
-        public bool[] ProjectionMap
-        {
-            get => _map;
-            set
-            {
-                if (value.Length == Dim)
-                    _map = value;
-            }
-        }
+        private IndexMap _mask;
 
         public Hyperplane(Hyperplane hyperplane)
         {
             Dim = hyperplane.Dim;
             Normal = hyperplane.Normal;
             MainPoint = hyperplane.MainPoint;
-            _map = hyperplane._map;
+            _mask = hyperplane._mask;
             ComputeD();
         }
 
         public Hyperplane(Point point, Vector normal)
         {
+            if (point.Dim != normal.Dim)
+            {
+                throw new ArgumentException("Point and normal have different dimensions.");
+            }
             Dim = normal.Dim;
             Normal = normal;
             MainPoint = point;
+            _mask = new IndexMap(Dim);
+            ComputeD();
+            Normal.Normalize();
+        }
+
+        public Hyperplane(Point point, Vector normal, IndexMap mask)
+        {
+            if (mask.Length!= normal.Dim)
+            {
+                throw new ArgumentException("Mask and normal have different dimensions.");
+            }
+            Dim = normal.Dim;
+            Normal = normal;
+            MainPoint = point;
+            _mask = mask;
             ComputeD();
             Normal.Normalize();
         }
 
         private void ComputeD()
         {
-            D = MainPoint * Normal / Normal.Length;
+            for (int i = 0; i < _mask.Length; i++)
+            {
+                D += MainPoint[_mask[i]] * Normal[i];
+            }
+            D /= Normal.Length;
         }
 
         public double Angle(Hyperplane hyperplane)

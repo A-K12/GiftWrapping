@@ -14,8 +14,6 @@ namespace GiftWrapping
 
         private bool[] _map;
 
-        public Point MinimumPoint { get; }
-
         public PointIterator(IList<Point> points)
         {
             if (!points.HaveSameDimension())
@@ -25,7 +23,6 @@ namespace GiftWrapping
 
             _points = new List<Point>(points);
             _map = new bool[points.Count];
-            MinimumPoint = points.FindMinimumPoint();
         }
 
         public IEnumerator<Point> GetEnumerator()
@@ -42,9 +39,5 @@ namespace GiftWrapping
             int indexPoint = _points.IndexOf(point);
             _map[indexPoint] = true;
         }
-
-
-
-
     }
 }
