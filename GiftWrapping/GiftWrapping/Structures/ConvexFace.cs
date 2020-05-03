@@ -7,12 +7,13 @@ namespace GiftWrapping.Structures
 {
     public class ConvexFace : IConvexFace
     {
-        public Vector Normal { get; set; }
+        public Hyperplane Hyperplane { get; set; }
         public int Dimension { get; }
-        private IList<IConvexFace> InnerFaces { get; }
+        private IList<IConvexFace> InnerFaces { get; set; }
         public IList<IConvexFace> AdjacentFaces { get; set; }
-        public ConvexFace()
+        public ConvexFace(int dimension)
         {
+            Dimension = dimension;
             InnerFaces = new List<IConvexFace>();
             AdjacentFaces = new List<IConvexFace>();
         }

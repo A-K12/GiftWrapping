@@ -6,7 +6,7 @@ namespace GiftWrapping.Structures
     public interface IConvexFace
     {
         public IList<IConvexFace> AdjacentFaces { get; set; }
-        public Vector Normal { get; set; }
+        public Hyperplane Hyperplane { get; set; }
         int Dimension { get; }
     }
 }
