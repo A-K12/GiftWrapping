@@ -8,6 +8,7 @@ namespace GiftWrapping.Structures
     {
         public IList<Point> Points { get; }
         public IList<IConvexFace> AdjacentFaces { get; set; }
+        public IList<IConvexFace> InnerFaces { get; set; }
         public Hyperplane Hyperplane { get; set; }
         public int Dimension { get;  }
         public ConvexFace2D()

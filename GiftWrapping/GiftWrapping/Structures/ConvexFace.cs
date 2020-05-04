@@ -9,7 +9,7 @@ namespace GiftWrapping.Structures
     {
         public Hyperplane Hyperplane { get; set; }
         public int Dimension { get; }
-        private IList<IConvexFace> InnerFaces { get; set; }
+        public IList<IConvexFace> InnerFaces { get; set; }
         public IList<IConvexFace> AdjacentFaces { get; set; }
         public ConvexFace(int dimension)
         {

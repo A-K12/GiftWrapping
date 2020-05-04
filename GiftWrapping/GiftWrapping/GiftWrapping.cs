@@ -7,7 +7,7 @@ namespace GiftWrapping
     {
         public IConvexFace ComputeConvexHull(IList<Point> points)
         {
-            return new ConvexFace();
+            return new ConvexFace(3);
         }
     }
 }

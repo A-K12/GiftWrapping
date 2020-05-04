@@ -22,23 +22,27 @@ namespace GiftWrapping
 
         private Point _minimalPoint;
 
+        private List<Point> _points;
         public Hyperplane FindFirstPlane(IList<Point> points, IndexMap mask)
         {
             this._pointIterator = new PointIterator(points);
             this._mask = mask;
             _dim = mask.Length;
             _indexMap = new bool[_dim - 1];
+            _points = new List<Point>();
             _minimalPoint = points.FindMinimumPoint(mask);
+            _points.Add(_minimalPoint);
             Hyperplane mainPlane = GetStartPlane();
             _vectors = GetFirstVectors();
             for (int i = 1; i < _dim; i++)
             {
-                _pointIterator.ExcludePoint(mainPlane.MainPoint);
+                _pointIterator.ExcludePoint(points[i-1]);
                 Hyperplane maxPlane = GetMaxPlane(mainPlane);
                 mainPlane = maxPlane;
                 mainPlane.ReorientNormal();
             }
 
+            mainPlane.Points = _points.ToArray();
             return mainPlane;
         }
         private Hyperplane GetStartPlane()
@@ -54,6 +58,7 @@ namespace GiftWrapping
             double maxAngle = double.MinValue;
             Hyperplane maxPlane = mainPlane;
             Vector[] tempVectors = _vectors;
+            Point maxPoint = mainPlane.MainPoint;
             foreach (Point point in _pointIterator)
             {
                 Vector vector = ConvertToVector(_minimalPoint, point);
@@ -63,8 +68,10 @@ namespace GiftWrapping
                 if (angle < maxAngle) continue;
                 maxAngle = angle;
                 maxPlane = plane;
+                maxPoint = point;
             }
 
+            _points.Add(maxPoint);
             _vectors = tempVectors;
             return maxPlane;
         }
