@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using GiftWrapping.Helpers;
 using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
@@ -40,7 +41,7 @@ namespace GiftWrapping
         {
             if (map.Length == 2)
             {
-                return FindConvexhull2D(points, map);
+                return FindConvexHull2D(points, map);
             }
             ConvexFace convexHull = new ConvexFace(points[0].Dim);
             Hyperplane hyperplane = FindFirstPlane(points, map);
@@ -89,12 +90,54 @@ namespace GiftWrapping
 
         private ConvexFace FindConvexHull(IList<Point> facePoints, IndexMap maxHyperplaneMask)
         {
+
             throw new NotImplementedException();
         }
 
-        private ConvexFace2D FindConvexhull2D(IList<Point> list, IndexMap map)
+        public ConvexFace2D FindConvexHull2D(IList<Point> list, IndexMap map)
         {
-            return new ConvexFace2D();
+            ConvexFace2D conveHull = new ConvexFace2D();
+            PlaneFinder pl = new PlaneFinder();
+            Hyperplane hyperplane = pl.FindFirstPlane(list, map);
+            IList<Point> planePoints = hyperplane.GetPlanePoints(list);
+            conveHull.Points.Add(planePoints.Min());
+            Point point = planePoints.Max();
+            conveHull.Points.Add(point);
+            
+            Hyperplane maxHyperplane = default;
+            double maxAngle = Double.MinValue;
+            while (true)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (planePoints.Contains(list[i])) continue;
+                    Point[] points = new Point[] { point, list[i] };
+                    Hyperplane newHyperplane = HyperplaneHelper.Create(points, map);
+                    newHyperplane.ReorientNormal();
+                    double angle = hyperplane.Angle(newHyperplane);
+                    if (angle < maxAngle) continue;
+                    maxAngle = angle;
+                    maxHyperplane = newHyperplane;
+                }
+                planePoints = maxHyperplane.GetPlanePoints(points);
+                point = planePoints.Max();
+                Point minPoint = planePoints.Min();
+                if(conveHull.Points.Contains(point))
+                {
+                    if (conveHull.Points.Contains(minPoint))
+                    {
+                        break;
+                    }
+                    conveHull.Points.Add(minPoint);
+                }
+                else
+                {
+                    conveHull.Points.Add(point);
+                }
+                hyperplane = maxHyperplane;
+            }
+
+            return conveHull;
         }
 
         private IndexMap GetIndexMap(IList<Point> points, IndexMap indexMap)

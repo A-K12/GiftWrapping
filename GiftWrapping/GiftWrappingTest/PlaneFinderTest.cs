@@ -16,6 +16,24 @@ namespace GiftWrappingTest
         private static IEnumerable SetPoints()
         {
             Point[] points = new Point[] {
+                new Point(new double[]{4, 0}),
+                new Point(new double[]{0, 4}),
+                new Point(new double[]{4, 4}),
+                new Point(new double[]{0, 0}),
+                new Point(new double[]{0.5, 0.5}),
+                new Point(new double[]{1, 1}),
+            };
+            Vector v1 = new Vector(new double[] { -1, 0});
+            Vector v2 = new Vector(new double[] { 0, -1});
+            Hyperplane[] expect = new Hyperplane[]
+            {
+                new Hyperplane(points[3], v1),
+                new Hyperplane(points[3], v2),
+            };
+
+            yield return new object[] { points, expect };
+
+            points = new Point[] {
                 new Point(new double[]{4, 0, 0}),
                 new Point(new double[]{0, 4, 0}),
                 new Point(new double[]{0, 0, 4}),
@@ -24,11 +42,11 @@ namespace GiftWrappingTest
                 new Point(new double[]{1, 1, 1}),
                 new Point(new double[]{1, 1, 0.5})
             };
-            Vector v1 = new Vector(new double[] { 0, 0, -1 });
-            Vector v2 = new Vector(new double[] { 0, -1, 0 });
+            v1 = new Vector(new double[] { 0, 0, -1 });
+            v2 = new Vector(new double[] { 0, -1, 0 });
             Vector v3 = new Vector(new double[] { -1, 0, 0 });
             Vector v4 = new Vector(new double[] { -1, -1, -1 });
-            Hyperplane[] expect = new Hyperplane[]
+            expect = new Hyperplane[]
             {
                 new Hyperplane(points[3], v1),
                 new Hyperplane(points[3], v2),

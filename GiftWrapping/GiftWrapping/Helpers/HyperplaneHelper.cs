@@ -44,7 +44,7 @@ namespace GiftWrapping.Helpers
         }
         public static Hyperplane Create(Point point, Matrix matrix, IndexMap mask)
         {
-            if (mask.Length != matrix.Rows)
+            if (mask.Length != matrix.Cols)
             {
                 throw new ArgumentException("Vectors and points have different dimensions..");
             }

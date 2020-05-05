@@ -36,7 +36,7 @@ namespace GiftWrapping
             _vectors = GetFirstVectors();
             for (int i = 1; i < _dim; i++)
             {
-                _pointIterator.ExcludePoint(points[i-1]);
+                _pointIterator.ExcludePoint(_points[i-1]);
                 Hyperplane maxPlane = GetMaxPlane(mainPlane);
                 mainPlane = maxPlane;
                 mainPlane.ReorientNormal();
@@ -65,14 +65,15 @@ namespace GiftWrapping
                 tempVectors = SetVector(vector);
                 Hyperplane plane = HyperplaneHelper.Create(_minimalPoint, tempVectors, _mask);
                 double angle = mainPlane.Angle(plane);
-                if (angle < maxAngle) continue;
+                if (Tools.LT(angle, maxAngle)) continue;
                 maxAngle = angle;
                 maxPlane = plane;
                 maxPoint = point;
             }
 
             _points.Add(maxPoint);
-            _vectors = tempVectors;
+            Vector tempVector = ConvertToVector(_minimalPoint, maxPoint);
+            _vectors = SetVector(tempVector);
             return maxPlane;
         }
 

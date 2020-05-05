@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using GiftWrapping;
+using GiftWrapping.Helpers;
+using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 using NUnit.Framework;
 
@@ -8,6 +10,22 @@ namespace GiftWrappingTest
 {
     public class HyperplaneTest
     {
+
+        [Test]
+        public void Create_2dPoints_ReturnHyperplane()
+        {
+            Point[] points = new Point[]
+            {
+                new Point(new double[] {0, 0}),
+                new Point(new double[] {0, 4})
+            };
+            Vector normal = new Vector(new double[]{-1, 0});
+            Hyperplane h2 = new Hyperplane(points[0], normal);
+
+            Hyperplane h = HyperplaneHelper.Create(points, new IndexMap(2));
+
+            Assert.AreEqual(h2,h);
+        }
 
         [Test]
         public void Angle_WhenCall_ReturnAngle()

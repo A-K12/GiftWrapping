@@ -77,5 +77,23 @@ namespace GiftWrappingTest
             Assert.True(expected.Contains(result));
         }
 
+
+        [Test]
+        public void FindConvexHull2D_Simplex_ReturnHyperplane()
+        {
+            Point[] points = new Point[] {
+                new Point(new double[]{4, 0}),
+                new Point(new double[]{0, 4}),
+                new Point(new double[]{4, 4}),
+                new Point(new double[]{0, 0}),
+                new Point(new double[]{0.5, 0.5}),
+                new Point(new double[]{1, 1}),
+            };
+            GiftWrappingAlgorithmTestClass giftWrapping = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
+
+            ConvexFace2D result = giftWrapping.FindConvexHull2D(points, new IndexMap(2));
+
+            Assert.True(false);
+        }
     }
 }
