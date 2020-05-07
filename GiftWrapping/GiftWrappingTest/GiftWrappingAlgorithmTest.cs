@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using GiftWrapping;
 using GiftWrapping.Helpers;
@@ -79,7 +80,7 @@ namespace GiftWrappingTest
 
 
         [Test]
-        public void FindConvexHull2D_Simplex_ReturnHyperplane()
+        public void FindConvexHull2D_Points2d_ReturnConvexHull2D()
         {
             Point[] points = new Point[] {
                 new Point(new double[]{4, 0}),
@@ -89,11 +90,18 @@ namespace GiftWrappingTest
                 new Point(new double[]{0.5, 0.5}),
                 new Point(new double[]{1, 1}),
             };
+            List<Point> exceptPoint = new List<Point> {
+                new Point(new double[]{4, 0}),
+                new Point(new double[]{0, 4}),
+                new Point(new double[]{4, 4}),
+                new Point(new double[]{0, 0}),
+            };
+            ConvexHull2d exceptCh = new ConvexHull2d {Points = exceptPoint.ToList()};
+
             GiftWrappingAlgorithmTestClass giftWrapping = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
+            ConvexHull2d actualCh = giftWrapping.FindConvexHull2D(points, new IndexMap(2));
 
-            ConvexFace2D result = giftWrapping.FindConvexHull2D(points, new IndexMap(2));
-
-            Assert.True(false);
+            Assert.AreEqual(exceptCh, actualCh);
         }
     }
 }

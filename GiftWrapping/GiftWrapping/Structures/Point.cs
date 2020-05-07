@@ -8,12 +8,12 @@ namespace GiftWrapping.Structures
         /// <summary>
         /// The internal storage of the point as a one-dimensional array
         /// </summary>
-        private readonly double[] _v;
+        private readonly double[] _p;
        
         /// <summary>
         /// Dimension of the point
         /// </summary>
-        public int Dim => _v.Length;
+        public int Dim => _p.Length;
 
         /// <summary>
         /// Indexer access
@@ -28,7 +28,7 @@ namespace GiftWrapping.Structures
                 if (i < 0 || i >= Dim)
                     throw new IndexOutOfRangeException();
 #endif
-                return _v[i];
+                return _p[i];
             }
         }
 
@@ -39,7 +39,7 @@ namespace GiftWrapping.Structures
         /// <returns>The resultant array</returns>
         public static implicit operator double[](Point p)
         {
-            return p._v;
+            return p._p;
         }
 
         /// <summary>
@@ -220,21 +220,28 @@ namespace GiftWrapping.Structures
             return this.CompareTo(v) == 0;
         }
 
+        public bool Equals(Point other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return this.CompareTo(other) == 0;
+        }
+
         public override string ToString()
         {
-            string res = "(" + _v[0];
+            string res = "(" + _p[0];
             int d = Dim, i;
             for (i = 1; i < d; i++)
-                res += ";" + _v[i];
+                res += ";" + _p[i];
             res += ")";
             return res;
         }
 
         public override int GetHashCode()
         {
-            int res = 0, d = Dim, i;
-            for (i = 0; i < d; i++)
-                res += _v[i].GetHashCode();
+            int res = 0;
+            for (int i = 0; i < _p.Length; i++)
+                res += _p[i].GetHashCode();
             return res;
         }
         #endregion
@@ -250,7 +257,7 @@ namespace GiftWrapping.Structures
             if (n <= 0)
                 throw new ArgumentException("Dimension of a point cannot be non-positive");
 #endif
-            _v = new double[n];
+            _p = new double[n];
 
         }
 
@@ -266,8 +273,8 @@ namespace GiftWrapping.Structures
             if (np.Rank != 1)
                 throw new ArgumentException("Cannot initialize a point by a multidimensional array");
 #endif
-            _v = new double[np.Length];
-            for (int i = 0; i < np.Length; i++) _v[i] = np[i];
+            _p = new double[np.Length];
+            for (int i = 0; i < np.Length; i++) _p[i] = np[i];
 
         }
 
@@ -278,9 +285,9 @@ namespace GiftWrapping.Structures
         public Point(Point p)
         {
             int d = p.Dim, i;
-            _v = new double[d];
+            _p = new double[d];
             for (i = 0; i < d; i++)
-                _v[i] = p._v[i];
+                _p[i] = p._p[i];
 
         }
 
@@ -297,7 +304,7 @@ namespace GiftWrapping.Structures
             int d = p.Dim, i;
             double[] nv = new double[d];
             for (i = 0; i < d; i++)
-                nv[i] = -p._v[i];
+                nv[i] = -p._p[i];
             return new Point(nv);
         }
 
@@ -316,7 +323,7 @@ namespace GiftWrapping.Structures
 #endif
             double[] nv = new double[d];
             for (i = 0; i < d; i++)
-                nv[i] = v1._v[i] + v2._v[i];
+                nv[i] = v1._p[i] + v2._p[i];
             return new Point(nv);
         }
 
@@ -335,7 +342,7 @@ namespace GiftWrapping.Structures
 #endif
             double[] nv = new double[d];
             for (i = 0; i < d; i++)
-                nv[i] = p1._v[i] - p2._v[i];
+                nv[i] = p1._p[i] - p2._p[i];
             return new Point(nv);
         }
 
@@ -350,7 +357,7 @@ namespace GiftWrapping.Structures
             int d = p.Dim, i;
             double[] nv = new double[d];
             for (i = 0; i < d; i++)
-                nv[i] = a * p._v[i];
+                nv[i] = a * p._p[i];
             return new Point(nv);
         }
 
@@ -380,9 +387,11 @@ namespace GiftWrapping.Structures
             int d = p.Dim, i;
             double[] nv = new double[d];
             for (i = 0; i < d; i++)
-                nv[i] = p._v[i] / a;
+                nv[i] = p._p[i] / a;
             return new Point(nv);
         }
 #endregion
+
+    
     }
 }

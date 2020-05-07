@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using GiftWrapping;
 using GiftWrapping.Structures;
@@ -33,6 +34,15 @@ namespace GiftWrappingTest
             int resultingDimension = point.Dim;
 
             Assert.AreEqual(exceptDimension, resultingDimension);
+        }
+
+        [Test]
+        public void Equals_EqualObjects_ReturnTrue()
+        {
+            Point p1 = new Point(new double[] {4, 4, 0, 0});
+            Point p2 = new Point(new double[] {4, 4, 0, 0});
+
+            Assert.AreEqual(p1, p2);
         }
     }
 }

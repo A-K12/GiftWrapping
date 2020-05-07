@@ -8,13 +8,11 @@ namespace GiftWrapping.Structures
     public class Hyperplane : IEquatable<Hyperplane>
     {
         public IndexMap Mask { get; set; }
-        private double D;
+        private double NumericVariable { get; set; }
         public Point MainPoint { get; }
         public Vector Normal { get; private set; }
-
         public Point[] Points { get; set; }
-
-        public int Dim { get; }
+        public int Dimension { get; }
 
         public Hyperplane(Hyperplane h) : this(h.MainPoint, h.Normal, h.Mask)
         {
@@ -26,12 +24,12 @@ namespace GiftWrapping.Structures
             if (mask.Length != normal.Dim)
                 throw new ArgumentException("Mask and normal have different dimensions.");
 
-            Dim = normal.Dim;
+            Dimension = normal.Dim;
             Normal = normal.Normalize();
             MainPoint = point;
             Mask = mask;
-            Points = new Point[Dim];
-            ComputeD();
+            Points = new Point[Dimension];
+            ComputeNumVariable();
         }
 
         public Hyperplane(Point point, Vector normal)
@@ -39,18 +37,18 @@ namespace GiftWrapping.Structures
             if (point.Dim != normal.Dim)
                 throw new ArgumentException("Point and normal have different dimensions.");
 
-            Dim = normal.Dim;
+            Dimension = normal.Dim;
             Normal = normal.Normalize();
             MainPoint = point;
-            Points = new Point[Dim];
-            Mask = new IndexMap(Dim);
-            ComputeD();
+            Points = new Point[Dimension];
+            Mask = new IndexMap(Dimension);
+            ComputeNumVariable();
         }
 
-        private void ComputeD()
+        private void ComputeNumVariable()
         {
-            for (int i = 0; i < Mask.Length; i++) D += MainPoint[Mask[i]] * Normal[i];
-            D /= Normal.Length;
+            for (int i = 0; i < Mask.Length; i++) NumericVariable += MainPoint[Mask[i]] * Normal[i];
+            NumericVariable /= Normal.Length;
         }
 
         public double Angle(Hyperplane hyperplane)
@@ -74,15 +72,15 @@ namespace GiftWrapping.Structures
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            if (Dim != other.Dim) return false;
+            if (Dimension != other.Dimension) return false;
             List<double> quotients = new List<double>();
-            for (int i = 0; i < other.Dim; i++)
+            for (int i = 0; i < other.Dimension; i++)
             {
                 if (Tools.EQ(Normal[i]) && Tools.EQ(other.Normal[i])) continue;
                 quotients.Add(other.Normal[i] / Normal[i]);
             }
 
-            if (Tools.NE(D) && Tools.NE(other.D)) quotients.Add(other.D / D);
+            if (Tools.NE(NumericVariable) && Tools.NE(other.NumericVariable)) quotients.Add(other.NumericVariable / NumericVariable);
 
             return quotients.Count == 0 || quotients.All(d => Tools.EQ(d, quotients[0]));
         }
@@ -97,7 +95,7 @@ namespace GiftWrapping.Structures
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Normal, D);
+            return HashCode.Combine(Normal, NumericVariable);
         }
 
         public bool IsPointInPlane(Point point)
