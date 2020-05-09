@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using FluentAssertions;
+using FluentAssertions.Common;
 using GiftWrapping;
 using GiftWrapping.Helpers;
 using GiftWrapping.LinearEquations;
@@ -129,7 +131,8 @@ namespace GiftWrappingTest
 
             Hyperplane result = planeFinder.FindFirstPlane(points, mask);
 
-            Assert.True(expected.Contains(result));
+            expected.Should().Contain(result);
+
         }
 
         [Test]
@@ -142,7 +145,7 @@ namespace GiftWrappingTest
                 new Point(new double[]{5, 5}),
                 new Point(new double[]{2, 2})};
 
-            Point result = points.FindMinimumPoint();
+            Point result = points.Min();
 
 
             Assert.AreEqual(points[2], result);

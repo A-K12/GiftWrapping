@@ -57,7 +57,7 @@ namespace GiftWrapping
                 Point[] edgePoints = new Point[edge.Hyperplane.Dimension+1];
                 for (int i = 0; i < edgePoints.Length; i++)
                 {
-                    edgePoints[i] = edge.Hyperplane.Points[i];
+                   // edgePoints[i] = edge.Hyperplane.Basis[i]; Вместо точек нужно брать вектора
                 }
                 double maxAngle = double.MinValue;
                 Hyperplane maxHyperplane = currentFace.Hyperplane;
@@ -98,20 +98,20 @@ namespace GiftWrapping
         {
             ConvexHull2d conveHull = new ConvexHull2d();
             PlaneFinder pl = new PlaneFinder();
+
             Hyperplane hyperplane = pl.FindFirstPlane(list, map);
-            IList<Point> planePoints = hyperplane.GetPlanePoints(list);
-            conveHull.Points.Add(planePoints.Min());
-            Point point = planePoints.Max();
-            conveHull.Points.Add(point);
             
-            Hyperplane maxHyperplane = default;
-            double maxAngle = Double.MinValue;
+            IList<Point> planePoints = hyperplane.GetPlanePoints(list);
+            conveHull.Points.Add(planePoints.Min(map));
+            conveHull.Points.Add(planePoints.Max(map));
             while (true)
             {
-                for (int i = 0; i < list.Count; i++)
+                Hyperplane maxHyperplane = default;
+                double maxAngle = Double.MinValue;
+                foreach (Point point in list)
                 {
-                    if (planePoints.Contains(list[i])) continue;
-                    Point[] points = new Point[] { point, list[i] };
+                    if (planePoints.Contains(point)) continue;
+                    Point[] points = new Point[] {conveHull.Points.Last(), point};
                     Hyperplane newHyperplane = HyperplaneHelper.Create(points, map);
                     newHyperplane.ReorientNormal();
                     double angle = hyperplane.Angle(newHyperplane);
@@ -120,9 +120,9 @@ namespace GiftWrapping
                     maxHyperplane = newHyperplane;
                 }
                 planePoints = maxHyperplane.GetPlanePoints(points);
-                point = planePoints.Max();
-                Point minPoint = planePoints.Min();
-                if(conveHull.Points.Contains(point))
+                Point maxPoint = planePoints.Max(map);
+                Point minPoint = planePoints.Min(map);
+                if(conveHull.Points.Contains(maxPoint))
                 {
                     if (conveHull.Points.Contains(minPoint))
                     {
@@ -132,7 +132,7 @@ namespace GiftWrapping
                 }
                 else
                 {
-                    conveHull.Points.Add(point);
+                    conveHull.Points.Add(maxPoint);
                 }
                 hyperplane = maxHyperplane;
             }

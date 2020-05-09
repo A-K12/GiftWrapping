@@ -29,7 +29,7 @@ namespace GiftWrapping.Helpers
         {
             if (!points.HaveSameDimension())
             {
-                throw new ArgumentException("Points don't have same dimension");
+                throw new ArgumentException("Basis don't have same dimension");
             }
             int n = points.Count, m = points[0].Dim;
             double[] cells = new double[n * m];
@@ -46,12 +46,26 @@ namespace GiftWrapping.Helpers
             return new Matrix(1, point.Dim, point);
         }
 
-        public static Point FindMinimumPoint(this IList<Point> points, IndexMap mask)
+        public static Point Min(this IList<Point> points, IndexMap mask)
         {
             int index = 0;
             for (int i = 0; i < points.Count; i++)
             {
                 if (points[i].CompareTo(points[index], mask)<0)
+                {
+                    index = i;
+                }
+            }
+
+            return points[index];
+        }
+
+        public static Point Max(this IList<Point> points, IndexMap mask)
+        {
+            int index = 0;
+            for (int i = 0; i < points.Count; i++)
+            {
+                if (points[i].CompareTo(points[index], mask) > 0)
                 {
                     index = i;
                 }
@@ -73,18 +87,6 @@ namespace GiftWrapping.Helpers
             return 0;
         }
 
-        public static Point FindMinimumPoint(this IList<Point> points)
-        {
-            int index = 0;
-            for (int i = 0; i < points.Count; i++)
-            {
-                if (points[i] < points[index])
-                {
-                    index = i;
-                }
-            }
-
-            return points[index];
-        }
+     
     }
 }

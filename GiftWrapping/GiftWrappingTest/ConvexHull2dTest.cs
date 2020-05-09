@@ -7,9 +7,12 @@ namespace GiftWrappingTest
 {
     public class ConvexHull2dTest
     {
+        
+
         [Test]
         public void Equals_EqualObjects_ReturnTrue()
         {
+            
             List<Point> points1 = new List<Point> {
                 new Point(new double[]{0, 0, 0, 0}),
                 new Point(new double[]{4, 0, 0, 0}),

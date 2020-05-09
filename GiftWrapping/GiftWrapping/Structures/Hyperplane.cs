@@ -5,18 +5,18 @@ using GiftWrapping.LinearEquations;
 
 namespace GiftWrapping.Structures
 {
-    public class Hyperplane : IEquatable<Hyperplane>
+    public class Hyperplane
     {
         public IndexMap Mask { get; set; }
         private double NumericVariable { get; set; }
-        public Point MainPoint { get; }
         public Vector Normal { get; private set; }
-        public Point[] Points { get; set; }
+        public Vector[] Basis { get; set; }
+        public Point MainPoint { get; set; }
         public int Dimension { get; }
 
         public Hyperplane(Hyperplane h) : this(h.MainPoint, h.Normal, h.Mask)
         {
-            Points = h.Points;
+            Basis = h.Basis;
         }
 
         public Hyperplane(Point point, Vector normal, IndexMap mask)
@@ -26,9 +26,10 @@ namespace GiftWrapping.Structures
 
             Dimension = normal.Dim;
             Normal = normal.Normalize();
-            MainPoint = point;
             Mask = mask;
-            Points = new Point[Dimension];
+            MainPoint = point;
+            Basis = new Vector[Dimension];
+            Basis[0] = point;
             ComputeNumVariable();
         }
 
@@ -39,9 +40,10 @@ namespace GiftWrapping.Structures
 
             Dimension = normal.Dim;
             Normal = normal.Normalize();
-            MainPoint = point;
-            Points = new Point[Dimension];
+            Basis = new Vector[Dimension];
+            Basis[0] = point;
             Mask = new IndexMap(Dimension);
+            MainPoint = point;
             ComputeNumVariable();
         }
 
@@ -80,7 +82,8 @@ namespace GiftWrapping.Structures
                 quotients.Add(other.Normal[i] / Normal[i]);
             }
 
-            if (Tools.NE(NumericVariable) && Tools.NE(other.NumericVariable)) quotients.Add(other.NumericVariable / NumericVariable);
+            if (Tools.NE(NumericVariable) && Tools.NE(other.NumericVariable))
+                quotients.Add(other.NumericVariable / NumericVariable);
 
             return quotients.Count == 0 || quotients.All(d => Tools.EQ(d, quotients[0]));
         }

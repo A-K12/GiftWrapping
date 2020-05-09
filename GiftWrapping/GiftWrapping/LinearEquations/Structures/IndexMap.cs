@@ -4,7 +4,7 @@ namespace GiftWrapping.LinearEquations
 {
     public class IndexMap
     {
-        private int[] _indexes;
+        public int[] _indexes { get; }
 
         public int Length { get; }
 

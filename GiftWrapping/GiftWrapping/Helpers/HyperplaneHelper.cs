@@ -13,16 +13,15 @@ namespace GiftWrapping.Helpers
         {
             if (!points.HaveSameDimension())
             {
-                throw new ArgumentException("Points don't have same dimension");
+                throw new ArgumentException("Basis don't have same dimension");
             }
-            if (points.Count != points[0].Dim)
+            if (points.Count != mask.Length)
             {
                 throw new ArgumentException("Number of points is not equal to dimension.");
             }
             Vector[] vectors = points.ToVectors();
-            Matrix matrix = vectors.ToMatrix();
-
-            Hyperplane hyperplane = Create(points.Last(), matrix, mask);
+            Hyperplane hyperplane = Create(points.First(), vectors, mask);
+            
 
             return hyperplane;
         }
@@ -32,32 +31,19 @@ namespace GiftWrapping.Helpers
             {
                 throw new ArgumentException("Vectors don't have same dimension");
             }
-            if (mask.Length != vectors[0].Dim)
+            if (point.Dim != vectors[0].Dim)
             {
                 throw new ArgumentException("Vectors and points have different dimensions.");
             }
 
-            Vector normal = ComputeNormal(vectors.ToMatrix());
-            Hyperplane hyperplane = new Hyperplane(point, normal, mask);
+            Matrix matrix = vectors.ToMatrix();
 
+            Vector normal = ComputeNormal(matrix.TakeCols(mask._indexes));
+            Hyperplane hyperplane = new Hyperplane(point, normal, mask);
+            hyperplane.Basis = vectors.ToArray();
             return hyperplane;
         }
-        public static Hyperplane Create(Point point, Matrix matrix, IndexMap mask)
-        {
-            if (mask.Length != matrix.Cols)
-            {
-                throw new ArgumentException("Vectors and points have different dimensions..");
-            }
-            if (mask.Length - 1 > matrix.Rows)
-            {
-                throw new ArgumentException("The plane cannot be found . There are not enough vectors.");
-            }
-
-            Vector normal = ComputeNormal(matrix);
-            Hyperplane hyperplane = new Hyperplane(point, normal, mask);
-
-            return hyperplane;
-        }
+      
 
         private static Vector ComputeNormal(Matrix leftSide)
         {

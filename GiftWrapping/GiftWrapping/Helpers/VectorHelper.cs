@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 
 namespace GiftWrapping.Helpers
@@ -21,7 +22,7 @@ namespace GiftWrapping.Helpers
             }
             if (!vectors.HaveSameDimension())
             {
-                throw new ArgumentException("Points don't have same dimension");
+                throw new ArgumentException("Basis don't have same dimension");
             }
             int n = vectors.Count, m = vectors[0].Dim;
             double[] cells = new double[n * m];
@@ -34,11 +35,11 @@ namespace GiftWrapping.Helpers
             return new Matrix(n, m, cells.ToArray());
         }
 
+
         public static Matrix ToMatrix(this Vector vector)
         {
             return new Matrix(1, vector.Dim, vector);
         }
-
 
 
     }

@@ -10,73 +10,78 @@ namespace GiftWrapping
 {
     public class PlaneFinder
     {
-        private PointIterator _pointIterator;
-
         private int _dim;
-
-        private bool[] _indexMap;
-
-        private Vector[] _vectors;
-
+        private bool[] _freeFieldsOfBasis;
         private IndexMap _mask;
 
-        private Point _minimalPoint;
 
-        private List<Point> _points;
         public Hyperplane FindFirstPlane(IList<Point> points, IndexMap mask)
         {
-            this._pointIterator = new PointIterator(points);
-            this._mask = mask;
+            _mask = mask;
             _dim = mask.Length;
-            _indexMap = new bool[_dim - 1];
-            _points = new List<Point>();
-            _minimalPoint = points.FindMinimumPoint(mask);
-            _points.Add(_minimalPoint);
-            Hyperplane mainPlane = GetStartPlane();
-            _vectors = GetFirstVectors();
+            _freeFieldsOfBasis = new bool[_dim - 1];
+            Point minPoint = points.Min(mask);
+            Vector[] mainBasis = GetFirstBasis();
+            Vector mainNormal = GetFirstNormal();
+            bool[] availablePoints = new bool[points.Count];
+            availablePoints[points.IndexOf(minPoint)] = true;
             for (int i = 1; i < _dim; i++)
             {
-                _pointIterator.ExcludePoint(_points[i-1]);
-                Hyperplane maxPlane = GetMaxPlane(mainPlane);
-                mainPlane = maxPlane;
-                mainPlane.ReorientNormal();
+                double maxAngle = double.MinValue;
+                int maxPoint = default;
+                Vector[] maxBasis = default;
+                Vector maxNormal = default;
+                for (int j = 0; j < points.Count; j++)
+                {
+                    if (availablePoints[j]) continue;
+                    Vector vector = ConvertToVector(minPoint, points[j]);
+                    Vector[] tempBasis = SetVector(mainBasis, vector);
+                    Vector newNormal = FindNormal(tempBasis);
+                    double newAngle = Vector.Angle(mainNormal, newNormal);
+                    if (Tools.LT(newAngle, maxAngle)) continue;
+                    maxAngle = newAngle;
+                    maxNormal = newNormal;
+                    maxBasis = tempBasis;
+                    maxPoint = j;
+                }
+
+                availablePoints[maxPoint] = true;
+                mainBasis = maxBasis;
+                mainNormal = -maxNormal;
             }
 
-            mainPlane.Points = _points.ToArray();
-            return mainPlane;
+            IEnumerable<Point> planePoints = points.Where(((_, i) => availablePoints[i]));
+            return HyperplaneHelper.Create(planePoints.ToList(), mask);
         }
-        private Hyperplane GetStartPlane()
-        {
-            Vector[] firstVectors = GetFirstVectors();
-            Hyperplane hyperplane = HyperplaneHelper.Create(_minimalPoint, firstVectors, _mask);
-            hyperplane.ReorientNormal();
 
-            return hyperplane;
-        }
-        private Hyperplane GetMaxPlane(Hyperplane mainPlane)    
+        private Hyperplane GetFirstHyperplane(Point point)
         {
-            double maxAngle = double.MinValue;
-            Hyperplane maxPlane = mainPlane;
-            Vector[] tempVectors = _vectors;
-            Point maxPoint = mainPlane.MainPoint;
-            foreach (Point point in _pointIterator)
+            Vector normal = GetFirstNormal();
+            Vector[] basis = GetFirstBasis();
+
+            return  new Hyperplane(point, normal, _mask) {Basis = basis};
+        }
+
+        private Vector GetFirstNormal()
+        {
+            double[] normal = new double[_dim];
+            normal[0] = -1;
+
+            return new Vector(normal);
+        }
+
+        private Vector[] GetFirstBasis()
+        {
+            Vector[] vectors = new Vector[_dim - 1];
+            for (int i = 0; i < vectors.Length; i++)
             {
-                Vector vector = ConvertToVector(_minimalPoint, point);
-                tempVectors = SetVector(vector);
-                Hyperplane plane = HyperplaneHelper.Create(_minimalPoint, tempVectors, _mask);
-                double angle = mainPlane.Angle(plane);
-                if (Tools.LT(angle, maxAngle)) continue;
-                maxAngle = angle;
-                maxPlane = plane;
-                maxPoint = point;
+                double[] cells = new double[_dim];
+                cells[i + 1] = 1;
+                vectors[i] = new Vector(cells);
             }
 
-            _points.Add(maxPoint);
-            Vector tempVector = ConvertToVector(_minimalPoint, maxPoint);
-            _vectors = SetVector(tempVector);
-            return maxPlane;
+            return vectors;
         }
-
         private Vector ConvertToVector(Point begin, Point end)
         {
             double[] coordinates = new double[_mask.Length];
@@ -88,31 +93,17 @@ namespace GiftWrapping
             return new Vector(coordinates);
         }
 
-
-        private Vector[] GetFirstVectors()
+        private Vector[] SetVector(Vector[] vectors, Vector vector)
         {
-            Vector[] vectors = new Vector[_dim-1];
-            for (int i = 0; i < vectors.Length; i++)
-            {
-                double[] cells = new double[_dim];
-                cells[i + 1] = 1;
-                vectors[i] = new Vector(cells);
-            }
-
-            return vectors;
-        }
-
-
-        private Vector[] SetVector(Vector vector)
-        {
-            Vector[] newVectors = (Vector[]) _vectors.Clone();
-            if (_vectors.Any(t => Vector.AreParallel(t, vector)))
+            Vector[] newVectors = (Vector[]) vectors.Clone();
+            if (vectors.Any(t => Vector.AreParallel(t, vector)))
             {
                 return newVectors;
             }
-            for (int i = 0; i < _vectors.Length; i++)
+
+            for (int i = 0; i < vectors.Length; i++)
             {
-                if (_indexMap[i]) continue;
+                if (_freeFieldsOfBasis[i]) continue;
                 newVectors[i] = vector;
                 return newVectors;
             }
@@ -120,5 +111,13 @@ namespace GiftWrapping
             throw new ArgumentException("Cannot insert a vector");
         }
 
+
+        private Vector FindNormal(Vector[] basis)
+        {
+            Matrix leftSide = basis.ToMatrix();
+            Vector rightSide = new Vector(leftSide.Rows);
+
+            return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide);
+        }
     }
 }

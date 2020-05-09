@@ -44,5 +44,22 @@ namespace GiftWrappingTest
 
             Assert.AreEqual(p1, p2);
         }
+
+
+        [Test]
+        public void Equals_PointArrays_ReturnTrue()
+        {
+            Point p1 = new Point(new double[] { 1, 1, 1, 0 });
+            Point p2 = new Point(new double[] { 4, 4, 0, 0 });
+            Point p3 = new Point(new double[] { 1, 1, 1, 0 });
+            Point p4 = new Point(new double[] { 4, 4, 0, 0 });
+            Point[] points1 = new Point[] { p1, p2 };
+            Point[] points2 = new Point[] { p3, p4 };
+
+
+            Assert.AreEqual(points1, points2);
+        }
+
+      
     }
 }
