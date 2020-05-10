@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace GiftWrappingTest
 {
     [TestFixture]
-    public class PlaneFinderTest
+    public class PlaneFinder_Test
     {
         private static IEnumerable SetPoints()
         {

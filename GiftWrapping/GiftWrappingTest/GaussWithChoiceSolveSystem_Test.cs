@@ -7,7 +7,7 @@ using NUnit.Framework.Constraints;
 namespace GiftWrappingTest
 {
     [TestFixture]
-    public class GaussWithChoiceSolveSystemTest
+    public class GaussWithChoiceSolveSystem_Test
     {
         private static readonly object[] SetLinearEquationsSystems =
         {

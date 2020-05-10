@@ -2,8 +2,8 @@
 
 namespace GiftWrapping.Structures
 {
-    public interface IFace2d:ICell
+    public interface IPointFace:ICell
     {
-        List<Point> Points { get; set; }
+        Point[] Points { get;}
     }
 }

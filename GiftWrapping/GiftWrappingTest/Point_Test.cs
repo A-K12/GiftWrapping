@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using FluentAssertions;
 using GiftWrapping;
 using GiftWrapping.Structures;
 using NUnit.Framework;
@@ -8,7 +10,7 @@ using NUnit.Framework;
 namespace GiftWrappingTest
 {
     [TestFixture]
-    public class PointTest
+    public class Point_Test
     {
         [Test]
         public void Set_IndexOutOfRange_ThrowsException()
@@ -60,6 +62,6 @@ namespace GiftWrappingTest
             Assert.AreEqual(points1, points2);
         }
 
-      
+
     }
 }

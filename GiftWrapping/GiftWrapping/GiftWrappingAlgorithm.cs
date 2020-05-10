@@ -94,27 +94,31 @@ namespace GiftWrapping
             throw new NotImplementedException();
         }
 
-        public ConvexHull2d FindConvexHull2D(IList<Point> list, IndexMap map)
+        public ConvexHull FindConvexHull2D(IList<Point> list, IndexMap map)
         {
-            ConvexHull2d conveHull = new ConvexHull2d();
+            ConvexHull convexHull = new ConvexHull(3);
             PlaneFinder pl = new PlaneFinder();
 
             Hyperplane hyperplane = pl.FindFirstPlane(list, map);
-            
+            hyperplane.ReorientNormal();
             IList<Point> planePoints = hyperplane.GetPlanePoints(list);
-            conveHull.Points.Add(planePoints.Min(map));
-            conveHull.Points.Add(planePoints.Max(map));
+            Edge2d firstEdge = new Edge2d(hyperplane);
+            Point endPoint = planePoints.Min(map);
+            firstEdge.Points[0] = endPoint;
+            firstEdge.Points[1] = planePoints.Max(map);
+            convexHull.InnerFaces.Add(firstEdge);
             while (true)
             {
+                Edge2d currentEdge = (Edge2d)convexHull.InnerFaces.Last();
                 Hyperplane maxHyperplane = default;
                 double maxAngle = Double.MinValue;
                 foreach (Point point in list)
                 {
                     if (planePoints.Contains(point)) continue;
-                    Point[] points = new Point[] {conveHull.Points.Last(), point};
+                    Point[] points = new Point[] { currentEdge.Points[1], point};
                     Hyperplane newHyperplane = HyperplaneHelper.Create(points, map);
-                    newHyperplane.ReorientNormal();
-                    double angle = hyperplane.Angle(newHyperplane);
+                    //newHyperplane.ReorientNormal();
+                    double angle = currentEdge.Hyperplane.Angle(newHyperplane);
                     if (angle < maxAngle) continue;
                     maxAngle = angle;
                     maxHyperplane = newHyperplane;
@@ -122,22 +126,22 @@ namespace GiftWrapping
                 planePoints = maxHyperplane.GetPlanePoints(points);
                 Point maxPoint = planePoints.Max(map);
                 Point minPoint = planePoints.Min(map);
-                if(conveHull.Points.Contains(maxPoint))
+                Edge2d newEdge = new Edge2d(maxHyperplane);
+                if(currentEdge.Points[1] == maxPoint)
                 {
-                    if (conveHull.Points.Contains(minPoint))
-                    {
-                        break;
-                    }
-                    conveHull.Points.Add(minPoint);
+                    newEdge.Points[0]= maxPoint;
+                    newEdge.Points[1] = minPoint;
                 }
                 else
                 {
-                    conveHull.Points.Add(maxPoint);
+                    newEdge.Points[0] = minPoint;
+                    newEdge.Points[1] = maxPoint;
                 }
-                hyperplane = maxHyperplane;
+                convexHull.InnerFaces.Add(newEdge);
+                if (newEdge.Points[1] == endPoint) break;
             }
 
-            return conveHull;
+            return convexHull;
         }
 
         private IndexMap GetIndexMap(IList<Point> points, IndexMap indexMap)

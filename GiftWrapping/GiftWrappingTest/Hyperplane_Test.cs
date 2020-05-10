@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace GiftWrappingTest
 {
-    public class HyperplaneTest
+    public class Hyperplane_Test
     {
 
         [Test]
@@ -25,6 +25,40 @@ namespace GiftWrappingTest
             Hyperplane h = HyperplaneHelper.Create(points, new IndexMap(2));
 
             Assert.AreEqual(h2,h);
+        }
+
+        [Test]
+        public void Create_2dPoints_ReturnHyperplane2()
+        {
+            Point[] points = new Point[]
+            {
+                new Point(new double[] {2,1}),
+                new Point(new double[] {1,1})
+            };
+            
+            Hyperplane h = HyperplaneHelper.Create(points, new IndexMap(2));
+
+            double y = h.Normal[0]*(-1);
+            double t = 9 / y;
+
+            Assert.IsTrue(true);
+        }
+
+        [Test]
+        public void Vector_2dPoints_ReturnHyperplane2()
+        {
+            Point[] points = new Point[]
+            {
+                new Point(new double[] {2,1}),
+                new Point(new double[] {1,1})
+            };
+
+            Hyperplane h = HyperplaneHelper.Create(points, new IndexMap(2));
+
+            double y = h.Normal[0] * (-1);
+            double t = 9 / y;
+
+            Assert.IsTrue(true);
         }
 
         [Test]

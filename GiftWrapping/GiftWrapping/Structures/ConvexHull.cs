@@ -42,12 +42,25 @@ namespace GiftWrapping.Structures
             for (int i = 0; i < InnerFaces.Count; i++)
                 res += InnerFaces[i].GetHashCode();
             res += Dimension.GetHashCode();
+            res += InnerFaces.Count;
             return res;
         }
 
         public int Dimension { get; }
-        public List<ICell> AdjacentCells { get; set; }
+        public List<ICell> AdjacentCells { get; }
         public Hyperplane Hyperplane { get; set; }
-        public List<ICell> InnerFaces { get; set; }
+        public IEnumerable<Point> GetPoints()
+        {
+            List<Point> points = new List<Point>();
+            foreach (ICell innerFace in InnerFaces)
+            {
+                points.AddRange(innerFace.GetPoints());
+            }
+
+            return points;
+        }
+
+        public List<ICell> InnerFaces { get; }
+       
     }
 }
