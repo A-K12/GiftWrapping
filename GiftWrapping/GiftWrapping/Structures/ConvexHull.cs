@@ -51,10 +51,10 @@ namespace GiftWrapping.Structures
         public Hyperplane Hyperplane { get; set; }
         public IEnumerable<Point> GetPoints()
         {
-            List<Point> points = new List<Point>();
+            HashSet<Point> points = new HashSet<Point>();
             foreach (ICell innerFace in InnerFaces)
             {
-                points.AddRange(innerFace.GetPoints());
+                points.UnionWith(innerFace.GetPoints());
             }
 
             return points;

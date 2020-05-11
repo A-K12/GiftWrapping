@@ -1,4 +1,5 @@
 ﻿using System;
+using GiftWrapping.Helpers;
 using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 using NUnit.Framework;
@@ -68,6 +69,5 @@ namespace GiftWrappingTest
 
             Assert.AreEqual(expect, result);
         }
-
     }
 }
