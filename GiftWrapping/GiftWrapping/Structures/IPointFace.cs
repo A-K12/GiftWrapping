@@ -4,6 +4,11 @@ namespace GiftWrapping.Structures
 {
     public interface IPointFace:ICell
     {
-        Point[] Points { get;}
+        void AddPoint(Point point);
+
+        Point this[int i]
+        {
+            get;
+        }
     }
 }

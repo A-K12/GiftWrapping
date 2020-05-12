@@ -391,7 +391,5 @@ namespace GiftWrapping.Structures
             return new Point(nv);
         }
 #endregion
-
-    
     }
 }

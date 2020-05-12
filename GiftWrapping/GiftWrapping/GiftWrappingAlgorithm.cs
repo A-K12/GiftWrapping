@@ -106,7 +106,7 @@ namespace GiftWrapping
             Point endPoint = planePoints.Min(map);
             firstEdge.Points[0] = endPoint;
             firstEdge.Points[1] = planePoints.Max(map);
-            convexHull.InnerFaces.Add(firstEdge);
+         //   convexHull.InnerFaces.Add(firstEdge);
             while (true)
             {
                 Edge2d currentEdge = (Edge2d)convexHull.InnerFaces.Last();
@@ -137,7 +137,7 @@ namespace GiftWrapping
                     newEdge.Points[0] = minPoint;
                     newEdge.Points[1] = maxPoint;
                 }
-                convexHull.InnerFaces.Add(newEdge);
+               // convexHull.InnerFaces.Add(newEdge);
                 if (newEdge.Points[1] == endPoint) break;
             }
 

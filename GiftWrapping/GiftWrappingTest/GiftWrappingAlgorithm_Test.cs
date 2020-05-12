@@ -97,7 +97,7 @@ namespace GiftWrappingTest
                 new Point(new double[]{0, 4}),
                 new Point(new double[]{4, 4}),
             };
-            ConvexHull except = exceptPoint.ToConvexHull2d();
+            ConvexHull2d except = exceptPoint.ToConvexHull2d();
 
             GiftWrappingAlgorithmTestClass giftWrapping = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
             

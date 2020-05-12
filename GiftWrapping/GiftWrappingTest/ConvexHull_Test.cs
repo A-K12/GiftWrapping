@@ -33,10 +33,10 @@ namespace GiftWrappingTest
                 new Point(new double[]{4, 0, 0, 0}),
                 new Point(new double[]{0, 0, 4, 0}),
             };
-            ConvexHull c1 = p1.ToConvexHull2d();
-            ConvexHull c2 = p2.ToConvexHull2d();
-            ConvexHull c3 = p3.ToConvexHull2d();
-            ConvexHull c4 = p4.ToConvexHull2d();
+            ConvexHull2d c1 = p1.ToConvexHull2d();
+            ConvexHull2d c2 = p2.ToConvexHull2d();
+            ConvexHull2d c3 = p3.ToConvexHull2d();
+            ConvexHull2d c4 = p4.ToConvexHull2d();
 
             ConvexHull ch1 = new ConvexHull(3);
             ch1.InnerFaces.AddRange(new []{c1, c2});
@@ -61,8 +61,8 @@ namespace GiftWrappingTest
                 new Point(new double[]{4, 0, 0, 0}),
                 new Point(new double[]{0, 0, 4, 0}),
             };
-            ConvexHull c1 = p1.ToConvexHull2d();
-            ConvexHull c2 = p2.ToConvexHull2d();
+            ConvexHull2d c1 = p1.ToConvexHull2d();
+            ConvexHull2d c2 = p2.ToConvexHull2d();
             ConvexHull ch1 = new ConvexHull(3);
             ch1.InnerFaces.AddRange(new[] { c1, c2 });
             Point[] expect = new Point[]{

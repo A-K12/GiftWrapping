@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace GiftWrapping.Structures
 {
-    public class Edge2d
+    public class ConvexHull2d:IPointFace
     {
-       
-        public int Dimension => 2;
+        public int Dimension { get; }
         public List<ICell> AdjacentCells { get; private set; }
-        public List<Point> Points { get; private set; }
 
         private Hyperplane _hyperplane;
+        private readonly List<Point> _points;
+        public Point this[int i] => _points[i];
         public Hyperplane Hyperplane
         {
             set
@@ -26,32 +26,30 @@ namespace GiftWrapping.Structures
             get => _hyperplane;
         }
 
-        public IEnumerable<Point> GetPoints() 
+        public IEnumerable<Point> GetPoints()
         {
-            return Points;
+            return _points;
         }
 
-
-        public Edge2d(Hyperplane hyperplane)
+        public void AddPoint(Point point)
         {
-            Hyperplane = hyperplane ?? throw new ArgumentNullException(nameof(hyperplane));
-            Init();
+            _points.Add(point);
         }
 
-        public Edge2d()
+        public ConvexHull2d(Hyperplane hyperplane = default)
         {
-            _hyperplane= default;
-            Init();
-        }
-
-        private void Init()
-        {
+            Dimension = 2;
+            _hyperplane = hyperplane;
+            _points = new List<Point>();
             AdjacentCells = new List<ICell>();
         }
 
+
+
         public bool Equals(IPointFace other)
         {
-            return Dimension == other.Dimension;
+            IEnumerable<Point> points = other.GetPoints();
+            return Dimension == other.Dimension && _points.All(points.Contains);
         }
 
 
@@ -60,16 +58,17 @@ namespace GiftWrapping.Structures
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((IPointFace) obj);
+            return Equals((IPointFace)obj);
         }
 
         public override int GetHashCode()
         {
             int res = 0;
-            for (int i = 0; i < Points.Count; i++)
-                res += Points[i].GetHashCode();
+            for (int i = 0; i < _points.Count; i++)
+                res += _points[i].GetHashCode();
             res += Dimension.GetHashCode();
             return res;
         }
+
     }
 }

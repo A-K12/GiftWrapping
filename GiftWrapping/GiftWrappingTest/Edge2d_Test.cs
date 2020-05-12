@@ -9,7 +9,7 @@ namespace GiftWrappingTest
     public class Edge2d_Test
     {
 
-        [Test]
+        [Test, Ignore("Remove")]
         public void Equals_WhenSamePoints_ReturnTrue()
         {
             Point p1 = new Point(new double[] { 1, 1, 1, 0 });

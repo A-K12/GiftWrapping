@@ -17,7 +17,7 @@ namespace GiftWrapping.LinearEquations
         public IndexMap(int[] map)
         {
             Length = map.Length;
-            _indexes = map;
+            _indexes = (int[])map.Clone();
         }
 
         public IndexMap(int length)
