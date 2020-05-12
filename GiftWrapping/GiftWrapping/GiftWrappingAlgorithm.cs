@@ -102,10 +102,10 @@ namespace GiftWrapping
             Hyperplane hyperplane = pl.FindFirstPlane(list, map);
             hyperplane.ReorientNormal();
             IList<Point> planePoints = hyperplane.GetPlanePoints(list);
-            Edge2d firstEdge = new Edge2d(hyperplane);
+           // Edge2d firstEdge = new Edge2d(hyperplane);
             Point endPoint = planePoints.Min(map);
-            firstEdge.Points[0] = endPoint;
-            firstEdge.Points[1] = planePoints.Max(map);
+            //firstEdge.Points[0] = endPoint;
+            //firstEdge.Points[1] = planePoints.Max(map);
          //   convexHull.InnerFaces.Add(firstEdge);
             while (true)
             {
@@ -118,27 +118,27 @@ namespace GiftWrapping
                     Point[] points = new Point[] { currentEdge.Points[1], point};
                     Hyperplane newHyperplane = HyperplaneHelper.Create(points, map);
                     //newHyperplane.ReorientNormal();
-                    double angle = currentEdge.Hyperplane.Angle(newHyperplane);
-                    if (angle < maxAngle) continue;
-                    maxAngle = angle;
-                    maxHyperplane = newHyperplane;
+                    //double angle = currentEdge.Hyperplane.Angle(newHyperplane);
+                    //if (angle < maxAngle) continue;
+                    //maxAngle = angle;
+                    //maxHyperplane = newHyperplane;
                 }
                 planePoints = maxHyperplane.GetPlanePoints(points);
                 Point maxPoint = planePoints.Max(map);
                 Point minPoint = planePoints.Min(map);
-                Edge2d newEdge = new Edge2d(maxHyperplane);
+          //      Edge2d newEdge = new Edge2d(maxHyperplane);
                 if(currentEdge.Points[1] == maxPoint)
                 {
-                    newEdge.Points[0]= maxPoint;
-                    newEdge.Points[1] = minPoint;
+                    //newEdge.Points[0]= maxPoint;
+                    //newEdge.Points[1] = minPoint;
                 }
                 else
                 {
-                    newEdge.Points[0] = minPoint;
-                    newEdge.Points[1] = maxPoint;
+                    //newEdge.Points[0] = minPoint;
+                    //newEdge.Points[1] = maxPoint;
                 }
                // convexHull.InnerFaces.Add(newEdge);
-                if (newEdge.Points[1] == endPoint) break;
+               // if (newEdge.Points[1] == endPoint) break;
             }
 
             return convexHull;

@@ -6,69 +6,39 @@ namespace GiftWrapping.Structures
 {
     public class Edge2d
     {
-       
-        public int Dimension => 2;
-        public List<ICell> AdjacentCells { get; private set; }
-        public List<Point> Points { get; private set; }
+        
+        public Point[] Points { get;  set; }
 
-        private Hyperplane _hyperplane;
-        public Hyperplane Hyperplane
+        public Edge2d(Point p1, Point p2)
         {
-            set
-            {
-                if (value.Dimension != 2)
-                {
-                    throw new ArgumentException("Hyperplane is not two-dimensional.");
-                }
-
-                _hyperplane = value;
-            }
-            get => _hyperplane;
-        }
-
-        public IEnumerable<Point> GetPoints() 
-        {
-            return Points;
+            if(p1 == p2) throw new ArgumentException("Points are equal.");
+            Points = new[] {p1, p2};
         }
 
 
-        public Edge2d(Hyperplane hyperplane)
+        public Edge2d(Point[] points)
         {
-            Hyperplane = hyperplane ?? throw new ArgumentNullException(nameof(hyperplane));
-            Init();
+            Points = points;
         }
 
-        public Edge2d()
+        public bool Equals(Edge2d other)
         {
-            _hyperplane= default;
-            Init();
+            return Points.All(other.Points.Contains);
         }
-
-        private void Init()
-        {
-            AdjacentCells = new List<ICell>();
-        }
-
-        public bool Equals(IPointFace other)
-        {
-            return Dimension == other.Dimension;
-        }
-
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((IPointFace) obj);
+            return Equals((Edge2d) obj);
         }
 
         public override int GetHashCode()
         {
             int res = 0;
-            for (int i = 0; i < Points.Count; i++)
+            for (int i = 0; i < Points.Length; i++)
                 res += Points[i].GetHashCode();
-            res += Dimension.GetHashCode();
             return res;
         }
     }
