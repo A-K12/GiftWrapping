@@ -19,37 +19,33 @@ namespace GiftWrapping
             _dim = points[0].Dim;
             _freeFieldsOfBasis = new bool[_dim - 1];
             Point minPoint = points.Min();
-            Vector[] mainBasis = GetFirstBasis();
-            Vector mainNormal = GetFirstNormal();
+            Hyperplane mainPlane = GetFirstHyperplane(minPoint);
             bool[] availablePoints = new bool[points.Count];
             availablePoints[points.IndexOf(minPoint)] = true;
             for (int i = 1; i < _dim; i++)
             {
                 double maxAngle = double.MinValue;
                 int maxPoint = default;
-                Vector[] maxBasis = default;
-                Vector maxNormal = default;
+                Hyperplane maxPlane = mainPlane;
                 for (int j = 0; j < points.Count; j++)
                 {
                     if (availablePoints[j]) continue;
                     Vector vector = Point.ToVector(minPoint, points[j]);
-                    Vector[] tempBasis = SetVector(mainBasis, vector);
-                    Vector newNormal = FindNormal(tempBasis);
-                    double newAngle = Vector.Angle(mainNormal, newNormal);
+                    Vector[] tempBasis = SetVector(mainPlane.Basis, vector);
+                    Hyperplane newPlane = HyperplaneHelper.Create(minPoint, tempBasis);
+                    double newAngle = mainPlane.Angle(newPlane);
                     if (Tools.LT(newAngle, maxAngle)) continue;
                     maxAngle = newAngle;
-                    maxNormal = newNormal;
-                    maxBasis = tempBasis;
+                    maxPlane = newPlane;
                     maxPoint = j;
                 }
 
                 availablePoints[maxPoint] = true;
-                mainBasis = maxBasis;
-                mainNormal = -maxNormal;
+                mainPlane = maxPlane;
+                mainPlane.ReorientNormal();
             }
 
-            IEnumerable<Point> planePoints = points.Where(((_, i) => availablePoints[i]));
-            return HyperplaneHelper.Create(planePoints.ToList());
+            return mainPlane;
         }
 
         private Hyperplane GetFirstHyperplane(Point point)

@@ -30,12 +30,12 @@ namespace GiftWrappingTest
         [Test]
         public void GetDimension_WhenCall_ReturnDimension()
         {
-            int exceptDimension = 555;
-            Point point = new Point(new double[exceptDimension]);
+            int expectDimension = 555;
+            Point point = new Point(new double[expectDimension]);
 
             int resultingDimension = point.Dim;
 
-            Assert.AreEqual(exceptDimension, resultingDimension);
+            Assert.AreEqual(expectDimension, resultingDimension);
         }
 
         [Test]
@@ -62,6 +62,17 @@ namespace GiftWrappingTest
             Assert.AreEqual(points1, points2);
         }
 
+        [Test]
+        public void LessOperator_Point_ReturnTrue()
+        {
+            Point p1 = new Point(new double[] { 1, 100000, 1, 0 });
+            Point p2 = new Point(new double[] { 2, 0, 0, 0 });
+
+            bool result = p1 < p2;
+
+
+            result.Should().BeTrue();
+        }
 
     }
 }
