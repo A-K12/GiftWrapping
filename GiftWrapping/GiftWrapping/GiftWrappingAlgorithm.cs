@@ -12,9 +12,9 @@ namespace GiftWrapping
     public class GiftWrappingAlgorithm
     {
         private double tolerance;
-        public GiftWrappingAlgorithm(Point[] points, double tolerance)
+        public GiftWrappingAlgorithm(IList<Point> points, double tolerance)
         {
-            if (points.Length < 3)
+            if (points.Count < 3)
             {
                 throw new ArgumentException("The number of points must be more than three.");
             }
@@ -22,7 +22,7 @@ namespace GiftWrapping
             this.points = points;
         }
 
-        private Point[] points;
+        private IList<Point> points;
 
         private ICell _cell;
 
@@ -35,19 +35,19 @@ namespace GiftWrapping
         protected void FindFirstFace(List<Point> points)
         {
             IndexMap mask = new IndexMap(points[0].Dim);
-            FindFirstFace(points,mask);
+            FindFirstFace(points);
         }
-        protected ICell FindFirstFace(IList<Point> points, IndexMap map)
+        protected ICell FindFirstFace(IList<Point> points)
         {
-            if (map.Length == 2)
+            if (points[0].Dim == 2)
             {
-                return FindConvexHull2D(points, map);
+                return FindConvexHull2D(points);
             }
             ConvexHull convexHull = new ConvexHull(points[0].Dim);
-            Hyperplane hyperplane = FindFirstPlane(points, map);
+            Hyperplane hyperplane = FindFirstPlane(points);
             IList<Point> planePoints = hyperplane.GetPlanePoints(points);
-            IndexMap newMap = GetIndexMap(points, map);
-            ICell currentFace = FindFirstFace(planePoints, newMap);
+            Point[] newPoints = hyperplane.RebuildPoints(planePoints);
+            ICell currentFace = FindFirstFace(newPoints);
             convexHull.InnerFaces.Add(currentFace);
             Stack<ICell> unprocessedEdges = new Stack<ICell>();
 
@@ -65,8 +65,8 @@ namespace GiftWrapping
                 {
                     if(planePoints.Contains(points[i])) continue;
                     edgePoints[^1] = points[i];
-                    IndexMap faceMap = GetIndexMap(edgePoints, map);
-                    Hyperplane newHyperplane = HyperplaneHelper.Create(edgePoints, faceMap);
+                    IndexMap faceMap = GetIndexMap(edgePoints);//REMOVE
+                    Hyperplane newHyperplane = HyperplaneHelper.Create(edgePoints);
                     double angle = currentFace.Hyperplane.Angle(newHyperplane);
                     if (angle < maxAngle) continue; //if ==? 
                     maxAngle = angle;
@@ -77,7 +77,7 @@ namespace GiftWrapping
 
                 IList<Point> facePoints = maxHyperplane.GetPlanePoints(points);
 
-                ConvexHull convexConvexHull = FindConvexHull(facePoints, maxHyperplane.Mask);
+                ConvexHull convexConvexHull = FindConvexHull(facePoints);
                 convexHull.InnerFaces.Add(convexConvexHull);
                 foreach (var face in convexConvexHull.InnerFaces)
                 {
@@ -88,22 +88,22 @@ namespace GiftWrapping
             return convexHull;
         }
 
-        private ConvexHull FindConvexHull(IList<Point> facePoints, IndexMap maxHyperplaneMask)
+        private ConvexHull FindConvexHull(IList<Point> facePoints)
         {
 
             throw new NotImplementedException();
         }
 
-        public ConvexHull FindConvexHull2D(IList<Point> list, IndexMap map)
+        public ConvexHull FindConvexHull2D(IList<Point> list)
         {
             ConvexHull convexHull = new ConvexHull(3);
             PlaneFinder pl = new PlaneFinder();
 
-            Hyperplane hyperplane = pl.FindFirstPlane(list, map);
+            Hyperplane hyperplane = pl.FindFirstPlane(list);
             hyperplane.ReorientNormal();
             IList<Point> planePoints = hyperplane.GetPlanePoints(list);
            // Edge2d firstEdge = new Edge2d(hyperplane);
-            Point endPoint = planePoints.Min(map);
+            Point endPoint = planePoints.Min();
             //firstEdge.Points[0] = endPoint;
             //firstEdge.Points[1] = planePoints.Max(map);
          //   convexHull.InnerFaces.Add(firstEdge);
@@ -116,7 +116,7 @@ namespace GiftWrapping
                 {
                     if (planePoints.Contains(point)) continue;
                     Point[] points = new Point[] { currentEdge.Points[1], point};
-                    Hyperplane newHyperplane = HyperplaneHelper.Create(points, map);
+                    Hyperplane newHyperplane = HyperplaneHelper.Create(points);
                     //newHyperplane.ReorientNormal();
                     //double angle = currentEdge.Hyperplane.Angle(newHyperplane);
                     //if (angle < maxAngle) continue;
@@ -124,8 +124,8 @@ namespace GiftWrapping
                     //maxHyperplane = newHyperplane;
                 }
                 planePoints = maxHyperplane.GetPlanePoints(points);
-                Point maxPoint = planePoints.Max(map);
-                Point minPoint = planePoints.Min(map);
+                Point maxPoint = planePoints.Max();
+                Point minPoint = planePoints.Min();
           //      Edge2d newEdge = new Edge2d(maxHyperplane);
                 if(currentEdge.Points[1] == maxPoint)
                 {
@@ -144,17 +144,16 @@ namespace GiftWrapping
             return convexHull;
         }
 
-        private IndexMap GetIndexMap(IList<Point> points, IndexMap indexMap)
+        private IndexMap GetIndexMap(IList<Point> points)
         {
             return default;
         }
 
-        protected Hyperplane FindFirstPlane(IList<Point> points, IndexMap mask)
+        protected Hyperplane FindFirstPlane(IList<Point> points)
         {
-            int dim = mask.Length;                 
             PlaneFinder planeFinder = new PlaneFinder();
 
-            return planeFinder.FindFirstPlane(points, mask);
+            return planeFinder.FindFirstPlane(points);
         }
     }
 }

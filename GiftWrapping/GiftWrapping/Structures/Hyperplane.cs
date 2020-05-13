@@ -7,30 +7,15 @@ namespace GiftWrapping.Structures
 {
     public class Hyperplane
     {
-        public IndexMap Mask { get; set; }
         private double NumericVariable { get; set; }
         public Vector Normal { get; private set; }
         public Vector[] Basis { get; set; }
         public Point MainPoint { get; set; }
         public int Dimension { get; }
 
-        public Hyperplane(Hyperplane h) : this(h.MainPoint, h.Normal, h.Mask)
+        public Hyperplane(Hyperplane h) : this(h.MainPoint, h.Normal)
         {
             Basis = h.Basis;
-        }
-
-        public Hyperplane(Point point, Vector normal, IndexMap mask)
-        {
-            if (mask.Length != normal.Dim)
-                throw new ArgumentException("Mask and normal have different dimensions.");
-
-            Dimension = normal.Dim;
-            Normal = normal.Normalize();
-            Mask = mask;
-            MainPoint = point;
-            Basis = new Vector[Dimension];
-            Basis[0] = point;
-            ComputeNumVariable();
         }
 
         public Hyperplane(Point point, Vector normal)
@@ -41,16 +26,13 @@ namespace GiftWrapping.Structures
             Dimension = normal.Dim;
             Normal = normal.Normalize();
             Basis = new Vector[Dimension];
-            Basis[0] = point;
-            Mask = new IndexMap(Dimension);
             MainPoint = point;
             ComputeNumVariable();
         }
 
         private void ComputeNumVariable()
         {
-            for (int i = 0; i < Mask.Length; i++) NumericVariable += MainPoint[Mask[i]] * Normal[i];
-            NumericVariable /= Normal.Length;
+            NumericVariable = MainPoint * Normal;
         }
 
         public double Angle(Hyperplane hyperplane)
@@ -60,9 +42,9 @@ namespace GiftWrapping.Structures
 
         public int Side(Point point)
         {
-            Vector vector = new Vector(point);
+            Vector v = Point.ToVector(MainPoint, point);
 
-            return Tools.CMP(Normal * vector);
+            return Tools.CMP(Normal * v);
         }
 
         public void ReorientNormal()
@@ -78,8 +60,17 @@ namespace GiftWrapping.Structures
             List<double> quotients = new List<double>();
             for (int i = 0; i < other.Dimension; i++)
             {
-                if (Tools.EQ(Normal[i]) && Tools.EQ(other.Normal[i])) continue;
-                quotients.Add(other.Normal[i] / Normal[i]);
+                if (Tools.NE(Normal[i]))
+                {
+                    quotients.Add(other.Normal[i] / Normal[i]);
+                }
+                else
+                {
+                    if (Tools.NE(other.Normal[i]))
+                    {
+                        return false;
+                    }
+                }
             }
 
             if (Tools.NE(NumericVariable) && Tools.NE(other.NumericVariable))
@@ -105,6 +96,11 @@ namespace GiftWrapping.Structures
         {
             Vector v = Point.ToVector(MainPoint, point);
             return Tools.EQ(Normal * v);
+        }
+
+        public Point[] RebuildPoints(IList<Point> planePoints)
+        {
+            throw new NotImplementedException();
         }
     }
 }

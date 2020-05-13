@@ -12,15 +12,13 @@ namespace GiftWrapping
     {
         private int _dim;
         private bool[] _freeFieldsOfBasis;
-        private IndexMap _mask;
 
 
-        public Hyperplane FindFirstPlane(IList<Point> points, IndexMap mask)
+        public Hyperplane FindFirstPlane(IList<Point> points)
         {
-            _mask = mask;
-            _dim = mask.Length;
+            _dim = points[0].Dim;
             _freeFieldsOfBasis = new bool[_dim - 1];
-            Point minPoint = points.Min(mask);
+            Point minPoint = points.Min();
             Vector[] mainBasis = GetFirstBasis();
             Vector mainNormal = GetFirstNormal();
             bool[] availablePoints = new bool[points.Count];
@@ -34,7 +32,7 @@ namespace GiftWrapping
                 for (int j = 0; j < points.Count; j++)
                 {
                     if (availablePoints[j]) continue;
-                    Vector vector = ConvertToVector(minPoint, points[j]);
+                    Vector vector = Point.ToVector(minPoint, points[j]);
                     Vector[] tempBasis = SetVector(mainBasis, vector);
                     Vector newNormal = FindNormal(tempBasis);
                     double newAngle = Vector.Angle(mainNormal, newNormal);
@@ -51,7 +49,7 @@ namespace GiftWrapping
             }
 
             IEnumerable<Point> planePoints = points.Where(((_, i) => availablePoints[i]));
-            return HyperplaneHelper.Create(planePoints.ToList(), mask);
+            return HyperplaneHelper.Create(planePoints.ToList());
         }
 
         private Hyperplane GetFirstHyperplane(Point point)
@@ -59,7 +57,7 @@ namespace GiftWrapping
             Vector normal = GetFirstNormal();
             Vector[] basis = GetFirstBasis();
 
-            return  new Hyperplane(point, normal, _mask) {Basis = basis};
+            return  new Hyperplane(point, normal) {Basis = basis};
         }
 
         private Vector GetFirstNormal()
@@ -81,16 +79,6 @@ namespace GiftWrapping
             }
 
             return vectors;
-        }
-        private Vector ConvertToVector(Point begin, Point end)
-        {
-            double[] coordinates = new double[_mask.Length];
-            for (int i = 0; i < _mask.Length; i++)
-            {
-                coordinates[i] = end[_mask[i]] - begin[_mask[i]];
-            }
-
-            return new Vector(coordinates);
         }
 
         private Vector[] SetVector(Vector[] vectors, Vector vector)

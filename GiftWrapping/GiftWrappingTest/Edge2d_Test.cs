@@ -19,13 +19,13 @@ namespace GiftWrappingTest
 
             Edge2d edge1 = new Edge2d(p1, p2);
             Edge2d edge2 = new Edge2d(p3, p4);
-            yield return new TestCaseData(edge1, edge2).SetName("When same point and same order.").Returns(true);
+            yield return new TestCaseData(edge1, edge2).SetName("Equals_When same point and same order.").Returns(true);
 
             Edge2d edge3 = new Edge2d(p4, p3);
-            yield return new TestCaseData(edge1, edge3).SetName("When same point and different order.").Returns(true);
+            yield return new TestCaseData(edge1, edge3).SetName("Equals_When same point and different order.").Returns(true);
 
             Edge2d edge4 = new Edge2d(p4, p5);
-            yield return new TestCaseData(edge1, edge4).SetName("When different point.").Returns(false);
+            yield return new TestCaseData(edge1, edge4).SetName("Equals_When different point.").Returns(false);
 
         }
 

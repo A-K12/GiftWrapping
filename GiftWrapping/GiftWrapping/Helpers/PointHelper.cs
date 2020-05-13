@@ -46,46 +46,6 @@ namespace GiftWrapping.Helpers
             return new Matrix(1, point.Dim, point);
         }
 
-        public static Point Min(this IList<Point> points, IndexMap mask)
-        {
-            int index = 0;
-            for (int i = 0; i < points.Count; i++)
-            {
-                if (points[i].CompareTo(points[index], mask)<0)
-                {
-                    index = i;
-                }
-            }
-
-            return points[index];
-        }
-
-        public static Point Max(this IList<Point> points, IndexMap mask)
-        {
-            int index = 0;
-            for (int i = 0; i < points.Count; i++)
-            {
-                if (points[i].CompareTo(points[index], mask) > 0)
-                {
-                    index = i;
-                }
-            }
-
-            return points[index];
-        }
-
-        public static int CompareTo(this Point p1, Point p2, IndexMap mask)
-        {
-            int res;
-            for (int i = 0; i < mask.Length; i++)
-            {
-                res = Tools.CMP(p1[mask[i]], p2[mask[i]]);
-                if (res != 0)
-                    return res;
-            }
-
-            return 0;
-        }
 
      
     }

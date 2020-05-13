@@ -8,11 +8,11 @@ namespace GiftWrappingTest
 {
     public class GiftWrappingAlgorithmTestClass:GiftWrappingAlgorithm
     {
-        public GiftWrappingAlgorithmTestClass(Point[] points, double tolerance) : base(points, tolerance)
+        public GiftWrappingAlgorithmTestClass(IList<Point> points, double tolerance) : base(points, tolerance)
         {
         }
-        public void FindFirstFaceTest(List<Point> points) => base.FindFirstFace(points);
+        public void FindFirstFaceTest(IList<Point> points) => base.FindFirstFace(points);
 
-        public Hyperplane FindFirstPlaneTest(List<Point> points, IndexMap mask) => base.FindFirstPlane(points, mask);
+        public Hyperplane FindFirstPlaneTest(IList<Point> points) => base.FindFirstPlane(points);
     }
 }

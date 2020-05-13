@@ -127,9 +127,8 @@ namespace GiftWrappingTest
         public void FindFirstPlane_Simplex_ReturnHyperplane(Point[] points, Hyperplane[] expected)
         {
             PlaneFinder planeFinder = new PlaneFinder();
-            IndexMap mask = new IndexMap(points[0].Dim);
 
-            Hyperplane result = planeFinder.FindFirstPlane(points, mask);
+            Hyperplane result = planeFinder.FindFirstPlane(points);
 
             expected.Should().Contain(result);
 

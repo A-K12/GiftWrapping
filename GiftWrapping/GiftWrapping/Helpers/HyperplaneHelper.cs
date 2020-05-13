@@ -9,23 +9,23 @@ namespace GiftWrapping.Helpers
 {
     public static class HyperplaneHelper
     {
-        public static Hyperplane Create(IList<Point> points, IndexMap mask)
+        public static Hyperplane Create(IList<Point> points)
         {
             if (!points.HaveSameDimension())
             {
                 throw new ArgumentException("Basis don't have same dimension");
             }
-            if (points.Count != mask.Length)
+            if (points.Count != points[0].Dim)
             {
                 throw new ArgumentException("Number of points is not equal to dimension.");
             }
             Vector[] vectors = points.ToVectors();
-            Hyperplane hyperplane = Create(points.First(), vectors, mask);
+            Hyperplane hyperplane = Create(points.First(), vectors);
             
 
             return hyperplane;
         }
-        public static Hyperplane Create(Point point, IList<Vector> vectors, IndexMap mask)
+        public static Hyperplane Create(Point point, IList<Vector> vectors)
         {
             if (!vectors.HaveSameDimension())
             {
@@ -38,10 +38,12 @@ namespace GiftWrapping.Helpers
 
             Matrix matrix = vectors.ToMatrix();
 
-            Vector normal = ComputeNormal(matrix.TakeCols(mask._indexes));
-            Hyperplane hyperplane = new Hyperplane(point, normal, mask);
-            hyperplane.Basis = vectors.ToArray();
-            return hyperplane;
+            Vector normal = ComputeNormal(matrix);
+
+            return new Hyperplane(point, normal)
+            {
+                Basis = vectors.ToArray()
+            };
         }
       
 
