@@ -46,7 +46,7 @@ namespace GiftWrapping
             ConvexHull convexHull = new ConvexHull(points[0].Dim);
             Hyperplane hyperplane = FindFirstPlane(points);
             IList<Point> planePoints = hyperplane.GetPlanePoints(points);
-            Point[] newPoints = hyperplane.RebuildPoints(planePoints);
+            Point[] newPoints = hyperplane.RebuildPoint(planePoints);
             ICell currentFace = FindFirstFace(newPoints);
             convexHull.InnerFaces.Add(currentFace);
             Stack<ICell> unprocessedEdges = new Stack<ICell>();
@@ -116,12 +116,12 @@ namespace GiftWrapping
                     {
                         minAngle = newAngle;
                         next = point;
-                        maxLen = Point.Length(first, next);
+                        maxLen = Point.Length(currentPoint, next);
                         maxVector = newVector;
                     }
                     else if (Tools.EQ(minAngle, newAngle))
                     {
-                        double dist = Point.Length(first, point);
+                        double dist = Point.Length(currentPoint, point);
                         if (Tools.LT(maxLen, dist))
                         {
                             next = point;
@@ -134,6 +134,53 @@ namespace GiftWrapping
                 currentPoint = next;
                 currentVector = maxVector;
             } while (first != currentPoint);
+
+            return convexHull;
+        }
+
+
+        public ConvexHull2d FindConvexHull2Dv2(IList<Point> points)
+        {
+            ConvexHull2d convexHull = new ConvexHull2d();
+            Point first = points.Min();
+            Vector currentVector = new Vector(new double[] { 0, -1 });
+            bool[] pointAvailability = new bool[points.Count];
+            int current = points.IndexOf(first);
+            do
+            {
+                convexHull.AddPoint(points[current]);
+                double minAngle = double.MaxValue;
+                double maxLen = double.MinValue;
+                int next = current;
+                Vector maxVector = currentVector;
+                for (int i = 0; i < points.Count; i++)
+                {
+                    if (pointAvailability[i]||i==current) continue;
+                    Vector newVector = Point.ToVector(points[current], points[i]);
+                    double newAngle = Vector.Angle(currentVector, newVector);
+                    if (Tools.LT(newAngle, minAngle))
+                    {
+                        minAngle = newAngle;
+                        next = i;
+                        maxLen = Point.Length(first, points[next]);
+                        maxVector = newVector;
+                    }
+                    else if (Tools.EQ(minAngle, newAngle))
+                    {
+                        double length = Point.Length(points[current], points[i]);
+                        if (Tools.LT(maxLen, length))
+                        {
+                            next = i;
+                            maxVector = newVector;
+                            maxLen = length;
+                        }
+                    }
+                }
+
+                current = next;
+                currentVector = maxVector;
+                pointAvailability[current] = true;
+            } while (first != points[current]);
 
             return convexHull;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace GiftWrapping.LinearEquations
 {
@@ -23,18 +24,7 @@ namespace GiftWrapping.LinearEquations
         public IndexMap(int length)
         {
             Length = length;
-            _indexes = InitIndexMap(length);
-        }
-
-        private int[] InitIndexMap(int length)
-        {
-            int[] array = new int[length];
-            for (int i = 0; i < length; i++)
-            {
-                array[i] = i;
-            }
-
-            return array;
+            _indexes = Enumerable.Range(0, length).ToArray();
         }
     }
 }

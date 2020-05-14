@@ -98,9 +98,13 @@ namespace GiftWrapping.Structures
             return Tools.EQ(Normal * v);
         }
 
-        public Point[] RebuildPoints(IList<Point> planePoints)
+        public PlanePoint RebuildPoint(Point point)
         {
-            throw new NotImplementedException();
+            PlanePoint planePoint = new PlanePoint();
+            if (point is PlanePoint)
+            {
+
+            }
         }
     }
 }
