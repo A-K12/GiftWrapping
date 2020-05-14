@@ -36,9 +36,9 @@ namespace GiftWrapping.Helpers
                 throw new ArgumentException("Vectors and points have different dimensions.");
             }
 
-            Matrix matrix = vectors.ToMatrix();
+            Matrix leftSide = vectors.ToHorizontalMatrix();
 
-            Vector normal = ComputeNormal(matrix);
+            Vector normal = ComputeNormal(leftSide);
 
             return new Hyperplane(point, normal)
             {

@@ -98,7 +98,7 @@ namespace GiftWrapping
 
         private Vector FindNormal(Vector[] basis)
         {
-            Matrix leftSide = basis.ToMatrix();
+            Matrix leftSide = basis.ToHorizontalMatrix();
             Vector rightSide = new Vector(leftSide.Rows);
 
             return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide);

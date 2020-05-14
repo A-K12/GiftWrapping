@@ -103,9 +103,13 @@ namespace GiftWrapping.Structures
         {
             Point originalPoint = (point is PlanePoint planePoint) ? planePoint.OriginPoint : point;
 
-            Matrix matrix = Basis.ToMatrix();
+            Matrix matrix = Basis.ToVerticalMatrix();
+            Vector leftSide = point - MainPoint;
 
-            return default;
+            Vector result = GaussWithChoiceSolveSystem.FindAnswer(matrix, leftSide);
+
+
+            return new PlanePoint(result,originalPoint);
         }
     }
 }

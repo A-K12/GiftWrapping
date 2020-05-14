@@ -144,5 +144,28 @@ namespace GiftWrappingTest
             
             Assert.AreEqual(result1,result2 );
         }
+
+
+
+        [Test]
+        public void GetPointInPlane_WhenCall_ReturnPlanePoint()
+        {
+            Point p1 = new Point(new double[] { 1, 1, 2 });
+            Vector n1 = new Vector(new double[] { 1, 0, 0 });
+            Vector[] basis = new[]
+            {
+                new Vector(new double[] {1, 0, 0}),
+                new Vector(new double[] {0, 1, 0}),
+            };
+            Hyperplane h1 = new Hyperplane(p1, n1);
+            h1.Basis = basis;
+
+            Point p2 = new Point(new double[] { 2, 2, 2 });
+            Point p3 = new Point(new double[] { 1,1});
+
+            Point result = h1.GetPointInPlane(p2);
+
+            Assert.AreEqual(p3, result);
+        }
     }
 }
