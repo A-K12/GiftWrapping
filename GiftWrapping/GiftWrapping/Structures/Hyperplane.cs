@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GiftWrapping.Helpers;
 using GiftWrapping.LinearEquations;
 
 namespace GiftWrapping.Structures
@@ -98,13 +99,13 @@ namespace GiftWrapping.Structures
             return Tools.EQ(Normal * v);
         }
 
-        public PlanePoint RebuildPoint(Point point)
+        public PlanePoint GetPointInPlane(Point point)
         {
-            PlanePoint planePoint = new PlanePoint();
-            if (point is PlanePoint)
-            {
+            Point originalPoint = (point is PlanePoint planePoint) ? planePoint.OriginPoint : point;
 
-            }
+            Matrix matrix = Basis.ToMatrix();
+
+            return default;
         }
     }
 }

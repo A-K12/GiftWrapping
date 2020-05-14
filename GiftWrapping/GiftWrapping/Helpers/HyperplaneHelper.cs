@@ -42,7 +42,7 @@ namespace GiftWrapping.Helpers
 
             return new Hyperplane(point, normal)
             {
-                Basis = vectors.ToArray()
+                Basis = vectors.GetOrthonormalBasis()
             };
         }
       
@@ -50,8 +50,14 @@ namespace GiftWrapping.Helpers
         private static Vector ComputeNormal(Matrix leftSide)
         {
             Vector rightSide = new Vector(leftSide.Rows);
-
-            return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide);
+            try
+            {
+                return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("Vectors are linearly dependent");
+            }
         }
 
         public static IList<Point> GetPlanePoints(this Hyperplane h, IList<Point> points)
@@ -67,5 +73,33 @@ namespace GiftWrapping.Helpers
 
             return result;
         }
+
+        public static Vector[]  GetOrthonormalBasis(this IEnumerable<Vector> vectors)
+        {
+            //TODO Checking vectors
+
+            Vector[] basis = vectors.Select((vector => new Vector(vector))).ToArray();
+            for (int i = 1; i < basis.Length; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    basis[i] -= basis[i].ProjectVectorTo(basis[j]);
+                }
+
+                basis[i] /= basis[i].Length;
+            }
+
+            return basis;
+        }
+
+        public static Vector ProjectVectorTo(this Vector v, Vector vector)
+        {
+            double coefficient = v * vector;
+            coefficient /= vector.Length*vector.Length;
+
+            return vector * coefficient;
+        }
+
+        
     }
 }

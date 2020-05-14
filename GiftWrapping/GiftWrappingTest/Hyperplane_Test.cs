@@ -12,56 +12,6 @@ namespace GiftWrappingTest
     {
 
         [Test]
-        public void Create_2dPoints_ReturnHyperplane()
-        {
-            Point[] points = new Point[]
-            {
-                new Point(new double[] {0, 0}),
-                new Point(new double[] {0, 4})
-            };
-            Vector normal = new Vector(new double[]{-1, 0});
-            Hyperplane h2 = new Hyperplane(points[0], normal);
-
-            Hyperplane h = HyperplaneHelper.Create(points);
-
-            Assert.AreEqual(h2,h);
-        }
-
-        [Test]
-        public void Create_2dPoints_ReturnHyperplane2()
-        {
-            Point[] points = new Point[]
-            {
-                new Point(new double[] {2,1}),
-                new Point(new double[] {1,1})
-            };
-            
-            Hyperplane h = HyperplaneHelper.Create(points);
-
-            double y = h.Normal[0]*(-1);
-            double t = 9 / y;
-
-            Assert.IsTrue(true);
-        }
-
-        [Test]
-        public void Vector_2dPoints_ReturnHyperplane2()
-        {
-            Point[] points = new Point[]
-            {
-                new Point(new double[] {2,1}),
-                new Point(new double[] {1,1})
-            };
-
-            Hyperplane h = HyperplaneHelper.Create(points);
-
-            double y = h.Normal[0] * (-1);
-            double t = 9 / y;
-
-            Assert.IsTrue(true);
-        }
-
-        [Test]
         public void Angle_WhenCall_ReturnAngle()
         {
             Point p1 = new Point(3);

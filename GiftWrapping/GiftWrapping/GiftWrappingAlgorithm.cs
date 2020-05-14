@@ -46,7 +46,7 @@ namespace GiftWrapping
             ConvexHull convexHull = new ConvexHull(points[0].Dim);
             Hyperplane hyperplane = FindFirstPlane(points);
             IList<Point> planePoints = hyperplane.GetPlanePoints(points);
-            Point[] newPoints = hyperplane.RebuildPoint(planePoints);
+            Point[] newPoints = planePoints.Select((point => hyperplane.GetPointInPlane(point))).ToArray();
             ICell currentFace = FindFirstFace(newPoints);
             convexHull.InnerFaces.Add(currentFace);
             Stack<ICell> unprocessedEdges = new Stack<ICell>();

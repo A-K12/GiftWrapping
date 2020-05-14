@@ -41,6 +41,6 @@ namespace GiftWrapping.Helpers
             return new Matrix(1, vector.Dim, vector);
         }
 
-
+       
     }
 }
