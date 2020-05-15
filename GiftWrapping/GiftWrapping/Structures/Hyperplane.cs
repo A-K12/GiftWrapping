@@ -118,11 +118,10 @@ namespace GiftWrapping.Structures
         public PlanePoint ConvertPoint(Point point)
         {
             Point originalPoint = (point is PlanePoint planePoint) ? planePoint.OriginPoint : point;
-            Matrix matrix = Basis.ToHorizontalMatrix();
-            Vector newVector = matrix * point;
-            newVector -= _offSet;
-
-            return new PlanePoint(newVector,originalPoint);
+            Point p1 = point - MainPoint;
+            double[] newPoint = Basis.Select((vector => vector * p1)).ToArray();
+     
+            return new PlanePoint(newPoint, originalPoint);
         }
     }
 }

@@ -33,25 +33,29 @@ namespace GiftWrapping
             return default;
         }
 
-        protected void FindFirstFace(List<Point> points)
+        protected void FindFirstFace(List<PlanePoint> points)
         {
-            IndexMap mask = new IndexMap(points[0].Dim);
             FindFirstFace(points);
         }
-        protected ICell FindFirstFace(IList<Point> points)
+        protected ICell FindFirstFace(IList<PlanePoint> points)
         {
-            if (points[0].Dim == 2)
-            {
-                return FindConvexHull2D(points);
-            }
+            int dim = points[0].Dim;
             ConvexHull convexHull = new ConvexHull(points[0].Dim);
             Hyperplane hyperplane = FindFirstPlane(points);
-            IList<Point> planePoints = hyperplane.GetPlanePoints(points);
-            Point[] newPoints = planePoints.Select((point => hyperplane.ConvertPoint(point))).ToArray();
+            IList<PlanePoint> planePoints = hyperplane.GetPlanePoints(points);
+            if (planePoints.Count == dim)
+            {
+                return CreateSimplex(planePoints);
+            }
+            if (dim - 1 == 3)
+            {
+                return FindConvexHull3D(points);
+            }
+            PlanePoint[] newPoints = planePoints.Select((point => hyperplane.ConvertPoint(point))).ToArray();
             ICell currentFace = FindFirstFace(newPoints);
             convexHull.InnerFaces.Add(currentFace);
-            Stack<ICell> unprocessedEdges = new Stack<ICell>();
-
+            Queue<ICell> unprocessedEdges = new Queue<ICell>();
+            unprocessedEdges.Enqueue(currentFace.);
             while (unprocessedEdges.Count!=0)
             {
                 ICell edge = unprocessedEdges.Pop();
@@ -89,14 +93,55 @@ namespace GiftWrapping
             return convexHull;
         }
 
+        private ICell FindConvexHull3D(IList<PlanePoint> points)
+        {
+            ConvexHull convexHull = new ConvexHull(3);
+
+            Hyperplane hyperplane = FindFirstPlane(points);
+
+            IList<PlanePoint> planePoints = hyperplane.GetPlanePoints(points);
+
+            ConvexHull2d firstHull = FindConvexHull2D(planePoints);
+            Queue<ICell> unprocessed = new Queue<Edge2d>();
+            Point[] pointsConvex = firstHull.GetPoints().ToArray();
+            for (int i = 0; i < pointsConvex.Length-1; i++)
+            {
+                unprocessed.Enqueue(new Edge2d(pointsConvex[i], pointsConvex[i+1]));
+            }
+            unprocessed.Enqueue(new Edge2d(pointsConvex[^1], pointsConvex[0]));
+            HashSet<Edge2d> processed = new HashSet<Edge2d>(); 
+            while(unprocessed.Any())
+            {
+                Edge2d edge = unprocessed.Dequeue();
+                if (processed.Contains(edge))
+                {
+                    continue;
+                }
+                processed.Add(edge);
+
+
+
+            }
+
+        }
+
+        private ICell CreateSimplex(IList<PlanePoint> points)
+        {
+            throw new NotImplementedException();
+        }
+
         private ConvexHull FindConvexHull(IList<Point> facePoints)
         {
 
             throw new NotImplementedException();
         }
 
-        public ConvexHull2d FindConvexHull2D(IList<Point> points)
+        public ConvexHull2d FindConvexHull2D(IList<PlanePoint> points)
         {
+            if (points.Count == 3)
+            {
+                return new ConvexHull2d(points);
+            }
             ConvexHull2d convexHull = new ConvexHull2d();
             Point first = points.Min();
             Vector currentVector = new Vector(new double[] {0, -1});
@@ -108,7 +153,7 @@ namespace GiftWrapping
                 double maxLen = double.MinValue;
                 Point next = currentPoint;
                 Vector maxVector = currentVector;
-                foreach (Point point in points)
+                foreach (PlanePoint point in points)
                 {
                     if (currentPoint == point) continue;
                     Vector newVector = Point.ToVector(currentPoint, point);
@@ -192,7 +237,7 @@ namespace GiftWrapping
             return default;
         }
 
-        protected Hyperplane FindFirstPlane(IList<Point> points)
+        protected Hyperplane FindFirstPlane(IList<PlanePoint> points)
         {
             PlaneFinder planeFinder = new PlaneFinder();
 

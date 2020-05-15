@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace GiftWrapping.Structures
 {
@@ -10,6 +11,7 @@ namespace GiftWrapping.Structures
         public List<ICell> AdjacentCells { get; private set; }
 
         private Hyperplane _hyperplane;
+
         private readonly List<Point> _points;
         public Point this[int i] => _points[i];
         public Hyperplane Hyperplane
@@ -44,7 +46,12 @@ namespace GiftWrapping.Structures
             AdjacentCells = new List<ICell>();
         }
 
-
+        public ConvexHull2d(IEnumerable<PlanePoint> points)
+        {
+            Dimension = 2;
+            _points = new List<Point>(points);
+            AdjacentCells = new List<ICell>();
+        }
 
         public bool Equals(IPointFace other)
         {

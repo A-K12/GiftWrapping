@@ -14,11 +14,11 @@ namespace GiftWrapping
         private bool[] _freeFieldsOfBasis;
 
 
-        public Hyperplane FindFirstPlane(IList<Point> points)
+        public Hyperplane FindFirstPlane(IList<PlanePoint> points)
         {
             _dim = points[0].Dim;
             _freeFieldsOfBasis = new bool[_dim - 1];
-            Point minPoint = points.Min();
+            PlanePoint minPoint = points.Min();
             Hyperplane mainPlane = GetFirstHyperplane(minPoint);
             bool[] availablePoints = new bool[points.Count];
             availablePoints[points.IndexOf(minPoint)] = true;

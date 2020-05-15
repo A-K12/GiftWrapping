@@ -60,9 +60,9 @@ namespace GiftWrapping.Helpers
             }
         }
 
-        public static IList<Point> GetPlanePoints(this Hyperplane h, IList<Point> points)
+        public static IList<PlanePoint> GetPlanePoints(this Hyperplane h, IList<PlanePoint> points)
         {
-            List<Point> result = new List<Point>();
+            List<PlanePoint> result = new List<PlanePoint>();
             for (int i = 0; i < points.Count; i++)
             {
                 if (h.IsPointInPlane(points[i]))

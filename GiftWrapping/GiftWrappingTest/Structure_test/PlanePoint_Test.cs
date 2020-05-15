@@ -23,7 +23,7 @@ namespace GiftWrappingTest.Structure_test
         {
             Point p1 = new Point(new double[] { 4, 4, 0, 0 });
             Point p2 = new Point(new double[] { 4, 4, 0, 0 });
-            Point pp1 = new PlanePoint(new double[] { 1,1,1}, p1);
+            PlanePoint pp1 = new PlanePoint(new double[] { 1,1,1}, p1);
             Point pp2 = new PlanePoint(new double[] { 2,2,2}, p2);
 
             Assert.AreEqual(pp1, pp2);
