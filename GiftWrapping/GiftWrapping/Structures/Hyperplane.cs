@@ -115,7 +115,7 @@ namespace GiftWrapping.Structures
             return Tools.EQ(Normal * v);
         }
 
-        public PlanePoint GetPointInPlane(Point point)
+        public PlanePoint ConvertPoint(Point point)
         {
             Point originalPoint = (point is PlanePoint planePoint) ? planePoint.OriginPoint : point;
             Matrix matrix = Basis.ToHorizontalMatrix();

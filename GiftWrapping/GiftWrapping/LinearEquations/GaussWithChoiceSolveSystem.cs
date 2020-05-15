@@ -13,12 +13,7 @@ namespace GiftWrapping.LinearEquations
     {
         public static Vector FindAnswer(Matrix leftSide, Vector rightSide )
         {
-            Matrix matrix = new Matrix(leftSide);
-            if (leftSide.Rows > leftSide.Cols)
-            {
-                matrix = ConvertToSquareMatrix(matrix);
-            }
-            LinearEquations equations = new LinearEquations(matrix, rightSide);
+            LinearEquations equations = new LinearEquations(leftSide, rightSide);
             for (int i = 0; i < equations.Matrix.Rows; i++)
             {
                 (int row, int col)  = equations.Matrix.FindIndexMaxAbsItem(i, i);
@@ -32,31 +27,6 @@ namespace GiftWrapping.LinearEquations
             }
 
             return FindVariables(equations);
-        }
-
-        private static Matrix ConvertToSquareMatrix(Matrix matrix)//Неверно
-        {
-            int cols = matrix.Cols;
-            int rows = matrix.Rows;
-            int[] range = Enumerable.Range(0, cols).ToArray();
-            double[,] squareMatrix = matrix.TakeRows(range);
-            double[] sum = new double[cols];
-            for (int i = cols; i < matrix.Rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    sum[j] += matrix[i, j];
-                }
-            }
-            for (int i = 0; i < squareMatrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < squareMatrix.GetLength(1); j++)
-                {
-                    squareMatrix[i, j] += sum[j];
-                }
-            }
-
-            return new Matrix(squareMatrix);
         }
 
         private void Show(LinearEquations equations, string text)

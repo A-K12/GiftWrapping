@@ -73,33 +73,5 @@ namespace GiftWrapping.Helpers
 
             return result;
         }
-
-        public static Vector[]  GetOrthonormalBasis(this IEnumerable<Vector> vectors)
-        {
-            //TODO Checking vectors
-
-            Vector[] basis = vectors.Select((vector => new Vector(vector))).ToArray();
-            for (int i = 1; i < basis.Length; i++)
-            {
-                for (int j = 0; j < i; j++)
-                {
-                    basis[i] -= basis[i].ProjectVectorTo(basis[j]);
-                }
-
-                basis[i] /= basis[i].Length;
-            }
-
-            return basis;
-        }
-
-        public static Vector ProjectVectorTo(this Vector v, Vector vector)
-        {
-            double coefficient = v * vector;
-            coefficient /= vector.Length*vector.Length;
-
-            return vector * coefficient;
-        }
-
-        
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GiftWrapping;
 using GiftWrapping.Helpers;
@@ -145,27 +146,43 @@ namespace GiftWrappingTest
             Assert.AreEqual(result1,result2 );
         }
 
-
-
-        [Test]
-        public void GetPointInPlane_WhenCall_ReturnPlanePoint()
+        [Test, TestCaseSource("GetDataForConvertPoint")]
+        public PlanePoint ConvertPoint_ReturnPlanePoint(Hyperplane h, Point p)
         {
-            Point p1 = new Point(new double[] { 1, 1, 2 });
-            Vector n1 = new Vector(new double[] { 1, 0, 0 });
+            PlanePoint point = h.ConvertPoint(p);
+
+            return point;
+        }
+
+        private static IEnumerable<TestCaseData> GetDataForConvertPoint()
+        {
+            Point mainPoint = new Point(new double[] { 1, 1, 2 });
+            Vector normal = new Vector(new double[] { 1, 0, 0 });
             Vector[] basis = new[]
             {
                 new Vector(new double[] {1, 0, 0}),
                 new Vector(new double[] {0, 1, 0}),
             };
-            Hyperplane h1 = new Hyperplane(p1, n1);
-            h1.Basis = basis;
+            Hyperplane hyperplane = new Hyperplane(mainPoint, normal);
+            hyperplane.Basis = basis;
+            Point point = new Point(new double[] { 2, 2, 2 });
+            Point expect = new Point(new double[] { 1, 1 });
 
-            Point p2 = new Point(new double[] { 2, 2, 2 });
-            Point p3 = new Point(new double[] { 1,1});
+            yield return new TestCaseData(hyperplane, point).Returns(expect);
 
-            Point result = h1.GetPointInPlane(p2);
+            mainPoint = new Point(new double[] { 2, 2, 4 });
+            normal = new Vector(new double[] { 2, 0, 2 });
+            basis = new[]
+            {
+                new Vector(new double[] {-2, 0, 2}),
+                new Vector(new double[] {0, 1, 0}),
+            };
+            hyperplane = new Hyperplane(mainPoint, normal);
+            hyperplane.Basis = basis;
+            point = new Point(new double[] { 2, 5, 4});
+            expect = new Point(new double[] { 0, 3 });
 
-            Assert.AreEqual(p3, result);
+            yield return new TestCaseData(hyperplane, point).Returns(expect);
         }
     }
 }
