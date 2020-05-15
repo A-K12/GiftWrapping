@@ -4,7 +4,7 @@ using GiftWrapping.Helpers;
 using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 
-namespace GiftWrappingTest
+namespace GiftWrappingTest.ConvexHull_test
 {
     public class GiftWrappingAlgorithmTestClass:GiftWrappingAlgorithm
     {

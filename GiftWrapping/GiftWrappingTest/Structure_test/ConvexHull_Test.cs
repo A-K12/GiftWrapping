@@ -5,7 +5,7 @@ using GiftWrapping.Helpers;
 using GiftWrapping.Structures;
 using NUnit.Framework;
 
-namespace GiftWrappingTest
+namespace GiftWrappingTest.Structure_test
 {
     public class ConvexHull_Test
     {

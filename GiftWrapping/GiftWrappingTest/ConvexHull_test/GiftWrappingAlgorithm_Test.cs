@@ -9,7 +9,7 @@ using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 using NUnit.Framework;
 
-namespace GiftWrappingTest
+namespace GiftWrappingTest.ConvexHull_test
 {
     public class GiftWrappingAlgorithm_Test
     {

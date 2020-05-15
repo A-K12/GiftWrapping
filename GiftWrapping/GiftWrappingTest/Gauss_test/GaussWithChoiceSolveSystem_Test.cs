@@ -5,7 +5,7 @@ using GiftWrapping.Structures;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 
-namespace GiftWrappingTest
+namespace GiftWrappingTest.Gauss_test
 {
     [TestFixture]
     public class GaussWithChoiceSolveSystem_Test

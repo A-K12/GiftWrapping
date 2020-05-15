@@ -3,7 +3,7 @@ using GiftWrapping.Helpers;
 using GiftWrapping.Structures;
 using NUnit.Framework;
 
-namespace GiftWrappingTest
+namespace GiftWrappingTest.Helpers_test
 {
     public class HyperplaneHelper_Test
     {

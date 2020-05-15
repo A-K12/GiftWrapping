@@ -7,7 +7,7 @@ using GiftWrapping;
 using GiftWrapping.Structures;
 using NUnit.Framework;
 
-namespace GiftWrappingTest
+namespace GiftWrappingTest.Structure_test
 {
     [TestFixture]
     public class Point_Test

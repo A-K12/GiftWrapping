@@ -10,7 +10,7 @@ using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 using NUnit.Framework;
 
-namespace GiftWrappingTest
+namespace GiftWrappingTest.ConvexHull_test
 {
     [TestFixture]
     public class PlaneFinder_Test

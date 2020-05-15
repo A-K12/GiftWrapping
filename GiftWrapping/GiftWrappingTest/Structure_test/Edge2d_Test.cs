@@ -5,7 +5,7 @@ using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
 using NUnit.Framework;
 
-namespace GiftWrappingTest
+namespace GiftWrappingTest.Structure_test
 {
     public class Edge2d_Test
     {
