@@ -8,11 +8,28 @@ namespace GiftWrapping.Structures
 {
     public class Hyperplane
     {
+        public Vector[] _basis;
+        public Vector _offSet;
         private double NumericVariable { get; set; }
         public Vector Normal { get; private set; }
-        public Vector[] Basis { get; set; }
         public Point MainPoint { get; set; }
         public int Dimension { get; }
+
+        public Vector[] Basis
+        {
+            get => _basis;
+            set
+            {
+                _basis = value;
+                _offSet = ComputeOffset();
+            }
+        }
+
+        private Vector ComputeOffset()
+        {
+            Matrix basis = _basis.ToHorizontalMatrix();
+            return basis * MainPoint;
+        }
 
         public Hyperplane(Hyperplane h) : this(h.MainPoint, h.Normal)
         {
@@ -26,7 +43,6 @@ namespace GiftWrapping.Structures
 
             Dimension = normal.Dim;
             Normal = normal.Normalize();
-            Basis = new Vector[Dimension];
             MainPoint = point;
             ComputeNumVariable();
         }
@@ -102,14 +118,11 @@ namespace GiftWrapping.Structures
         public PlanePoint GetPointInPlane(Point point)
         {
             Point originalPoint = (point is PlanePoint planePoint) ? planePoint.OriginPoint : point;
+            Matrix matrix = Basis.ToHorizontalMatrix();
+            Vector newVector = matrix * point;
+            newVector -= _offSet;
 
-            Matrix matrix = Basis.ToVerticalMatrix();
-            Vector leftSide = point - MainPoint;
-
-            Vector result = GaussWithChoiceSolveSystem.FindAnswer(matrix, leftSide);
-
-
-            return new PlanePoint(result,originalPoint);
+            return new PlanePoint(newVector,originalPoint);
         }
     }
 }
