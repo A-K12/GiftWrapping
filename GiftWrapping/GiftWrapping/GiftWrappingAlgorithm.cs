@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.NetworkInformation;
 using GiftWrapping.Helpers;
@@ -103,7 +104,7 @@ namespace GiftWrapping
             do
             {
                 convexHull.AddPoint(currentPoint);
-                double minAngle = double.MaxValue;
+                double maxCos = double.MinValue;
                 double maxLen = double.MinValue;
                 Point next = currentPoint;
                 Vector maxVector = currentVector;
@@ -111,15 +112,16 @@ namespace GiftWrapping
                 {
                     if (currentPoint == point) continue;
                     Vector newVector = Point.ToVector(currentPoint, point);
-                    double newAngle = Vector.Angle(currentVector, newVector);
-                    if (Tools.LT(newAngle, minAngle))
+                    double newCos = currentVector * newVector;
+                    newCos /= newVector.Length*currentVector.Length;
+                    if (Tools.GT(newCos, maxCos))
                     {
-                        minAngle = newAngle;
+                        maxCos = newCos;
                         next = point;
                         maxLen = Point.Length(currentPoint, next);
                         maxVector = newVector;
                     }
-                    else if (Tools.EQ(minAngle, newAngle))
+                    else if (Tools.EQ(maxCos, newCos))
                     {
                         double dist = Point.Length(currentPoint, point);
                         if (Tools.LT(maxLen, dist))

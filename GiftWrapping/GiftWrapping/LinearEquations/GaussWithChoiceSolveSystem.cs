@@ -34,7 +34,7 @@ namespace GiftWrapping.LinearEquations
             return FindVariables(equations);
         }
 
-        private static Matrix ConvertToSquareMatrix(Matrix matrix)
+        private static Matrix ConvertToSquareMatrix(Matrix matrix)//Неверно
         {
             int cols = matrix.Cols;
             int rows = matrix.Rows;
