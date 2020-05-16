@@ -49,9 +49,9 @@ namespace GiftWrapping.Structures
         public int Dimension { get; }
         public List<ICell> AdjacentCells { get; }
         public Hyperplane Hyperplane { get; set; }
-        public IEnumerable<Point> GetPoints()
+        public IEnumerable<PlanePoint> GetPoints()
         {
-            HashSet<Point> points = new HashSet<Point>();
+            HashSet<PlanePoint> points = new HashSet<PlanePoint>();
             foreach (ICell innerFace in InnerFaces)
             {
                 points.UnionWith(innerFace.GetPoints());
@@ -59,7 +59,6 @@ namespace GiftWrapping.Structures
 
             return points;
         }
-
         public List<ICell> InnerFaces { get; }
        
     }

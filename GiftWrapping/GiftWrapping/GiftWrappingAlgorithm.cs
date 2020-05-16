@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Transactions;
 using GiftWrapping.Helpers;
 using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
@@ -29,8 +30,8 @@ namespace GiftWrapping
 
         public ConvexHull Create(List<Point> points)
         {
-            FindFirstFace(points);
-            return default;
+            PlanePoint[] planePoints = points.Select((point => new PlanePoint(point, point))).ToArray();
+            return FindConvexHull3D(planePoints);
         }
 
         protected void FindFirstFace(List<PlanePoint> points)
@@ -93,31 +94,52 @@ namespace GiftWrapping
             return convexHull;
         }
 
-        private ICell FindConvexHull3D(IList<PlanePoint> points)
+        private ConvexHull FindConvexHull3D(IList<PlanePoint> points)
         {
             ConvexHull convexHull = new ConvexHull(3);
 
-            Hyperplane hyperplane = FindFirstPlane(points);
-
-            IList<PlanePoint> planePoints = hyperplane.GetPlanePoints(points);
-
-            ConvexHull2d firstHull = FindConvexHull2D(planePoints);
-            Queue<ICell> unprocessed = new Queue<Edge2d>();
-            Point[] pointsConvex = firstHull.GetPoints().ToArray();
-            for (int i = 0; i < pointsConvex.Length-1; i++)
-            {
-                unprocessed.Enqueue(new Edge2d(pointsConvex[i], pointsConvex[i+1]));
-            }
-            unprocessed.Enqueue(new Edge2d(pointsConvex[^1], pointsConvex[0]));
-            HashSet<Edge2d> processed = new HashSet<Edge2d>(); 
+            Hyperplane currentHyperplane = FindFirstPlane(points);
+            IList<PlanePoint> planePoints = currentHyperplane.GetPlanePoints(points);
+            IList<PlanePoint> planePoints2d = planePoints.Select((point => currentHyperplane.ConvertPoint(point))).ToList(); 
+            ConvexHull2d firstHull = FindConvexHull2D(planePoints2d);
+            Queue<ICell> unprocessed = new Queue<ICell>();
+            HashSet<Edge2d> processedEdges = new HashSet<Edge2d>();
+            unprocessed.Enqueue(firstHull);
+            Edge2d tempEdge = new Edge2d();
             while(unprocessed.Any())
             {
-                Edge2d edge = unprocessed.Dequeue();
-                if (processed.Contains(edge))
+                ConvexHull2d currentHull = (ConvexHull2d)unprocessed.Dequeue();
+                PlanePoint[] vertexes = currentHull.GetPoints().ToArray(); 
+                for (int i = 0; i < vertexes.Length-1; i++)
                 {
-                    continue;
+                    tempEdge.SetPoints(vertexes[i], vertexes[i+1]);
+                    if (processedEdges.Contains(tempEdge))
+                    {
+                        continue;
+                    }
+                    processedEdges.Add((Edge2d) tempEdge.Clone());
+                    PlanePoint orientPoint = vertexes[(i + 2) % vertexes.Length];
+                    double maxCos = double.MinValue;
+                    Hyperplane nextHyperplane = currentHyperplane;
+                    for (int j = 0; j < points.Count; j++)
+                    {
+                        Hyperplane newHyperplane =
+                            HyperplaneHelper.Create(new Point[]{vertexes[i], vertexes[i + 1], points[i]});
+                        newHyperplane.SetOrientationNormals(orientPoint);
+                        double newCos = currentHull.Hyperplane.Cos(newHyperplane);
+                        if (Tools.GT(newCos, maxCos))
+                        {
+                            maxCos = newCos;
+                            nextHyperplane = newHyperplane;
+                        }
+                        IList<PlanePoint> newPlanePoints = newHyperplane.GetPlanePoints(points);
+
+                    }
+                    
+
+
                 }
-                processed.Add(edge);
+
 
 
 

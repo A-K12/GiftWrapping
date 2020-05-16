@@ -73,7 +73,7 @@ namespace GiftWrappingTest.ConvexHull_test
 
             GiftWrappingAlgorithmTestClass giftWrapping = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
             
-            ConvexHull2d actual = giftWrapping.FindConvexHull2D(points);
+            ConvexHull2d actual = giftWrapping.FindConvexHull2D(points.ToPlanePoint());
 
             actual.Should().Be(expect);
         }
@@ -84,7 +84,7 @@ namespace GiftWrappingTest.ConvexHull_test
         {
             GiftWrappingAlgorithmTestClass algorithm = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
 
-            return algorithm.FindConvexHull2D(points);
+            return algorithm.FindConvexHull2D(points.ToPlanePoint());
         }
 
 

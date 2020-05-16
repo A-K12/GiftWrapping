@@ -12,8 +12,8 @@ namespace GiftWrapping.Structures
 
         private Hyperplane _hyperplane;
 
-        private readonly List<Point> _points;
-        public Point this[int i] => _points[i];
+        private readonly List<PlanePoint> _points;
+        public PlanePoint this[int i] => _points[i];
         public Hyperplane Hyperplane
         {
             set
@@ -28,12 +28,12 @@ namespace GiftWrapping.Structures
             get => _hyperplane;
         }
 
-        public IEnumerable<Point> GetPoints()
+        public IEnumerable<PlanePoint> GetPoints()
         {
             return _points;
         }
 
-        public void AddPoint(Point point)
+        public void AddPoint(PlanePoint point)
         {
             _points.Add(point);
         }
@@ -42,20 +42,20 @@ namespace GiftWrapping.Structures
         {
             Dimension = 2;
             _hyperplane = hyperplane;
-            _points = new List<Point>();
+            _points = new List<PlanePoint>();
             AdjacentCells = new List<ICell>();
         }
 
         public ConvexHull2d(IEnumerable<PlanePoint> points)
         {
             Dimension = 2;
-            _points = new List<Point>(points);
+            _points = new List<PlanePoint>(points);
             AdjacentCells = new List<ICell>();
         }
 
         public bool Equals(IPointFace other)
         {
-            IEnumerable<Point> points = other.GetPoints();
+            IEnumerable<PlanePoint> points = other.GetPoints();
             return Dimension == other.Dimension && _points.All(points.Contains);
         }
 

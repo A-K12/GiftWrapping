@@ -128,7 +128,7 @@ namespace GiftWrappingTest.ConvexHull_test
         {
             PlaneFinder planeFinder = new PlaneFinder();
 
-            Hyperplane result = planeFinder.FindFirstPlane(points);
+            Hyperplane result = planeFinder.FindFirstPlane(points.ToPlanePoint());
 
             expected.Should().Contain(result);
 

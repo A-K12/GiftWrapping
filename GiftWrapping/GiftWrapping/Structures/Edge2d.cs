@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GiftWrapping.Structures
 {
-    public class Edge2d
+    public class Edge2d:ICloneable
     {
         
         public Point[] Points { get;  set; }
@@ -15,12 +15,16 @@ namespace GiftWrapping.Structures
             Points = new[] {p1, p2};
         }
 
-
-        public Edge2d(Point[] points)
+        public Edge2d()
         {
-            Points = points;
+            Points = new Point[2];
         }
 
+        public void SetPoints(Point p1, Point p2)
+        {
+            Points[0] = p1;
+            Points[1] = p2;
+        }
         public bool Equals(Edge2d other)
         {
             return Points.All(other.Points.Contains);
@@ -40,6 +44,11 @@ namespace GiftWrapping.Structures
             for (int i = 0; i < Points.Length; i++)
                 res += Points[i].GetHashCode();
             return res;
+        }
+
+        public object Clone()
+        {
+            return  new Edge2d(Points[0], Points[1]);
         }
     }
 }

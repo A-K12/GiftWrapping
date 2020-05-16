@@ -8,6 +8,6 @@ namespace GiftWrapping.Structures
         int Dimension { get; }
         List<ICell> AdjacentCells { get; }
         Hyperplane Hyperplane { get; set; }
-        IEnumerable<Point> GetPoints();
+        IEnumerable<PlanePoint> GetPoints();
     }
 }

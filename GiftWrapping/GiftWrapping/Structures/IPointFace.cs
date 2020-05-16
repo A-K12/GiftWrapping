@@ -4,9 +4,9 @@ namespace GiftWrapping.Structures
 {
     public interface IPointFace:ICell
     {
-        void AddPoint(Point point);
+        void AddPoint(PlanePoint point);
 
-        Point this[int i]
+        PlanePoint this[int i]
         {
             get;
         }

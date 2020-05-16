@@ -8,28 +8,11 @@ namespace GiftWrapping.Structures
 {
     public class Hyperplane
     {
-        public Vector[] _basis;
-        public Vector _offSet;
         private double NumericVariable { get; set; }
         public Vector Normal { get; private set; }
         public Point MainPoint { get; set; }
         public int Dimension { get; }
-
-        public Vector[] Basis
-        {
-            get => _basis;
-            set
-            {
-                _basis = value;
-                _offSet = ComputeOffset();
-            }
-        }
-
-        private Vector ComputeOffset()
-        {
-            Matrix basis = _basis.ToHorizontalMatrix();
-            return basis * MainPoint;
-        }
+        public Vector[] Basis { get; set; }
 
         public Hyperplane(Hyperplane h) : this(h.MainPoint, h.Normal)
         {
@@ -55,6 +38,11 @@ namespace GiftWrapping.Structures
         public double Angle(Hyperplane hyperplane)
         {
             return Vector.Angle(Normal, hyperplane.Normal);
+        }
+
+        public double Cos(Hyperplane hyperplane)
+        {
+            return Normal *hyperplane.Normal;//Normal.Length = 1
         }
 
         public int Side(Point point)
@@ -122,6 +110,17 @@ namespace GiftWrapping.Structures
             double[] newPoint = Basis.Select((vector => vector * p1)).ToArray();
      
             return new PlanePoint(newPoint, originalPoint);
+        }
+
+
+        public void SetOrientationNormals(PlanePoint innerPoint)
+        {
+            Vector vector = Point.ToVector(MainPoint, innerPoint);
+
+            if (vector * Normal > 0)
+            {
+                ReorientNormal();
+            }
         }
     }
 }
