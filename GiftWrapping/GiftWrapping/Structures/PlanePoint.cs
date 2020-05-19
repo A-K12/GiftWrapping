@@ -1,48 +1,59 @@
-﻿using System;
-using Microsoft.Win32.SafeHandles;
-
-namespace GiftWrapping.Structures
+﻿namespace GiftWrapping.Structures
 {
     public class PlanePoint:Point
     {
-        public Point OriginPoint { get; }
-        public PlanePoint(int n, Point originPoint) : base(n)
+        private PlanePoint _originalPoint;
+        public PlanePoint OriginalPoint
         {
-            OriginPoint = originPoint;
+            get => _originalPoint ?? (this);
+            set => _originalPoint=value;
+        }
+        public PlanePoint(int n, PlanePoint originalPoint) : base(n)
+        {
+            _originalPoint = originalPoint;
+        }
+        public PlanePoint(double[] np, PlanePoint originalPoint) : base(np)
+        {
+            _originalPoint = originalPoint;
         }
 
-        public PlanePoint(double[] np, Point originPoint) : base(np)
+        public PlanePoint(Point p, PlanePoint originalPoint) : base(p)
         {
-            OriginPoint = originPoint;
+            _originalPoint = originalPoint;
         }
 
-        public PlanePoint(Point p, Point originPoint) : base(p)
+        public PlanePoint(int n) : base(n)
         {
-            OriginPoint = originPoint;
+        }
+        public PlanePoint(double[] np) : base(np)
+        {
+        }
+
+        public PlanePoint(Point p) : base(p)
+        {
         }
 
         public PlanePoint(PlanePoint p) : base(p)
         {
-            OriginPoint = p.OriginPoint;
+            OriginalPoint = p.OriginalPoint;
         }
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((PlanePoint)obj);
-        }
-        public bool Equals(PlanePoint other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return OriginPoint.CompareTo(other.OriginPoint) == 0;
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    if (ReferenceEquals(null, obj)) return false;
+        //    if (ReferenceEquals(this, obj)) return true;
+        //    if (obj.GetType() != this.GetType()) return false;
+        //    return Equals((PlanePoint)obj);
+        //}
+        //public bool Equals(PlanePoint other)
+        //{
+        //    if (ReferenceEquals(null, other)) return false;
+        //    if (ReferenceEquals(this, other)) return true;
+        //    return OriginalPoint.Equals(other);
+        //}
 
-        public override int GetHashCode()
-        {
-           return OriginPoint.GetHashCode();
-        }
-
+        //public override int GetHashCode()
+        //{
+        //    return OriginalPoint.GetHashCode();
+        //}
     }
 }

@@ -11,9 +11,12 @@ namespace GiftWrappingTest.Structure_test
         public void GetDimension_WhenCall_ReturnDimension()
         {
             int expectDimension = 555;
-            PlanePoint PlanePoint = new PlanePoint(new double[expectDimension], new Point(new double[expectDimension+1]));
+            PlanePoint planePoint = new PlanePoint(new double[expectDimension])
+            {
+                OriginalPoint = new PlanePoint(new double[expectDimension + 1])
+            };
 
-            int resultingDimension = PlanePoint.Dim;
+            int resultingDimension = planePoint.Dim;
 
             Assert.AreEqual(expectDimension, resultingDimension);
         }
@@ -21,9 +24,9 @@ namespace GiftWrappingTest.Structure_test
         [Test]
         public void Equals_EqualObjects_ReturnTrue()
         {
-            Point p1 = new Point(new double[] { 4, 4, 0, 0 });
-            Point p2 = new Point(new double[] { 4, 4, 0, 0 });
-            PlanePoint pp1 = new PlanePoint(new double[] { 1,1,1}, p1);
+            PlanePoint p1 = new PlanePoint(new double[] { 4, 4, 0, 0 });
+            PlanePoint p2 = new PlanePoint(new double[] { 4, 4, 0, 0 });
+            PlanePoint pp1 = new PlanePoint(new double[] {1, 1, 1}, p1);
             Point pp2 = new PlanePoint(new double[] { 2,2,2}, p2);
 
             Assert.AreEqual(pp1, pp2);

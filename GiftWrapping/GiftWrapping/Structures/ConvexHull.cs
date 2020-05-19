@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace GiftWrapping.Structures
 {
     public class ConvexHull : IFace
     {
+        public int Dimension { get; }
+        public List<ICell> AdjacentCells { get; }
+        public Hyperplane Hyperplane { get; set; }
+        public List<ICell> InnerFaces { get; }
         public ConvexHull(int dimension)
         {
             Dimension = dimension;
@@ -45,10 +46,6 @@ namespace GiftWrapping.Structures
             res += InnerFaces.Count;
             return res;
         }
-
-        public int Dimension { get; }
-        public List<ICell> AdjacentCells { get; }
-        public Hyperplane Hyperplane { get; set; }
         public IEnumerable<PlanePoint> GetPoints()
         {
             HashSet<PlanePoint> points = new HashSet<PlanePoint>();
@@ -59,7 +56,6 @@ namespace GiftWrapping.Structures
 
             return points;
         }
-        public List<ICell> InnerFaces { get; }
-       
+
     }
 }

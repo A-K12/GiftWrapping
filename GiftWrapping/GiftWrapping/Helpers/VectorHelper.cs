@@ -75,10 +75,11 @@ namespace GiftWrapping.Helpers
                 {
                     basis[i] -= basis[i].ProjectVectorTo(basis[j]);
                 }
-
+            }
+            for (int i = 0; i < basis.Length; i++)
+            {
                 basis[i] /= basis[i].Length;
             }
-
             return basis;
         }
 

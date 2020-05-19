@@ -9,24 +9,9 @@ namespace GiftWrapping.Structures
     {
         public int Dimension { get; }
         public List<ICell> AdjacentCells { get; private set; }
-
-        private Hyperplane _hyperplane;
-
         private readonly List<PlanePoint> _points;
         public PlanePoint this[int i] => _points[i];
-        public Hyperplane Hyperplane
-        {
-            set
-            {
-                if (value.Dimension != 2)
-                {
-                    throw new ArgumentException("Hyperplane is not two-dimensional.");
-                }
-
-                _hyperplane = value;
-            }
-            get => _hyperplane;
-        }
+        public Hyperplane Hyperplane { get; set; }
 
         public IEnumerable<PlanePoint> GetPoints()
         {
@@ -41,7 +26,7 @@ namespace GiftWrapping.Structures
         public ConvexHull2d(Hyperplane hyperplane = default)
         {
             Dimension = 2;
-            _hyperplane = hyperplane;
+            Hyperplane = hyperplane;
             _points = new List<PlanePoint>();
             AdjacentCells = new List<ICell>();
         }
@@ -55,10 +40,9 @@ namespace GiftWrapping.Structures
 
         public bool Equals(IPointFace other)
         {
-            IEnumerable<PlanePoint> points = other.GetPoints();
+            IEnumerable<Point> points = other.GetPoints();
             return Dimension == other.Dimension && _points.All(points.Contains);
         }
-
 
         public override bool Equals(object obj)
         {

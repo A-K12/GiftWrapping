@@ -103,24 +103,37 @@ namespace GiftWrapping.Structures
             return Tools.EQ(Normal * v);
         }
 
-        public PlanePoint ConvertPoint(Point point)
+        public PlanePoint ConvertPoint(PlanePoint point)
         {
-            Point originalPoint = (point is PlanePoint planePoint) ? planePoint.OriginPoint : point;
+            if (point.Dim != MainPoint.Dim)
+            {
+                throw new ArgumentException("The planePoint has the wrong dimension.");
+            }
             Point p1 = point - MainPoint;
             double[] newPoint = Basis.Select((vector => vector * p1)).ToArray();
-     
-            return new PlanePoint(newPoint, originalPoint);
+
+            return new PlanePoint(newPoint) {OriginalPoint = point};
         }
 
 
-        public void SetOrientationNormals(PlanePoint innerPoint)
+        public void SetOrientationNormal(IEnumerable<PlanePoint> innerPoints)
         {
-            Vector vector = Point.ToVector(MainPoint, innerPoint);
-
-            if (vector * Normal > 0)
+            foreach (PlanePoint planePoint in innerPoints)
             {
-                ReorientNormal();
+                Vector vector = Point.ToVector(MainPoint, planePoint.OriginalPoint);
+                double dotProduct = vector * Normal;
+                if(Tools.EQ(dotProduct)) continue;
+                if (Tools.GT(dotProduct))
+                {
+                    ReorientNormal();
+                }
+                return;
             }
+        }
+
+        public IList<PlanePoint> FindPoints(IList<PlanePoint> points)
+        {
+            return points.Where(IsPointInPlane).Select(ConvertPoint).ToList();
         }
     }
 }

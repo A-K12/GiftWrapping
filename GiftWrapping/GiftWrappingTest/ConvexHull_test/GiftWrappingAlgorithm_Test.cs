@@ -16,16 +16,15 @@ namespace GiftWrappingTest.ConvexHull_test
         private static IEnumerable GetNDimensionPoints()
         { 
             Point[] points = new Point[] {
-                new Point(new double[]{0, 0, 0}),
-                new Point(new double[]{4, 0, 0}),
-                new Point(new double[]{0, 4, 0}),
-                new Point(new double[]{4, 4, 0}),
-                new Point(new double[]{0, 0, 4}),
-                new Point(new double[]{4, 0, 4}),
-                new Point(new double[]{0, 4, 4}),
-                new Point(new double[]{4, 4, 4}),
-                new Point(new double[]{1, 1, 1}),
-                new Point(new double[]{2, 2, 2}),
+                new Point(new double[]{1, 1, 0}),
+                new Point(new double[]{5, 1, 0}),
+                new Point(new double[]{1, 5, 0}),
+                new Point(new double[]{5, 5, 0}),
+                new Point(new double[]{1, 1, 5}),
+                new Point(new double[]{5, 1, 5}),
+                new Point(new double[]{1, 5, 5}),
+                new Point(new double[]{5, 5, 5}),
+                new Point(new double[]{3, 3, 3}),
             };
 
             Vector v1 = new Vector(new double[] { 0, 0, -1});
@@ -37,17 +36,29 @@ namespace GiftWrappingTest.ConvexHull_test
                 new Hyperplane(points[0], v2),
                 new Hyperplane(points[0], v3),
             };
-            yield return new TestCaseData(points, expect).SetName("{m}_3dPoints");
+            yield return new TestCaseData(points).SetName("{m}_3dPoints");
         }
 
-        [Test, TestCaseSource(nameof(GetNDimensionPoints)), Ignore("Not Working")]
-        public void FindFirstPlane_ReturnHyperplane(IList<Point> points, Hyperplane[] expected)
+        [Test]
+        public void FindFirstPlane_ReturnHyperplane()
         {
+            Point[] points = new Point[] {
+                new Point(new double[]{1, 1, 0}),
+                new Point(new double[]{5, 1, 0}),
+                new Point(new double[]{1, 5, 0}),
+                new Point(new double[]{5, 5, 0}),
+                new Point(new double[]{1, 1, 5}),
+                new Point(new double[]{5, 1, 5}),
+                new Point(new double[]{1, 5, 5}),
+                new Point(new double[]{5, 5, 5}),
+                new Point(new double[]{3, 3, 3}),
+            };
+
             GiftWrappingAlgorithmTestClass giftWrapping = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
 
-            Hyperplane result = giftWrapping.FindFirstPlaneTest(points);
+            ConvexHull result = giftWrapping.FindConvexHull3D(points.ToPlanePoint());
 
-            expected.Should().Contain(result);
+            Assert.IsTrue(false);
         }
 
 

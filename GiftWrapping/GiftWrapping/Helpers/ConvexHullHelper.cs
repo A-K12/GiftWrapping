@@ -10,7 +10,7 @@ namespace GiftWrapping.Helpers
             ConvexHull2d result = new ConvexHull2d();
             foreach (Point point in points)
             {
-                result.AddPoint(point);
+                result.AddPoint(new PlanePoint(point));
             }
             return result;
         }

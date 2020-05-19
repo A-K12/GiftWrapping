@@ -18,10 +18,10 @@ namespace GiftWrapping
         {
             _dim = points[0].Dim;
             _freeFieldsOfBasis = new bool[_dim - 1];
-            PlanePoint minPoint = points.Min();
-            Hyperplane mainPlane = GetFirstHyperplane(minPoint);
+            PlanePoint minPlanePoint = points.Min();
+            Hyperplane mainPlane = GetFirstHyperplane(minPlanePoint);
             bool[] availablePoints = new bool[points.Count];
-            availablePoints[points.IndexOf(minPoint)] = true;
+            availablePoints[points.IndexOf(minPlanePoint)] = true;
             for (int i = 1; i < _dim; i++)
             {
                 double maxAngle = double.MinValue;
@@ -30,9 +30,9 @@ namespace GiftWrapping
                 for (int j = 0; j < points.Count; j++)
                 {
                     if (availablePoints[j]) continue;
-                    Vector vector = Point.ToVector(minPoint, points[j]);
+                    Vector vector = Point.ToVector(minPlanePoint, points[j]);
                     Vector[] tempBasis = SetVector(mainPlane.Basis, vector);
-                    Hyperplane newPlane = HyperplaneHelper.Create(minPoint, tempBasis);
+                    Hyperplane newPlane = HyperplaneHelper.Create(minPlanePoint, tempBasis);
                     double newAngle = mainPlane.Angle(newPlane);
                     if (Tools.LT(newAngle, maxAngle)) continue;
                     maxAngle = newAngle;

@@ -46,6 +46,27 @@ namespace GiftWrappingTest.Structure_test
         }
 
         [Test]
+        public void AddToDictionary()
+        {
+            Point p1 = new Point(new double[] { 1, 1, 1, 0 });
+            Point p2 = new Point(new double[] { 4, 4, 0, 0 });
+            Point p3 = new Point(new double[] { 1, 1, 1, 0 });
+            Point p4 = new Point(new double[] { 4, 4, 0, 0 });
+            Point p5 = new Point(new double[] { 1, 1, 1, 1 });
+
+            Edge2d edge1 = new Edge2d(p1, p2);
+            Edge2d edge2 = new Edge2d(p3, p4);
+
+            Dictionary<Edge2d, int> test = new Dictionary<Edge2d, int>();
+
+            test.Add(edge2, 1);
+
+            int t = test[edge1];
+
+            Assert.Throws<ArgumentException>((() => new Edge2d(p1, p2)));
+        }
+
+        [Test]
         public void Initialization_WhenDifferentPoints_CreatesEdge2d()
         {
             Point p1 = new Point(new double[] { 1, 1, 1, 0 });
