@@ -7,37 +7,46 @@ using GiftWrapping.Structures;
 
 namespace GiftWrapping
 {
-    public class PointIterator
+    internal class PointIterator
     {
-        protected readonly List<Point> _points;
-        public IList<Point> Points => _points.AsReadOnly();
-
+        public IList<Point> Points { get; private set; }
+        
         private bool[] _map;
 
         public PointIterator(IList<Point> points)
         {
-            if (!points.HaveSameDimension())
-            {
-                throw new ArgumentException("Vectors don't have same dimension");
-            }
-
-            _points = new List<Point>(points);
+            Points = new List<Point>(points);
             _map = new bool[points.Count];
+        }
+
+        public void SetPoint(IList<Point> points)
+        {
+            Points = points;
+            ClearMap();
         }
 
         public IEnumerator<Point> GetEnumerator()
         {
-            for (int i = 0; i < _points.Count; i++)
+            for (int i = 0; i < Points.Count; i++)
             {
                 if(_map[i]) continue;
-                yield return _points[i];
+                yield return Points[i];
             }
         }
 
+        public void ClearMap()
+        {
+            _map = new bool[Points.Count];
+        }
         public void ExcludePoint(Point point)
         {
-            int indexPoint = _points.IndexOf(point);
-            _map[indexPoint] = true;
+            int indexPoint = Points.IndexOf(point);
+            ExcludePoint(indexPoint);
+        }
+
+        public void ExcludePoint(int index)
+        {
+            _map[index] = true;
         }
     }
 }

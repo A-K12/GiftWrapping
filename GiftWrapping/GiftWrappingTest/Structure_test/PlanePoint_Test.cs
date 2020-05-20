@@ -21,7 +21,7 @@ namespace GiftWrappingTest.Structure_test
             Assert.AreEqual(expectDimension, resultingDimension);
         }
 
-        [Test]
+        [Test, Ignore("The old functionality")]
         public void Equals_EqualObjects_ReturnTrue()
         {
             PlanePoint p1 = new PlanePoint(new double[] { 4, 4, 0, 0 });

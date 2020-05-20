@@ -147,9 +147,9 @@ namespace GiftWrappingTest.Structure_test
         }
 
         [Test, TestCaseSource("GetDataForConvertPoint")]
-        public PlanePoint ConvertPoint_ReturnPlanePoint(Hyperplane h, PlanePoint p)
+        public PlanePoint ConvertPoint_ReturnPlanePoint(Hyperplane h, Point p)
         {
-            PlanePoint planePoint = h.ConvertPoint(p);
+            PlanePoint planePoint = h.ConvertPoint(p.ToPlanePoint());
 
             return planePoint;
         }

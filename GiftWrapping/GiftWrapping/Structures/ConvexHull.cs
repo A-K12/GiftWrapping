@@ -49,10 +49,10 @@ namespace GiftWrapping.Structures
         public IEnumerable<PlanePoint> GetPoints()
         {
             HashSet<PlanePoint> points = new HashSet<PlanePoint>();
-            foreach (ICell innerFace in InnerFaces)
-            {
-                points.UnionWith(innerFace.GetPoints());
-            }
+            //foreach (ICell innerFace in InnerFaces)
+            //{
+            //    points.UnionWith(innerFace.GetPoints());
+            //}
 
             return points;
         }

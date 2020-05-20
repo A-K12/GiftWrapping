@@ -53,14 +53,10 @@ namespace GiftWrapping.Structures
 
         public static IEnumerable<Edge2d> GetEdges(ConvexHull2d convexHull)
         {
-            IList<PlanePoint> planePoints = convexHull.GetPoints().ToList();
-
-            Edge2d tempEdge = new Edge2d(planePoints[^1].OriginalPoint, planePoints[0].OriginalPoint);
-            yield return tempEdge;
-            for (int i = 0; i < planePoints.Count-1; i++)
+            yield return new Edge2d(convexHull.Points[^1], convexHull.Points[0]);
+            for (int i = 0; i < convexHull.Points.Count-1; i++)
             {
-                //tempEdge.SetPoints(planePoints[i].OriginalPoint, planePoints[i+1].OriginalPoint);
-                yield return new Edge2d(planePoints[i].OriginalPoint, planePoints[i + 1].OriginalPoint);
+                yield return new Edge2d(convexHull.Points[i], convexHull.Points[i + 1]);
             }
         }
     }

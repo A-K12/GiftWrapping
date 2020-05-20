@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -9,40 +10,41 @@ namespace GiftWrapping.Structures
     {
         public int Dimension { get; }
         public List<ICell> AdjacentCells { get; private set; }
-        private readonly List<PlanePoint> _points;
-        public PlanePoint this[int i] => _points[i];
+        public IList<PlanePoint> Points { get; }
+
         public Hyperplane Hyperplane { get; set; }
 
         public IEnumerable<PlanePoint> GetPoints()
         {
-            return _points;
+            return Points;
         }
 
         public void AddPoint(PlanePoint point)
         {
-            _points.Add(point);
+            Points.Add(point);
         }
 
         public ConvexHull2d(Hyperplane hyperplane = default)
         {
             Dimension = 2;
             Hyperplane = hyperplane;
-            _points = new List<PlanePoint>();
+            Points = new List<PlanePoint>();
             AdjacentCells = new List<ICell>();
         }
 
         public ConvexHull2d(IEnumerable<PlanePoint> points)
         {
             Dimension = 2;
-            _points = new List<PlanePoint>(points);
+            Points = new List<PlanePoint>(points);
             AdjacentCells = new List<ICell>();
         }
 
         public bool Equals(IPointFace other)
         {
             IEnumerable<Point> points = other.GetPoints();
-            return Dimension == other.Dimension && _points.All(points.Contains);
+            return Dimension == other.Dimension && Points.All(points.Contains);
         }
+
 
         public override bool Equals(object obj)
         {
@@ -55,11 +57,10 @@ namespace GiftWrapping.Structures
         public override int GetHashCode()
         {
             int res = 0;
-            for (int i = 0; i < _points.Count; i++)
-                res += _points[i].GetHashCode();
+            for (int i = 0; i < Points.Count; i++)
+                res += Points[i].GetHashCode();
             res += Dimension.GetHashCode();
             return res;
         }
-
     }
 }

@@ -1,14 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace GiftWrapping.Structures
 {
     public interface IPointFace:ICell
     {
-        void AddPoint(PlanePoint point);
-
-        PlanePoint this[int i]
-        {
-            get;
-        }
+        IList<PlanePoint> Points { get; }
     }
 }

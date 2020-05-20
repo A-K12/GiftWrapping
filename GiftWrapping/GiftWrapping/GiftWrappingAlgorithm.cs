@@ -101,6 +101,8 @@ namespace GiftWrapping
             ConvexHull2d currentHull = FindConvexHull2D(planePoints2d);
             currentHull.Hyperplane = currentHyperplane;
             convexHull.InnerFaces.Add(currentHull);
+
+
             unprocessed.Enqueue(currentHull);
             do
             {
@@ -116,9 +118,9 @@ namespace GiftWrapping
                             processedEdges[edge].AdjacentCells.Add(currentHull);
                             processedEdges[edge] = default;
                         }
-                        break;
+                        continue;
                     }
-                    //processedEdges[(Edge2d)edge.Clone()] = currentHull;
+                 
                     double maxCos = double.MinValue;
                     Hyperplane nextHyperplane = currentHyperplane;
                     foreach (PlanePoint point in points)
@@ -173,7 +175,7 @@ namespace GiftWrapping
             PlanePoint currentPlanePoint = first;
             do
             {
-                convexHull.AddPoint(currentPlanePoint);
+                convexHull.AddPoint(currentPlanePoint.OriginalPoint);
                 double maxCos = double.MinValue;
                 double maxLen = double.MinValue;
                 PlanePoint next = currentPlanePoint;
