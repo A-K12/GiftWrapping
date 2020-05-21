@@ -5,28 +5,42 @@ namespace GiftWrapping.Structures
 {
     public class ConvexHull : IFace
     {
+        private readonly List<ICell> _adjacentCells, _innerCells;
         public int Dimension { get; }
-        public List<ICell> AdjacentCells { get; }
+        public IEnumerable<ICell> AdjacentCells => _adjacentCells;
+        public IEnumerable<ICell> InnerCells => _innerCells;
+        public void AddAdjacentCell(ICell cell) => _adjacentCells.Add(cell);
+        public void AddInnerCell(ICell cell) => _innerCells.Add(cell);
         public Hyperplane Hyperplane { get; set; }
-        public List<ICell> InnerFaces { get; }
+ 
         public ConvexHull(int dimension)
         {
             Dimension = dimension;
-            InnerFaces = new List<ICell>();
-            AdjacentCells = new List<ICell>();
+            _innerCells = new List<ICell>();
+            _adjacentCells = new List<ICell>();
         }
 
         public ConvexHull(Hyperplane hyperplane)
         {
             Hyperplane = hyperplane;
             Dimension = hyperplane.Dimension;
-            InnerFaces = new List<ICell>();
-            AdjacentCells = new List<ICell>();
+            _innerCells = new List<ICell>();
+            _adjacentCells = new List<ICell>();
+        }
+        public ICollection<PlanePoint> GetPoints()
+        {
+            HashSet<PlanePoint> points = new HashSet<PlanePoint>();
+            foreach (ICell innerFace in InnerCells)
+            {
+                points.UnionWith(innerFace.GetPoints());
+            }
+
+            return points;
         }
 
         protected bool Equals(IFace other)
         {
-            return Dimension == other.Dimension && InnerFaces.All(other.InnerFaces.Contains);
+            return Dimension == other.Dimension && InnerCells.All(other.InnerCells.Contains);
         }
 
         public override bool Equals(object obj)
@@ -40,22 +54,12 @@ namespace GiftWrapping.Structures
         public override int GetHashCode()
         {
             int res = 0;
-            for (int i = 0; i < InnerFaces.Count; i++)
-                res += InnerFaces[i].GetHashCode();
+            foreach (ICell cell in _innerCells)
+                res += cell.GetHashCode();
+
             res += Dimension.GetHashCode();
-            res += InnerFaces.Count;
+            res += _innerCells.Count;
             return res;
         }
-        public IEnumerable<PlanePoint> GetPoints()
-        {
-            HashSet<PlanePoint> points = new HashSet<PlanePoint>();
-            //foreach (ICell innerFace in InnerFaces)
-            //{
-            //    points.UnionWith(innerFace.GetPoints());
-            //}
-
-            return points;
-        }
-
     }
 }

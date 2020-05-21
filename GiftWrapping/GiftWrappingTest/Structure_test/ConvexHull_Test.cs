@@ -39,10 +39,12 @@ namespace GiftWrappingTest.Structure_test
             ConvexHull2d c4 = p4.ToConvexHull2d();
 
             ConvexHull ch1 = new ConvexHull(3);
-            ch1.InnerFaces.AddRange(new []{c1, c2});
+            ch1.AddInnerCell(c1);
+            ch1.AddInnerCell(c2);
 
             ConvexHull ch2 = new ConvexHull(3);
-            ch2.InnerFaces.AddRange(new[] { c3, c4 });
+            ch2.AddInnerCell(c3);
+            ch2.AddInnerCell(c4);
 
             Assert.AreEqual(ch1, ch2);
         }
@@ -64,7 +66,8 @@ namespace GiftWrappingTest.Structure_test
             ConvexHull2d c1 = p1.ToConvexHull2d();
             ConvexHull2d c2 = p2.ToConvexHull2d();
             ConvexHull ch1 = new ConvexHull(3);
-            ch1.InnerFaces.AddRange(new[] { c1, c2 });
+            ch1.AddInnerCell(c1);
+            ch1.AddInnerCell(c2);
             Point[] expect = new Point[]{
                 new Point(new double[]{0, 0, 0, 0}),
                 new Point(new double[]{4, 0, 0, 0}),

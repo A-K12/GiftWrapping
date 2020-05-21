@@ -8,12 +8,13 @@ namespace GiftWrapping.Helpers
 {
     public static class PointHelper
     {
-        public static bool HaveSameDimension(this IList<Point> points)
+        public static bool HaveSameDimension(this IEnumerable<Point> points)
         {
-            return points.All(v => v.Dim == points[0].Dim);
+            int dim = points.First().Dim;
+            return points.All(v => v.Dim == dim);
         }
 
-        public static Vector[] ToVectors(this IList<Point> points)
+        public static Vector[] ToVectors(this IList<PlanePoint> points)
         {
             Vector[] vectors = new Vector[points.Count - 1];
             Point firstPoint = points[0];

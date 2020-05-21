@@ -3,8 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace GiftWrapping.Structures
 {
-    public interface IPointFace:ICell
+    public interface IEdge:ICell
     {
-        IList<PlanePoint> Points { get; }
     }
 }

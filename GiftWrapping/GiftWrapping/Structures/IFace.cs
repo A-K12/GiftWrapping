@@ -4,6 +4,8 @@ namespace GiftWrapping.Structures
 {
     public interface IFace:ICell
     {
-        List<ICell> InnerFaces { get; }
+        IEnumerable<ICell> AdjacentCells { get; }
+        IEnumerable<ICell> InnerCells { get; }
+        void AddAdjacentCell(ICell cell);
     }
 }

@@ -6,9 +6,7 @@ namespace GiftWrapping.Structures
     public interface ICell
     {
         int Dimension { get; }
-        List<ICell> AdjacentCells { get; }
         Hyperplane Hyperplane { get; set; }
-
-        IEnumerable<PlanePoint> GetPoints();
+        ICollection<PlanePoint> GetPoints();
     }
 }

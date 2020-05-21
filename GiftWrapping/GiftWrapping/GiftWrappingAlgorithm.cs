@@ -49,7 +49,7 @@ namespace GiftWrapping
             //}
             //PlanePoint[] newPoints = planePoints.Select((point => hyperplane.ConvertPoint(point))).ToArray();
             //ICell currentFace = FindConvexHull(newPoints);
-            //convexHull.InnerFaces.Add(currentFace);
+            //convexHull.InnerCells.Add(currentFace);
             //Queue<ICell> unprocessedEdges = new Queue<ICell>();
             //unprocessedEdges.Enqueue(currentFace.);
             //while (unprocessedEdges.Count!=0)
@@ -74,13 +74,13 @@ namespace GiftWrapping
             //        maxHyperplane = newHyperplane;
             //    }
 
-            //    if (convexHull.InnerFaces.Any((face => face.Hyperplane.Equals(maxHyperplane)))) continue;
+            //    if (convexHull.InnerCells.Any((face => face.Hyperplane.Equals(maxHyperplane)))) continue;
 
             //    IList<Point> facePoints = maxHyperplane.GetPlanePoints(points);
 
             //    ConvexHull convexConvexHull = FindConvexHull(facePoints);
-            //    convexHull.InnerFaces.Add(convexConvexHull);
-            //    foreach (var face in convexConvexHull.InnerFaces)
+            //    convexHull.InnerCells.Add(convexConvexHull);
+            //    foreach (var face in convexConvexHull.InnerCells)
             //    {
             //        unprocessedEdges.Push(face);
             //    }
@@ -91,72 +91,93 @@ namespace GiftWrapping
 
         public ConvexHull FindConvexHull3D(IList<PlanePoint> points)
         {
-            ConvexHull convexHull = new ConvexHull(3);
-            Queue<ICell> unprocessed = new Queue<ICell>();
-            Dictionary<Edge2d, ConvexHull2d> processedEdges = new Dictionary<Edge2d, ConvexHull2d>();
+            //HashSet<PlanePoint> processedPoints = new HashSet<PlanePoint>();
+            //ConvexHull convexHull = new ConvexHull(3);
+            //Queue<ConvexHull2d> unprocessedFaces = new Queue<ConvexHull2d>();
+            //Dictionary<Edge, ConvexHull2d> processedEdges = new Dictionary<Edge, ConvexHull2d>();
+            //Hyperplane currentHyperplane = FindFirstPlane(points);
+            //IList<PlanePoint> planePoints2d = new List<PlanePoint>();
+            //foreach (PlanePoint point in points)
+            //{
+            //    if (!currentHyperplane.IsPointInPlane(point)) continue;
+            //    processedPoints.Add(point);
+            //    planePoints2d.Add(currentHyperplane.ConvertPoint(point));
+            //}
+            //ConvexHull2d currentHull = FindConvexHull2D(planePoints2d);
+            //processedPoints.ExceptWith(currentHull._points);
+            //currentHull.Hyperplane = currentHyperplane;
+            //convexHull.InnerCells.Add(currentHull);
+            //unprocessedFaces.Enqueue(currentHull);
+            //while (unprocessedFaces.Any())
+            //{
+            //    currentHull = unprocessedFaces.Dequeue();
+                
+            //    foreach (Edge edge in Edge.GetEdges(currentHull))
+            //    {
+            //        processedPoints.UnionWith(currentHull._points);
+            //        if (processedEdges.ContainsKey(edge))
+            //        {
+            //            if (processedEdges[edge] != default)
+            //            {
+            //                UniteAdjacentCells(currentHull, processedEdges[edge]);
+            //                processedEdges[edge] = default;
+            //            }
+            //            continue;
+            //        }
+            //        double maxCos = double.MinValue;
+            //        Hyperplane nextHyperplane = currentHyperplane;
+            //        foreach (Hyperplane hyperplane in GetHyperplanes2d(edge, processedPoints, points))
+            //        {
+            //            hyperplane.SetOrientationNormal(currentHull._points);
+            //            double newCos = currentHull.Hyperplane.Cos(hyperplane);
+            //            if (Tools.LT(newCos, maxCos)) continue;
+            //            maxCos = newCos;
+            //            nextHyperplane = hyperplane;
+            //        }
+            //        planePoints2d.Clear();
+            //        foreach (PlanePoint point in points)
+            //        {
+            //            if (!nextHyperplane.IsPointInPlane(point)) continue;
+            //            processedPoints.Add(point);
+            //            planePoints2d.Add(nextHyperplane.ConvertPoint(point));
+            //        }
+            //        ConvexHull2d newConvexHull = FindConvexHull2D(planePoints2d);
+            //         processedPoints.ExceptWith(newConvexHull._points);
+            //        newConvexHull.Hyperplane = nextHyperplane;
+            //        convexHull.InnerCells.Add(newConvexHull);
+            //        foreach (Edge e in Edge.GetEdges(newConvexHull))
+            //        {
+            //            processedEdges[e] = newConvexHull;
+            //        }
+            //        unprocessedFaces.Enqueue(newConvexHull);
+            //    }
+            //}
 
-            Hyperplane currentHyperplane = FindFirstPlane(points);
-            IEnumerable<PlanePoint> originalPoints = points.Where(currentHyperplane.IsPointInPlane);
-            IList<PlanePoint> planePoints2d = originalPoints.Select(currentHyperplane.ConvertPoint).ToList();
-            ConvexHull2d currentHull = FindConvexHull2D(planePoints2d);
-            currentHull.Hyperplane = currentHyperplane;
-            convexHull.InnerFaces.Add(currentHull);
-
-
-            unprocessed.Enqueue(currentHull);
-            do
-            {
-                currentHull = (ConvexHull2d) unprocessed.Dequeue();
-                originalPoints = points.Where(currentHull.Hyperplane.IsPointInPlane);
-                foreach (Edge2d edge in Edge2d.GetEdges(currentHull))
-                {
-                    if (processedEdges.ContainsKey(edge))
-                    {
-                        if (processedEdges[edge] != default)
-                        {
-                            currentHull.AdjacentCells.Add(processedEdges[edge]);
-                            processedEdges[edge].AdjacentCells.Add(currentHull);
-                            processedEdges[edge] = default;
-                        }
-                        continue;
-                    }
-                 
-                    double maxCos = double.MinValue;
-                    Hyperplane nextHyperplane = currentHyperplane;
-                    foreach (PlanePoint point in points)
-                    {
-                        if (originalPoints.Contains(point)) continue;
-                        Point[] planePoints = new Point[] {edge.Points[0], edge.Points[1], point};
-                        Hyperplane newHyperplane =
-                            HyperplaneHelper.Create(planePoints);
-                        newHyperplane.SetOrientationNormal(currentHull.GetPoints());
-                        double newCos = currentHull.Hyperplane.Cos(newHyperplane);
-                        if (Tools.GT(newCos, maxCos))
-                        {
-                            maxCos = newCos;
-                            nextHyperplane = newHyperplane;
-                        }
-                    }
-                    IList<PlanePoint> list = nextHyperplane.FindPoints(points);
-                    ConvexHull2d newConvexHull = FindConvexHull2D(list);
-                    newConvexHull.Hyperplane = nextHyperplane;
-                    convexHull.InnerFaces.Add(newConvexHull);
-                    newConvexHull.AdjacentCells.Add(currentHull);
-                    currentHull.AdjacentCells.Add(newConvexHull);
-
-                    foreach (Edge2d e in Edge2d.GetEdges(newConvexHull))
-                    {
-                        processedEdges[e] = newConvexHull;
-                    }
-                    processedEdges[(Edge2d)edge.Clone()] = default;
-                    unprocessed.Enqueue(newConvexHull);
-                }
-            } while (unprocessed.Any());
-
-            return convexHull;
+            return new ConvexHull(3);
         }
 
-  
+        private IEnumerable<Hyperplane> GetHyperplanes2d(Edge edge, HashSet<PlanePoint> processedPoints, IList<PlanePoint> points)
+        {
+            //foreach (PlanePoint point in points)
+            //{
+            //    if(processedPoints.Contains(point)) continue;
+            //    Point[] planePoints = new Point[] { edge.Points[0], edge.Points[1], point };
+            //    Hyperplane newHyperplane =
+            //        HyperplaneHelper.Create(planePoints);
+
+            //    yield return newHyperplane;
+            //}
+            throw new NotImplementedException();
+        }
+
+        private void UniteAdjacentCells(IFace c1, IFace c2)
+        {
+            c1.AddAdjacentCell(c2);
+            c2.AddAdjacentCell(c1);
+        }
+
+
+
         private ICell CreateSimplex(IList<PlanePoint> points)
         {
             throw new NotImplementedException();

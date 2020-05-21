@@ -9,7 +9,7 @@ namespace GiftWrapping.Helpers
 {
     public static class HyperplaneHelper
     {
-        public static Hyperplane Create(IList<Point> points)
+        public static Hyperplane Create(IList<PlanePoint> points)
         {
             if (!points.HaveSameDimension())
             {

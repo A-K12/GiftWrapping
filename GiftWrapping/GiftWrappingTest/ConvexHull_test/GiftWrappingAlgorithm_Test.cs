@@ -39,7 +39,7 @@ namespace GiftWrappingTest.ConvexHull_test
             yield return new TestCaseData(points).SetName("{m}_3dPoints");
         }
 
-        [Test, Ignore("Not working")]
+        [Test]
         public void FindFirstPlane_ReturnHyperplane()
         {
             Point[] points = new Point[] {

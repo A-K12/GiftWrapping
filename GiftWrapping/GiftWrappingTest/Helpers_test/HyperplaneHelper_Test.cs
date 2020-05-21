@@ -10,10 +10,10 @@ namespace GiftWrappingTest.Helpers_test
         [Test]
         public void Create_2dPoints_ReturnHyperplane()
         {
-            Point[] points = new Point[]
+            PlanePoint[] points = new PlanePoint[]
             {
-                new Point(new double[] {0, 0}),
-                new Point(new double[] {0, 4})
+                new PlanePoint(new double[] {0, 0}),
+                new PlanePoint(new double[] {0, 4})
             };
             Vector normal = new Vector(new double[] { -1, 0 });
             Hyperplane h2 = new Hyperplane(points[0], normal);
@@ -26,10 +26,10 @@ namespace GiftWrappingTest.Helpers_test
         [Test]
         public void Create_2dPoints_ReturnHyperplane2()
         {
-            Point[] points = new Point[]
+            PlanePoint[] points = new PlanePoint[]
             {
-                new Point(new double[] {2,1}),
-                new Point(new double[] {1,1})
+                new PlanePoint(new double[] {2,1}),
+                new PlanePoint(new double[] {1,1})
             };
 
             Hyperplane h = HyperplaneHelper.Create(points);
