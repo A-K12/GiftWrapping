@@ -48,7 +48,7 @@ namespace GiftWrapping
             return mainPlane;
         }
 
-        private Hyperplane GetFirstHyperplane(Point point)
+        private Hyperplane GetFirstHyperplane(PlanePoint point)
         {
             Vector normal = GetFirstNormal();
             Vector[] basis = GetFirstBasis();

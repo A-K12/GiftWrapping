@@ -25,7 +25,7 @@ namespace GiftWrapping.Helpers
 
             return hyperplane;
         }
-        public static Hyperplane Create(Point point, IList<Vector> vectors)
+        public static Hyperplane Create(PlanePoint point, IList<Vector> vectors)
         {
             if (!vectors.HaveSameDimension())
             {

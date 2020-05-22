@@ -28,15 +28,15 @@ namespace GiftWrapping
             this._points = points.Select(point => new PlanePoint(point)).ToArray();
         }
 
-        public ConvexHull Create()
+        public IFace Create()
         {
             return FindConvexHull(_points);
         }
 
-        protected ConvexHull FindConvexHull(IList<PlanePoint> points)
-        {
-            int dim = points[0].Dim;
-            ConvexHull convexHull = new ConvexHull(points[0].Dim);
+        //protected ConvexHull FindConvexHull(IList<PlanePoint> points)
+        //{
+        //    int dim = points[0].Dim;
+        //    ConvexHull convexHull = new ConvexHull(points[0].Dim);
             //Hyperplane hyperplane = FindFirstPlane(points);
             //IList<PlanePoint> planePoints = hyperplane.GetPlanePoints(points);
             //if (planePoints.Count == dim)
@@ -54,11 +54,11 @@ namespace GiftWrapping
             //unprocessedEdges.Enqueue(currentFace.);
             //while (unprocessedEdges.Count!=0)
             //{
-            //    ICell edge = unprocessedEdges.Pop();
-            //    Point[] edgePoints = new Point[edge.Hyperplane.Dimension+1];
+            //    ICell cell = unprocessedEdges.Pop();
+            //    Point[] edgePoints = new Point[cell.Hyperplane.Dimension+1];
             //    for (int i = 0; i < edgePoints.Length; i++)
             //    {
-            //       // edgePoints[i] = edge.Hyperplane.Basis[i]; Вместо точек нужно брать вектора
+            //       // edgePoints[i] = cell.Hyperplane.Basis[i]; Вместо точек нужно брать вектора
             //    }
             //    double maxAngle = double.MinValue;
             //    Hyperplane maxHyperplane = currentFace.Hyperplane;
@@ -86,88 +86,97 @@ namespace GiftWrapping
             //    }
             //}
 
+        //    return convexHull;
+        //}
+
+        public IFace FindConvexHull(IList<PlanePoint> points)
+        {
+            int dim = points[0].Dim;
+            if (dim == 2)
+            {
+                return FindConvexHull2D(points);
+            }
+            ConvexHull convexHull = new ConvexHull(dim);
+            HashSet<PlanePoint> processedPoints = new HashSet<PlanePoint>();
+            Queue<IFace> unprocessedFaces = new Queue<IFace>();
+            Dictionary<ICell, ICell> processedCells = new Dictionary<ICell, ICell>();
+            Hyperplane currentHyperplane = FindFirstPlane(points);
+            IList<PlanePoint> planePoints2d = new List<PlanePoint>();
+            foreach (PlanePoint point in points)
+            {
+                if (!currentHyperplane.IsPointInPlane(point)) continue;
+                processedPoints.Add(point);
+                planePoints2d.Add(currentHyperplane.ConvertPoint(point));
+            }
+            IFace currentHull = FindConvexHull(planePoints2d);
+
+            processedPoints.ExceptWith(currentHull.GetPoints());
+            currentHull.Hyperplane = currentHyperplane;
+            convexHull.AddInnerCell(currentHull);
+            unprocessedFaces.Enqueue(currentHull);
+            while (unprocessedFaces.Any())
+            {
+                currentHull = unprocessedFaces.Dequeue();
+
+                foreach (ICell cell in currentHull.InnerCells)
+                {
+                    processedPoints.UnionWith(currentHull.GetPoints());
+                    if (processedCells.ContainsKey(cell))
+                    {
+                        if (processedCells[cell] != default)
+                        {
+                            UniteAdjacentCells(currentHull, (IFace)processedCells[cell]);
+                            processedCells[cell] = default;
+                        }
+                        continue;
+                    }
+                    double maxCos = double.MinValue;
+                    Hyperplane nextHyperplane = currentHyperplane;
+                    foreach (Hyperplane hyperplane in GetHyperplanes(cell, processedPoints, points))
+                    {
+                        hyperplane.SetOrientationNormal(currentHull.GetPoints());
+                        double newCos = currentHull.Hyperplane.Cos(hyperplane);
+                        if (Tools.LT(newCos, maxCos)) continue;
+                        maxCos = newCos;
+                        nextHyperplane = hyperplane;
+                    }
+                    planePoints2d.Clear();
+                    foreach (PlanePoint point in points)
+                    {
+                        if (!nextHyperplane.IsPointInPlane(point)) continue;
+                        processedPoints.Add(point);
+                        planePoints2d.Add(nextHyperplane.ConvertPoint(point));
+                    }
+                    ConvexHull2d newConvexHull = FindConvexHull2D(planePoints2d);
+                    processedPoints.ExceptWith(newConvexHull.GetPoints());
+                    newConvexHull.Hyperplane = nextHyperplane;
+                    convexHull.AddInnerCell(newConvexHull);
+                    foreach (ICell c in newConvexHull.InnerCells)
+                    {
+                        processedCells[c] = newConvexHull;
+                    }
+                    unprocessedFaces.Enqueue(newConvexHull);
+                }
+            }
+
             return convexHull;
         }
 
-        public ConvexHull FindConvexHull3D(IList<PlanePoint> points)
+        private IEnumerable<Hyperplane> GetHyperplanes(ICell cell, HashSet<PlanePoint> processedPoints, IList<PlanePoint> points)
         {
-            //HashSet<PlanePoint> processedPoints = new HashSet<PlanePoint>();
-            //ConvexHull convexHull = new ConvexHull(3);
-            //Queue<ConvexHull2d> unprocessedFaces = new Queue<ConvexHull2d>();
-            //Dictionary<Edge, ConvexHull2d> processedEdges = new Dictionary<Edge, ConvexHull2d>();
-            //Hyperplane currentHyperplane = FindFirstPlane(points);
-            //IList<PlanePoint> planePoints2d = new List<PlanePoint>();
-            //foreach (PlanePoint point in points)
-            //{
-            //    if (!currentHyperplane.IsPointInPlane(point)) continue;
-            //    processedPoints.Add(point);
-            //    planePoints2d.Add(currentHyperplane.ConvertPoint(point));
-            //}
-            //ConvexHull2d currentHull = FindConvexHull2D(planePoints2d);
-            //processedPoints.ExceptWith(currentHull._points);
-            //currentHull.Hyperplane = currentHyperplane;
-            //convexHull.InnerCells.Add(currentHull);
-            //unprocessedFaces.Enqueue(currentHull);
-            //while (unprocessedFaces.Any())
-            //{
-            //    currentHull = unprocessedFaces.Dequeue();
-                
-            //    foreach (Edge edge in Edge.GetEdges(currentHull))
-            //    {
-            //        processedPoints.UnionWith(currentHull._points);
-            //        if (processedEdges.ContainsKey(edge))
-            //        {
-            //            if (processedEdges[edge] != default)
-            //            {
-            //                UniteAdjacentCells(currentHull, processedEdges[edge]);
-            //                processedEdges[edge] = default;
-            //            }
-            //            continue;
-            //        }
-            //        double maxCos = double.MinValue;
-            //        Hyperplane nextHyperplane = currentHyperplane;
-            //        foreach (Hyperplane hyperplane in GetHyperplanes2d(edge, processedPoints, points))
-            //        {
-            //            hyperplane.SetOrientationNormal(currentHull._points);
-            //            double newCos = currentHull.Hyperplane.Cos(hyperplane);
-            //            if (Tools.LT(newCos, maxCos)) continue;
-            //            maxCos = newCos;
-            //            nextHyperplane = hyperplane;
-            //        }
-            //        planePoints2d.Clear();
-            //        foreach (PlanePoint point in points)
-            //        {
-            //            if (!nextHyperplane.IsPointInPlane(point)) continue;
-            //            processedPoints.Add(point);
-            //            planePoints2d.Add(nextHyperplane.ConvertPoint(point));
-            //        }
-            //        ConvexHull2d newConvexHull = FindConvexHull2D(planePoints2d);
-            //         processedPoints.ExceptWith(newConvexHull._points);
-            //        newConvexHull.Hyperplane = nextHyperplane;
-            //        convexHull.InnerCells.Add(newConvexHull);
-            //        foreach (Edge e in Edge.GetEdges(newConvexHull))
-            //        {
-            //            processedEdges[e] = newConvexHull;
-            //        }
-            //        unprocessedFaces.Enqueue(newConvexHull);
-            //    }
-            //}
+            int dim = cell.Dimension;
+            Vector[] basis = new Vector[dim+1];
+            Array.Copy(cell.Hyperplane.Basis,0,basis,0,dim);
+            PlanePoint p = cell.Hyperplane.MainPoint.OriginalPoint;
+            foreach (PlanePoint point in points)
+            {
+                if (processedPoints.Contains(point)) continue;
+                basis[^1] = Point.ToVector(point, p);
+                Hyperplane newHyperplane =
+                    HyperplaneHelper.Create(p, basis);
 
-            return new ConvexHull(3);
-        }
-
-        private IEnumerable<Hyperplane> GetHyperplanes2d(Edge edge, HashSet<PlanePoint> processedPoints, IList<PlanePoint> points)
-        {
-            //foreach (PlanePoint point in points)
-            //{
-            //    if(processedPoints.Contains(point)) continue;
-            //    Point[] planePoints = new Point[] { edge.Points[0], edge.Points[1], point };
-            //    Hyperplane newHyperplane =
-            //        HyperplaneHelper.Create(planePoints);
-
-            //    yield return newHyperplane;
-            //}
-            throw new NotImplementedException();
+                yield return newHyperplane;
+            }
         }
 
         private void UniteAdjacentCells(IFace c1, IFace c2)
@@ -196,7 +205,7 @@ namespace GiftWrapping
             PlanePoint currentPlanePoint = first;
             do
             {
-                convexHull.AddPoint(currentPlanePoint.OriginalPoint);
+                convexHull.AddPoint(currentPlanePoint);
                 double maxCos = double.MinValue;
                 double maxLen = double.MinValue;
                 PlanePoint next = currentPlanePoint;

@@ -15,7 +15,7 @@ namespace GiftWrappingTest.Structure_test
         [Test]
         public void Angle_WhenCall_ReturnAngle()
         {
-            Point p1 = new Point(3);
+            PlanePoint p1 = new PlanePoint(3);
             Vector n1 = new Vector(new double[]{1,0,0});
             Vector n2 = new Vector(new double[] { 0, 1, 0 });
             Hyperplane h1 = new Hyperplane(p1, n1);
@@ -30,7 +30,7 @@ namespace GiftWrappingTest.Structure_test
         [Test]
         public void Angle_SamePlane_ReturnAngle()
         {
-            Point p1 = new Point(3);
+            PlanePoint p1 = new PlanePoint(3);
             Vector n1 = new Vector(new double[] { 1, 0, 0 });
             Hyperplane h1 = new Hyperplane(p1, n1);
             const double expect = 0;
@@ -45,7 +45,7 @@ namespace GiftWrappingTest.Structure_test
         [Test]
         public void Side_PositivePoint_ReturnPosition()
         {
-            Point p1 = new Point(3);
+            PlanePoint p1 = new PlanePoint(3);
             Vector n1 = new Vector(new double[] { 1, 0, 0 });
             Hyperplane h1 = new Hyperplane(p1, n1);
             Point p2 = new Point(new double[]{1,1,1});
@@ -59,7 +59,7 @@ namespace GiftWrappingTest.Structure_test
         [Test]
         public void Side_NegativePoint_ReturnPosition()
         {
-            Point p1 = new Point(3);
+            PlanePoint p1 = new PlanePoint(3);
             Vector n1 = new Vector(new double[] { 1, 0, 0 });
             Hyperplane h1 = new Hyperplane(p1, n1);
             Point p2 = new Point(new double[] { -1, -1, -1 });
@@ -73,7 +73,7 @@ namespace GiftWrappingTest.Structure_test
         [Test]
         public void Side_PointOfPlane_ReturnPosition()
         {
-            Point p1 = new Point(3);
+            PlanePoint p1 = new PlanePoint(3);
             Vector n1 = new Vector(new double[] { 1, 0, 0 });
             Hyperplane h1 = new Hyperplane(p1, n1);
             Point p2 = new Point(new double[] { 0, 4, 4 });
@@ -87,7 +87,7 @@ namespace GiftWrappingTest.Structure_test
         [Test]
         public void ReorientNormal_WhenCall_ChangeOrientationNormal()
         {
-            Point p1 = new Point(3);
+            PlanePoint p1 = new PlanePoint(3);
             Vector n1 = new Vector(new double[] { 1, 1, 1 });
             Hyperplane h1 = new Hyperplane(p1, n1);
             Vector n2 = new Vector(new double[] { -1, -1, -1 });
@@ -101,10 +101,10 @@ namespace GiftWrappingTest.Structure_test
         [Test]
         public void Equals_EqualPlane_ReturnTrue()
         {
-            Point p1 = new Point(new double[]{1, 7, 0});
+            PlanePoint p1 = new PlanePoint(new double[]{1, 7, 0});
             Vector n1 = new Vector(new double[] { 2, -1, 0 });
             Hyperplane h1 = new Hyperplane(p1, n1);
-            Point p2 = new Point(new double[] { -1, 3, 0 });
+            PlanePoint p2 = new PlanePoint(new double[] { -1, 3, 0 });
             Vector n2 = new Vector(new double[] { -4, 2, 0 });
             Hyperplane h2 = new Hyperplane(p2, n2);
 
@@ -117,10 +117,10 @@ namespace GiftWrappingTest.Structure_test
         [Test]
         public void Equals_UnequalPlane_ReturnFalse()
         {
-            Point p1 = new Point(new double[] { 1, 7, 0 });
+            PlanePoint p1 = new PlanePoint(new double[] { 1, 7, 0 });
             Vector n1 = new Vector(new double[] { 1, -1, 0 });
             Hyperplane h1 = new Hyperplane(p1, n1);
-            Point p2 = new Point(new double[] { -1, 3, 0 });
+            PlanePoint p2 = new PlanePoint(new double[] { -1, 3, 0 });
             Vector n2 = new Vector(new double[] { -4, 2, 0 });
             Hyperplane h2 = new Hyperplane(p2, n2);
 
@@ -133,10 +133,10 @@ namespace GiftWrappingTest.Structure_test
         [Test]
         public void GetHashCode_WhenCall_SameValue()
         {
-            Point p1 = new Point(new double[] { 1, 7, 0 });
+            PlanePoint p1 = new PlanePoint(new double[] { 1, 7, 0 });
             Vector n1 = new Vector(new double[] { -2, 1, 0 });
             Hyperplane h1 = new Hyperplane(p1, n1);
-            Point p2 = new Point(new double[] { -1, 3, 0 });
+            PlanePoint p2 = new PlanePoint(new double[] { -1, 3, 0 });
             Vector n2 = new Vector(new double[] { -4, 2, 0 });
             Hyperplane h2 = new Hyperplane(p2, n2);
 
@@ -156,7 +156,7 @@ namespace GiftWrappingTest.Structure_test
 
         private static IEnumerable<TestCaseData> GetDataForConvertPoint()
         {
-            Point mainPoint = new Point(new double[] { 1, 1, 2 });
+            PlanePoint mainPoint = new PlanePoint(new double[] { 1, 1, 2 });
             Vector normal = new Vector(new double[] { 1, 0, 0 });
             Vector[] basis = new[]
             {
@@ -170,7 +170,7 @@ namespace GiftWrappingTest.Structure_test
 
             yield return new TestCaseData(hyperplane, point).Returns(expect);
 
-            mainPoint = new Point(new double[] { 2, 2, 4 });
+            mainPoint = new PlanePoint(new double[] { 2, 2, 4 });
             normal = new Vector(new double[] { 2, 0, 2 });
             basis = new[]
             {

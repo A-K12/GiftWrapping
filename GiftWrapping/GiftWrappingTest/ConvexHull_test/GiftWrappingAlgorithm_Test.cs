@@ -14,17 +14,17 @@ namespace GiftWrappingTest.ConvexHull_test
     public class GiftWrappingAlgorithm_Test
     {
         private static IEnumerable GetNDimensionPoints()
-        { 
-            Point[] points = new Point[] {
-                new Point(new double[]{1, 1, 0}),
-                new Point(new double[]{5, 1, 0}),
-                new Point(new double[]{1, 5, 0}),
-                new Point(new double[]{5, 5, 0}),
-                new Point(new double[]{1, 1, 5}),
-                new Point(new double[]{5, 1, 5}),
-                new Point(new double[]{1, 5, 5}),
-                new Point(new double[]{5, 5, 5}),
-                new Point(new double[]{3, 3, 3}),
+        {
+            PlanePoint[] points = new PlanePoint[] {
+                new PlanePoint(new double[]{1, 1, 0}),
+                new PlanePoint(new double[]{5, 1, 0}),
+                new PlanePoint(new double[]{1, 5, 0}),
+                new PlanePoint(new double[]{5, 5, 0}),
+                new PlanePoint(new double[]{1, 1, 5}),
+                new PlanePoint(new double[]{5, 1, 5}),
+                new PlanePoint(new double[]{1, 5, 5}),
+                new PlanePoint(new double[]{5, 5, 5}),
+                new PlanePoint(new double[]{3, 3, 3}),
             };
 
             Vector v1 = new Vector(new double[] { 0, 0, -1});
@@ -56,7 +56,7 @@ namespace GiftWrappingTest.ConvexHull_test
 
             GiftWrappingAlgorithmTestClass giftWrapping = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
 
-            ConvexHull result = giftWrapping.FindConvexHull3D(points.ToPlanePoint());
+            IFace result = giftWrapping.FindConvexHull(points.ToPlanePoint());
 
             Assert.IsTrue(false);
         }

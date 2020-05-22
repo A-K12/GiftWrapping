@@ -57,6 +57,14 @@ namespace GiftWrapping.Structures
             return _points;
         }
 
+        public void GoToOriginalPoints()
+        {
+            for (int i = 0; i < _points.Count; i++)
+            {
+                _points[i] = _points[i].OriginalPoint;
+            }
+        }
+
         public void AddPoint(PlanePoint point)
         {
             _points.Add(point);

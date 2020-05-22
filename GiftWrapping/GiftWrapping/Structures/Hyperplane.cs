@@ -10,7 +10,7 @@ namespace GiftWrapping.Structures
     {
         private double NumericVariable { get; set; }
         public Vector Normal { get; private set; }
-        public Point MainPoint { get; set; }
+        public PlanePoint MainPoint { get; set; }
         public int Dimension { get; }
         public Vector[] Basis { get; set; }
 
@@ -19,7 +19,7 @@ namespace GiftWrapping.Structures
             Basis = h.Basis;
         }
 
-        public Hyperplane(Point point, Vector normal)
+        public Hyperplane(PlanePoint point, Vector normal)
         {
             if (point.Dim != normal.Dim)
                 throw new ArgumentException("Point and normal have different dimensions.");
