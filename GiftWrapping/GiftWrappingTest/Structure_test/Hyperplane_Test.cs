@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using GiftWrapping;
 using GiftWrapping.Helpers;
 using GiftWrapping.LinearEquations;
@@ -9,6 +10,7 @@ using NUnit.Framework;
 
 namespace GiftWrappingTest.Structure_test
 {
+    [TestFixture]
     public class Hyperplane_Test
     {
 
@@ -144,6 +146,26 @@ namespace GiftWrappingTest.Structure_test
             int result2 = h2.GetHashCode();
             
             Assert.AreEqual(result1,result2 );
+        }   
+        
+        [Test]
+        public void ConvertVector_ReturnPlanePoint()
+        {
+            PlanePoint mainPoint = new PlanePoint(new double[] { 2, 2, 4 });
+            Vector normal = new Vector(new double[] { 1, 0, 1 });
+            Vector[] basis = new[]
+            {
+                new Vector(new double[] {-1, 0, 1}),
+                new Vector(new double[] {0, 1, 0}),
+            };
+            Hyperplane hyperplane = new Hyperplane(mainPoint, normal);
+            hyperplane.Basis = basis;
+            Vector vector = new Vector(new double[]{2,3});
+            Vector expect = new Vector(new double[] { -2, 3, 2 });
+
+            Vector actual = hyperplane.ConvertVector(vector);
+
+            actual.Should().Be(expect);
         }
 
         [Test, TestCaseSource("GetDataForConvertPoint")]

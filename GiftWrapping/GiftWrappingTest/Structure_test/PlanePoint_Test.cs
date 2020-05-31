@@ -5,21 +5,22 @@ using NUnit.Framework;
 
 namespace GiftWrappingTest.Structure_test
 {
+    [TestFixture]
     public class PlanePoint_Test
     {
-       [Test]
-        public void GetDimension_WhenCall_ReturnDimension()
-        {
-            int expectDimension = 555;
-            PlanePoint planePoint = new PlanePoint(new double[expectDimension])
-            {
-                OriginalPoint = new PlanePoint(new double[expectDimension + 1])
-            };
+       //[Test]
+       // public void GetDimension_WhenCall_ReturnDimension()
+       // {
+       //     int expectDimension = 555;
+       //     PlanePoint planePoint = new PlanePoint(new double[expectDimension])
+       //     {
+       //         OriginalPoint = new PlanePoint(new double[expectDimension + 1])
+       //     };
 
-            int resultingDimension = planePoint.Dim;
+       //     int resultingDimension = planePoint.Dim;
 
-            Assert.AreEqual(expectDimension, resultingDimension);
-        }
+       //     Assert.AreEqual(expectDimension, resultingDimension);
+       // }
 
         [Test, Ignore("The old functionality")]
         public void Equals_EqualObjects_ReturnTrue()

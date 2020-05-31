@@ -24,24 +24,24 @@ namespace GiftWrapping
             availablePoints[points.IndexOf(minPlanePoint)] = true;
             for (int i = 1; i < _dim; i++)
             {
-                double maxAngle = double.MinValue;
-                int maxPoint = default;
-                Hyperplane maxPlane = mainPlane;
+                double minCos = double.MinValue;
+                int nextPoint = default;
+                Hyperplane nextPlane = mainPlane;
                 for (int j = 0; j < points.Count; j++)
                 {
                     if (availablePoints[j]) continue;
                     Vector vector = Point.ToVector(minPlanePoint, points[j]);
                     Vector[] tempBasis = SetVector(mainPlane.Basis, vector);
                     Hyperplane newPlane = HyperplaneHelper.Create(minPlanePoint, tempBasis);
-                    double newAngle = mainPlane.Angle(newPlane);
-                    if (Tools.LT(newAngle, maxAngle)) continue;
-                    maxAngle = newAngle;
-                    maxPlane = newPlane;
-                    maxPoint = j;
+                    double newCos = mainPlane.Cos(newPlane);
+                    if (Tools.LT(newCos, minCos)) continue;
+                    minCos = newCos;
+                    nextPlane = newPlane;
+                    nextPoint = j;
                 }
 
-                availablePoints[maxPoint] = true;
-                mainPlane = maxPlane;
+                availablePoints[nextPoint] = true;
+                mainPlane = nextPlane;
                 mainPlane.ReorientNormal();
             }
 

@@ -94,6 +94,7 @@ namespace GiftWrapping.Structures
 
         public override int GetHashCode()
         {
+
             return HashCode.Combine(Normal, NumericVariable);
         }
 
@@ -112,15 +113,31 @@ namespace GiftWrapping.Structures
             Point p1 = point - MainPoint;
             double[] newPoint = Basis.Select((vector => vector * p1)).ToArray();
 
-            return new PlanePoint(newPoint) {OriginalPoint = point};
+            return new PlanePoint(newPoint, point);
         }
 
+        public Vector ConvertVector(Vector vector)
+        {
+            if (vector.Dim >= MainPoint.Dim)
+            {
+                throw new ArgumentException("The planePoint has the wrong dimension.");
+            }
+            double[] newVector = new double[Dimension];
+            for (int i = 0; i < Dimension; i++)
+            {
+                for (int j = 0; j < vector.Dim; j++)
+                {
+                    newVector[i] += vector[j] * Basis[j][i];
+                }
+            }
+            return new Vector(newVector);
+        }
 
         public void SetOrientationNormal(IEnumerable<PlanePoint> innerPoints)
         {
             foreach (PlanePoint planePoint in innerPoints)
             {
-                Vector vector = Point.ToVector(MainPoint, planePoint.OriginalPoint);
+                Vector vector = Point.ToVector(MainPoint, planePoint.GetPoint(Dimension));
                 double dotProduct = vector * Normal;
                 if(Tools.EQ(dotProduct)) continue;
                 if (Tools.GT(dotProduct))
@@ -130,6 +147,7 @@ namespace GiftWrapping.Structures
                 return;
             }
         }
+
 
         public IList<PlanePoint> FindPoints(IList<PlanePoint> points)
         {

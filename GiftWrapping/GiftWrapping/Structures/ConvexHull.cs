@@ -10,13 +10,6 @@ namespace GiftWrapping.Structures
         public IEnumerable<ICell> AdjacentCells => _adjacentCells;
         public IEnumerable<ICell> InnerCells => _innerCells;
         public void AddAdjacentCell(ICell cell) => _adjacentCells.Add(cell);
-        public void GoToOriginalPoints()
-        {
-            foreach (ICell innerCell in _innerCells)
-            {
-                innerCell.GoToOriginalPoints();
-            }
-        }
 
         public void AddInnerCell(ICell cell) => _innerCells.Add(cell);
         public Hyperplane Hyperplane { get; set; }

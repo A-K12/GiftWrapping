@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 namespace GiftWrappingTest.Helpers_test
 {
+    [TestFixture]
     public class HyperplaneHelper_Test
     {
         [Test]

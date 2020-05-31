@@ -14,6 +14,15 @@ namespace GiftWrapping.Structures
             
             return _points;
         }
+
+        public void GoToOriginalPoints()
+        {
+            for (int i = 0; i < _points.Length; i++)
+            {
+                _points[i] = _points[i].OriginalPoint;
+            }
+        }
+
         public Edge(PlanePoint p1, PlanePoint p2)
         {
             if (p1.Dim != p2.Dim) throw new ArgumentException("_points have different dimensions.");
@@ -27,6 +36,7 @@ namespace GiftWrapping.Structures
         }
         public override int GetHashCode()
         {
+            
             int res = 0;
             foreach (PlanePoint point in _points)
                 res += point.GetHashCode();

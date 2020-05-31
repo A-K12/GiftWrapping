@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 namespace GiftWrappingTest.Structure_test
 {
+    [TestFixture]
     public class ConvexHull2d_Test
     {
   

@@ -5,14 +5,6 @@ namespace GiftWrapping.Helpers
 {
     public static class ConvexHullHelper
     {
-        public static ConvexHull2d ToConvexHull2d(this IList<Point> points)
-        {
-            ConvexHull2d result = new ConvexHull2d();
-            foreach (Point point in points)
-            {
-                result.AddPoint(new PlanePoint(point));
-            }
-            return result;
-        }
+        public static ConvexHull2d ToConvexHull2d(this IList<PlanePoint> points)=> new ConvexHull2d(points);
     }
 }

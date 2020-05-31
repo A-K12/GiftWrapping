@@ -11,35 +11,30 @@ namespace GiftWrapping.Structures
     public class ConvexHull2d:IFace 
     {
         private readonly List<PlanePoint> _points;
-        private readonly List<ICell> _adjacentCells;
+        private readonly List<ICell> _adjacentCells, _innerCells;
         public int Dimension => 2;
         public IEnumerable<ICell> AdjacentCells => _adjacentCells;
-        public IEnumerable<ICell> InnerCells => GetInnerCells();
+        public IEnumerable<ICell> InnerCells => _innerCells;
         public Hyperplane Hyperplane { get; set; }
-
-        public ConvexHull2d(Hyperplane hyperplane = default)
-        {
-            Hyperplane = hyperplane;
-            _points = new List<PlanePoint>();
-            _adjacentCells = new List<ICell>();
-        }
 
         public ConvexHull2d(IEnumerable<PlanePoint> points)
         {
             _points = new List<PlanePoint>(points);
             _adjacentCells = new List<ICell>();
+            _innerCells = GetInnerCells().ToList();
         }
         private IEnumerable<ICell> GetInnerCells()
         {
             Edge firstEdge = new Edge(_points[^1], _points[0]);
             firstEdge.Hyperplane = HyperplaneHelper.Create(firstEdge.GetPoints().ToArray());
-
+            firstEdge.Hyperplane.SetOrientationNormal(_points);
             yield return firstEdge;
             
             for (int i = 0; i < _points.Count - 1; i++)
             {
                 Edge nextEdge = new Edge(_points[i], _points[i + 1]);
                 nextEdge.Hyperplane = HyperplaneHelper.Create(nextEdge.GetPoints().ToArray());
+                nextEdge.Hyperplane.SetOrientationNormal(_points);
                 yield return nextEdge;
             }
         }
@@ -57,23 +52,10 @@ namespace GiftWrapping.Structures
             return _points;
         }
 
-        public void GoToOriginalPoints()
-        {
-            for (int i = 0; i < _points.Count; i++)
-            {
-                _points[i] = _points[i].OriginalPoint;
-            }
-        }
-
-        public void AddPoint(PlanePoint point)
-        {
-            _points.Add(point);
-        }
 
         public bool Equals(ConvexHull2d other)
         {
-            IEnumerable<Point> points = other.GetPoints();
-            return Dimension == other.Dimension && _points.All(points.Contains);
+            return Dimension == other.Dimension && _points.All(other._points.Contains);
         }
 
 

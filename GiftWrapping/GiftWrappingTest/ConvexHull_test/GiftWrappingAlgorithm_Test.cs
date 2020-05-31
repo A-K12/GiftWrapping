@@ -11,8 +11,10 @@ using NUnit.Framework;
 
 namespace GiftWrappingTest.ConvexHull_test
 {
+    [TestFixture]
     public class GiftWrappingAlgorithm_Test
     {
+     
         private static IEnumerable GetNDimensionPoints()
         {
             PlanePoint[] points = new PlanePoint[] {
@@ -65,20 +67,20 @@ namespace GiftWrappingTest.ConvexHull_test
         [Test]
         public void FindConvexHull2D_Points2d_ReturnConvexHull2D()
         {
-            Point[] points = new Point[] {
-                new Point(new double[]{4, 0}),
-                new Point(new double[]{0, 4}),
-                new Point(new double[]{4, 4}),
-                new Point(new double[]{0, 0}),
-                new Point(new double[]{0.5, 0.5}),
-                new Point(new double[]{1, 1}),
+            PlanePoint[] points = new PlanePoint[] {
+                new PlanePoint(new double[]{4, 0}),
+                new PlanePoint(new double[]{0, 4}),
+                new PlanePoint(new double[]{4, 4}),
+                new PlanePoint(new double[]{0, 0}),
+                new PlanePoint(new double[]{0.5, 0.5}),
+                new PlanePoint(new double[]{1, 1}),
             };
-            List<Point> expectPoint = new List<Point>
+            List<PlanePoint> expectPoint = new List<PlanePoint>
             {
-                new Point(new double[]{0, 0}),
-                new Point(new double[]{4, 0}),
-                new Point(new double[]{0, 4}),
-                new Point(new double[]{4, 4}),
+                new PlanePoint(new double[]{0, 0}),
+                new PlanePoint(new double[]{4, 0}),
+                new PlanePoint(new double[]{0, 4}),
+                new PlanePoint(new double[]{4, 4}),
             };
             ConvexHull2d expect = expectPoint.ToConvexHull2d();
 
@@ -101,42 +103,42 @@ namespace GiftWrappingTest.ConvexHull_test
 
         public static IEnumerable<TestCaseData> Get2dPoints()
         {
-            List<Point> points1 = new List<Point> {
-                new Point(new double[]{1, 5}),
-                new Point(new double[]{1, 3}),
-                new Point(new double[]{2, 1}),
-                new Point(new double[]{4, 1.1}),
-                new Point(new double[]{4, 0.5}),
-                new Point(new double[]{5, 3}),
+            List<PlanePoint> points1 = new List<PlanePoint> {
+                new PlanePoint(new double[]{1, 5}),
+                new PlanePoint(new double[]{1, 3}),
+                new PlanePoint(new double[]{2, 1}),
+                new PlanePoint(new double[]{4, 1.1}),
+                new PlanePoint(new double[]{4, 0.5}),
+                new PlanePoint(new double[]{5, 3}),
             };
-            Point[] expectPoint1 = new Point[]{
-                new Point(new double[]{1, 3}),
-                new Point(new double[]{2, 1}),
-                new Point(new double[]{4, 0.5}),
-                new Point(new double[]{5, 3}),
-                new Point(new double[]{1, 5}),
+            PlanePoint[] expectPoint1 = new PlanePoint[]{
+                new PlanePoint(new double[]{1, 3}),
+                new PlanePoint(new double[]{2, 1}),
+                new PlanePoint(new double[]{4, 0.5}),
+                new PlanePoint(new double[]{5, 3}),
+                new PlanePoint(new double[]{1, 5}),
             };
 
             ConvexHull2d expect1 = expectPoint1.ToConvexHull2d();
 
             yield return new TestCaseData(points1).SetName("{m}_When2dPoints").Returns(expect1);
-            List <Point> points2 = new List<Point> {
-                new Point(new double[]{1, 1}),
-                new Point(new double[]{1, 5}),
-                new Point(new double[]{5, 1}),
-                new Point(new double[]{7, 1}),
-                new Point(new double[]{10, 1.1}),
-                new Point(new double[]{10, 5}),
-                new Point(new double[]{10, 8}),
-                new Point(new double[]{10, 10}),
+            List <PlanePoint> points2 = new List<PlanePoint> {
+                new PlanePoint(new double[]{1, 1}),
+                new PlanePoint(new double[]{1, 5}),
+                new PlanePoint(new double[]{5, 1}),
+                new PlanePoint(new double[]{7, 1}),
+                new PlanePoint(new double[]{10, 1.1}),
+                new PlanePoint(new double[]{10, 5}),
+                new PlanePoint(new double[]{10, 8}),
+                new PlanePoint(new double[]{10, 10}),
 
             };
-            Point[] expectPoint2 = new Point[]{
-                new Point(new double[]{1, 1}),
-                new Point(new double[]{7, 1}),
-                new Point(new double[]{10, 1.1}),
-                new Point(new double[]{10, 10}),
-                new Point(new double[]{1, 5}),
+            PlanePoint[] expectPoint2 = new PlanePoint[]{
+                new PlanePoint(new double[]{1, 1}),
+                new PlanePoint(new double[]{7, 1}),
+                new PlanePoint(new double[]{10, 1.1}),
+                new PlanePoint(new double[]{10, 10}),
+                new PlanePoint(new double[]{1, 5}),
             };
 
             ConvexHull2d expect2 = expectPoint2.ToConvexHull2d();
@@ -157,11 +159,11 @@ namespace GiftWrappingTest.ConvexHull_test
             points3.AddRange(p2);
             points3.AddRange(p3);
             points3.AddRange(p4);
-            Point[] expectPoint3 = new Point[]{
-                new Point(new double[]{1, 0.5}),
-                new Point(new double[]{100, 0.5}),
-                new Point(new double[]{100, 102}),
-                new Point(new double[]{1, 102}),
+            PlanePoint[] expectPoint3 = new PlanePoint[]{
+                new PlanePoint(new double[]{1, 0.5}),
+                new PlanePoint(new double[]{100, 0.5}),
+                new PlanePoint(new double[]{100, 102}),
+                new PlanePoint(new double[]{1, 102}),
             };
 
             ConvexHull2d expect3 = expectPoint3.ToConvexHull2d();

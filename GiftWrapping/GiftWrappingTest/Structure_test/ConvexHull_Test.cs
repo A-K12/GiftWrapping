@@ -7,31 +7,32 @@ using NUnit.Framework;
 
 namespace GiftWrappingTest.Structure_test
 {
+    [TestFixture]
     public class ConvexHull_Test
     {
         [Test]
         public void Equals_EqualObjects_ReturnTrue()
         {
-            List<Point> p1 = new List<Point> {
-                new Point(new double[]{0, 0, 0, 0}),
-                new Point(new double[]{4, 0, 0, 0}),
-                new Point(new double[]{0, 4, 0, 0}),
+            List<PlanePoint> p1 = new List<PlanePoint> {
+                new PlanePoint(new double[]{0, 0, 0, 0}),
+                new PlanePoint(new double[]{4, 0, 0, 0}),
+                new PlanePoint(new double[]{0, 4, 0, 0}),
             };
-            List<Point> p2 = new List<Point> {
-                new Point(new double[]{0, 0, 0, 0}),
-                new Point(new double[]{4, 0, 0, 0}),
-                new Point(new double[]{0, 0, 4, 0}),
+            List<PlanePoint> p2 = new List<PlanePoint> {
+                new PlanePoint(new double[]{0, 0, 0, 0}),
+                new PlanePoint(new double[]{4, 0, 0, 0}),
+                new PlanePoint(new double[]{0, 0, 4, 0}),
             };
 
-            List<Point> p3 = new List<Point> {
-                new Point(new double[]{0, 0, 0, 0}),
-                new Point(new double[]{4, 0, 0, 0}),
-                new Point(new double[]{0, 4, 0, 0}),
+            List<PlanePoint> p3 = new List<PlanePoint> {
+                new PlanePoint(new double[]{0, 0, 0, 0}),
+                new PlanePoint(new double[]{4, 0, 0, 0}),
+                new PlanePoint(new double[]{0, 4, 0, 0}),
             };
-            List<Point> p4 = new List<Point> {
-                new Point(new double[]{0, 0, 0, 0}),
-                new Point(new double[]{4, 0, 0, 0}),
-                new Point(new double[]{0, 0, 4, 0}),
+            List<PlanePoint> p4 = new List<PlanePoint> {
+                new PlanePoint(new double[]{0, 0, 0, 0}),
+                new PlanePoint(new double[]{4, 0, 0, 0}),
+                new PlanePoint(new double[]{0, 0, 4, 0}),
             };
             ConvexHull2d c1 = p1.ToConvexHull2d();
             ConvexHull2d c2 = p2.ToConvexHull2d();
@@ -53,26 +54,26 @@ namespace GiftWrappingTest.Structure_test
         [Test, Ignore("Not working")]
         public void GetPoints_When3dConvexHull_ReturnTrue()
         {
-            List<Point> p1 = new List<Point> {
-                new Point(new double[]{0, 0, 0, 0}),
-                new Point(new double[]{4, 0, 0, 0}),
-                new Point(new double[]{0, 4, 0, 0}),
+            List<PlanePoint> p1 = new List<PlanePoint> {
+                new PlanePoint(new double[]{0, 0, 0, 0}),
+                new PlanePoint(new double[]{4, 0, 0, 0}),
+                new PlanePoint(new double[]{0, 4, 0, 0}),
             };
-            List<Point> p2 = new List<Point> {
-                new Point(new double[]{0, 0, 0, 0}),
-                new Point(new double[]{4, 0, 0, 0}),
-                new Point(new double[]{0, 0, 4, 0}),
+            List<PlanePoint> p2 = new List<PlanePoint> {
+                new PlanePoint(new double[]{0, 0, 0, 0}),
+                new PlanePoint(new double[]{4, 0, 0, 0}),
+                new PlanePoint(new double[]{0, 0, 4, 0}),
             };
             ConvexHull2d c1 = p1.ToConvexHull2d();
             ConvexHull2d c2 = p2.ToConvexHull2d();
             ConvexHull ch1 = new ConvexHull(3);
             ch1.AddInnerCell(c1);
             ch1.AddInnerCell(c2);
-            Point[] expect = new Point[]{
-                new Point(new double[]{0, 0, 0, 0}),
-                new Point(new double[]{4, 0, 0, 0}),
-                new Point(new double[]{0, 4, 0, 0}),
-                new Point(new double[]{0, 0, 4, 0}),
+            PlanePoint[] expect = new PlanePoint[]{
+                new PlanePoint(new double[]{0, 0, 0, 0}),
+                new PlanePoint(new double[]{4, 0, 0, 0}),
+                new PlanePoint(new double[]{0, 4, 0, 0}),
+                new PlanePoint(new double[]{0, 0, 4, 0}),
             };
             Array.Sort(expect);
             

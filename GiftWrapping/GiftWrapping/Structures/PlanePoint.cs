@@ -1,12 +1,21 @@
-﻿namespace GiftWrapping.Structures
+﻿using System;
+using System.Collections.Generic;
+
+namespace GiftWrapping.Structures
 {
     public class PlanePoint:Point
     {
+
         private PlanePoint _originalPoint;
         public PlanePoint OriginalPoint
         {
             get => _originalPoint ?? (this);
-            set => _originalPoint=value;
+        }
+        public PlanePoint GetPoint(int dimension)
+        {
+            if (dimension == Dim) return this;
+            return _originalPoint.GetPoint(dimension) ??
+                   throw new ArgumentException("There is no point of this dimension.");
         }
         public PlanePoint(int n, PlanePoint originalPoint) : base(n)
         {
@@ -35,25 +44,29 @@
 
         public PlanePoint(PlanePoint p) : base(p)
         {
-            OriginalPoint = p.OriginalPoint;
+            _originalPoint = p.OriginalPoint;
         }
-        //public override bool Equals(object obj)
-        //{
-        //    if (ReferenceEquals(null, obj)) return false;
-        //    if (ReferenceEquals(this, obj)) return true;
-        //    if (obj.GetType() != this.GetType()) return false;
-        //    return Equals((PlanePoint)obj);
-        //}
-        //public bool Equals(PlanePoint other)
-        //{
-        //    if (ReferenceEquals(null, other)) return false;
-        //    if (ReferenceEquals(this, other)) return true;
-        //    return OriginalPoint.Equals(other);
-        //}
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((PlanePoint)obj);
+        }
+        public bool Equals(PlanePoint other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return base.Equals((Point)other);
+        }
 
-        //public override int GetHashCode()
-        //{
-        //    return OriginalPoint.GetHashCode();
-        //}
+        public override int GetHashCode()
+        {
+            if( ReferenceEquals(null, _originalPoint))
+            {
+                return base.GetHashCode();
+            }
+            return  _originalPoint.GetHashCode();
+        }
     }
 }

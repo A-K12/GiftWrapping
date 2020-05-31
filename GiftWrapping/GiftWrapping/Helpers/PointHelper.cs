@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using GiftWrapping.LinearEquations;
 using GiftWrapping.Structures;
@@ -57,6 +58,8 @@ namespace GiftWrapping.Helpers
 
             return dictionary;
         }
+
      
+
     }
 }

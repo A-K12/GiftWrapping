@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 namespace GiftWrappingTest.Structure_test
 {
+    [TestFixture]
     public class Edge2d_Test
     {
         public static IEnumerable<TestCaseData> GetTestEdges()
