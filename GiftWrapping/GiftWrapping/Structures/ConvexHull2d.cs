@@ -53,9 +53,15 @@ namespace GiftWrapping.Structures
         }
 
 
-        public bool Equals(ConvexHull2d other)
+        public bool Equals(ICell other)
         {
-            return Dimension == other.Dimension && _points.All(other._points.Contains);
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            if (other.GetType() != this.GetType()) return false;
+            ConvexHull2d convexHull = (ConvexHull2d) other;
+            return Dimension == other.Dimension && 
+                   _points.Count == convexHull._points.Count && 
+                   _points.All(convexHull._points.Contains);
         }
 
 

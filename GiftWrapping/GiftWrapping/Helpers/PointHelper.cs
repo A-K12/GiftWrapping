@@ -48,16 +48,7 @@ namespace GiftWrapping.Helpers
             return new Matrix(1, point.Dim, point);
         }
 
-        public static Dictionary<Point, PlanePoint> ToDictionary(this IEnumerable<PlanePoint> points)
-        {
-            Dictionary<Point, PlanePoint> dictionary = new Dictionary<Point, PlanePoint>();
-            foreach (PlanePoint point in points)
-            {
-                dictionary[point.OriginalPoint] = point;
-            }
 
-            return dictionary;
-        }
 
      
 

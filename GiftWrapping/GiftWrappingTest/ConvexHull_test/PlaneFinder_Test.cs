@@ -17,6 +17,37 @@ namespace GiftWrappingTest.ConvexHull_test
     {
         private static IEnumerable SetPoints()
         {
+            // PlanePoint[] points1 = new PlanePoint[] {
+            //     new PlanePoint(new double[]{1, 1, 1, 1}),
+            //     new PlanePoint(new double[]{5, 1, 1, 1}),
+            //     new PlanePoint(new double[]{1, 5, 1, 1}),
+            //     new PlanePoint(new double[]{5, 5, 1,1}),
+            //     new PlanePoint(new double[]{1, 1, 5,1}),
+            //     new PlanePoint(new double[]{5, 1, 5,1}),
+            //     new PlanePoint(new double[]{1, 5, 5,1}),
+            //     new PlanePoint(new double[]{5, 5, 5,1}),
+            //     new PlanePoint(new double[]{1, 1, 1, 5}),
+            //     new PlanePoint(new double[]{5, 1, 1, 5}),
+            //     new PlanePoint(new double[]{1, 5, 1, 5}),
+            //     new PlanePoint(new double[]{5, 5, 1,5}),
+            //     new PlanePoint(new double[]{1, 1, 5,5}),
+            //     new PlanePoint(new double[]{5, 1, 5,5}),
+            //     new PlanePoint(new double[]{1, 5, 5,5}),
+            //     new PlanePoint(new double[]{5, 5, 5,5}),
+            //
+            // };
+            //
+            // Vector v11 = new Vector(new double[] { -1, 0 });
+            // Vector v21 = new Vector(new double[] { 0, -1 });
+            // Hyperplane[] expect1 = new Hyperplane[]
+            // {
+            //     new Hyperplane(points1[3], v11),
+            //     new Hyperplane(points1[3], v21),
+            // };
+            //
+            // yield return new object[] { points1, expect1 };
+
+
             PlanePoint[] points = new PlanePoint[] {
                 new PlanePoint(new double[]{4, 0}),
                 new PlanePoint(new double[]{0, 4}),
@@ -58,19 +89,64 @@ namespace GiftWrappingTest.ConvexHull_test
 
             yield return new object[] {points, expect};
 
+
             points = new PlanePoint[] {
-                new PlanePoint(new double[]{4, 0, 0, 0}),
-                new PlanePoint(new double[]{0, 4, 0, 0}),
-                new PlanePoint(new double[]{0, 0, 4, 0}),
-                new PlanePoint(new double[]{0, 0, 0, 4}),
-                new PlanePoint(new double[]{0, 0, 0, 0}),
-                new PlanePoint(new double[]{0.5, 0.5, 0.5, 0.5}),
-                new PlanePoint(new double[]{1, 1, 1, 0.5}),
-                new PlanePoint(new double[]{3, 1, 1, 1}),
-                new PlanePoint(new double[]{1, 3, 1, 1}),
-                new PlanePoint(new double[]{1, 1, 3, 1}),
-                new PlanePoint(new double[]{1, 1, 1, 3}),
-                new PlanePoint(new double[]{1, 1, 1, 1})
+                new PlanePoint(new double[]{1, 1, 1}),
+                new PlanePoint(new double[]{1, 5, 1}),
+                new PlanePoint(new double[]{5, 1, 1}),
+                new PlanePoint(new double[]{5, 5, 1}),
+                new PlanePoint(new double[]{1, 1, 5}),
+                new PlanePoint(new double[]{1, 5, 5}),
+                new PlanePoint(new double[]{5, 1, 5}),
+                new PlanePoint(new double[]{5, 5, 5}),
+          
+            };
+            v1 = new Vector(new double[] { 0, 0, -1 });
+            v2 = new Vector(new double[] { 0, -1, 0 });
+            v3 = new Vector(new double[] { -1, 0, 0 });
+            v4 = new Vector(new double[] { -1, -1, -1 });
+            expect = new Hyperplane[]
+            {
+                new Hyperplane(points[0], v1),
+                new Hyperplane(points[0], v2),
+                new Hyperplane(points[0], v3),
+                new Hyperplane(points[0], v4)
+            };
+
+            yield return new object[] { points, expect };
+
+            // points = new PlanePoint[] {
+            //     new PlanePoint(new double[]{4, 0, 0, 0}),
+            //     new PlanePoint(new double[]{0, 4, 0, 0}),
+            //     new PlanePoint(new double[]{0, 0, 4, 0}),
+            //     new PlanePoint(new double[]{0, 0, 0, 4}),
+            //     new PlanePoint(new double[]{0, 0, 0, 0}),
+            //     new PlanePoint(new double[]{0.5, 0.5, 0.5, 0.5}),
+            //     new PlanePoint(new double[]{1, 1, 1, 0.5}),
+            //     new PlanePoint(new double[]{3, 1, 1, 1}),
+            //     new PlanePoint(new double[]{1, 3, 1, 1}),
+            //     new PlanePoint(new double[]{1, 1, 3, 1}),
+            //     new PlanePoint(new double[]{1, 1, 1, 3}),
+            //     new PlanePoint(new double[]{1, 1, 1, 1})
+            // };
+            points = new PlanePoint[] {
+                new PlanePoint(new double[]{1, 1, 1, 1}),
+                new PlanePoint(new double[]{5, 1, 1, 1}),
+                new PlanePoint(new double[]{1, 5, 1, 1}),
+                new PlanePoint(new double[]{5, 5, 1,1}),
+                new PlanePoint(new double[]{1, 1, 5,1}),
+                new PlanePoint(new double[]{5, 1, 5,1}),
+                new PlanePoint(new double[]{1, 5, 5,1}),
+                new PlanePoint(new double[]{5, 5, 5,1}),
+                new PlanePoint(new double[]{1, 1, 1, 5}),
+                new PlanePoint(new double[]{5, 1, 1, 5}),
+                new PlanePoint(new double[]{1, 5, 1, 5}),
+                new PlanePoint(new double[]{5, 5, 1,5}),
+                new PlanePoint(new double[]{1, 1, 5,5}),
+                new PlanePoint(new double[]{5, 1, 5,5}),
+                new PlanePoint(new double[]{1, 5, 5,5}),
+                new PlanePoint(new double[]{5, 5, 5,5}),
+
             };
 
             v1 = new Vector(new double[] { 0, 0, 0, -1 });
@@ -105,6 +181,7 @@ namespace GiftWrappingTest.ConvexHull_test
                 new PlanePoint(new double[]{1, 1, 1, 1, 3}),
                 new PlanePoint(new double[]{1, 1, 1, 1, 1})
             };
+           
             v1 = new Vector(new double[] { 0, 0, 0, 0, -1 });
             v2 = new Vector(new double[] { 0, 0, 0, -1, 0 });
             v3 = new Vector(new double[] { 0, 0, -1, 0, 0 });

@@ -39,10 +39,6 @@ namespace GiftWrapping.Structures
             return points;
         }
 
-        protected bool Equals(IFace other)
-        {
-            return Dimension == other.Dimension && InnerCells.All(other.InnerCells.Contains);
-        }
 
         public override bool Equals(object obj)
         {
@@ -61,6 +57,17 @@ namespace GiftWrapping.Structures
             res += Dimension.GetHashCode();
             res += _innerCells.Count;
             return res;
+        }
+
+        public bool Equals(ICell other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            if (other.GetType() != this.GetType()) return false;
+            ConvexHull convexHull = (ConvexHull)other;
+            return Dimension == other.Dimension &&
+                   _innerCells.Count == convexHull._innerCells.Count && 
+                   _innerCells.All(convexHull._innerCells.Contains);
         }
     }
 }

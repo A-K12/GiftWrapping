@@ -44,17 +44,37 @@ namespace GiftWrappingTest.ConvexHull_test
         [Test]
         public void FindFirstPlane_ReturnHyperplane()
         {
-            Point[] points = new Point[] {
-                new Point(new double[]{1, 1, 0}),
-                new Point(new double[]{5, 1, 0}),
-                new Point(new double[]{1, 5, 0}),
-                new Point(new double[]{5, 5, 0}),
-                new Point(new double[]{1, 1, 5}),
-                new Point(new double[]{5, 1, 5}),
-                new Point(new double[]{1, 5, 5}),
-                new Point(new double[]{5, 5, 5}),
-                new Point(new double[]{3, 3, 3}),
+            // PlanePoint[] points = new PlanePoint[] {
+            //     new PlanePoint(new double[]{1, 1, 0}),
+            //     new PlanePoint(new double[]{5, 1, 0}),
+            //     new PlanePoint(new double[]{1, 5, 0}),
+            //     new PlanePoint(new double[]{5, 5, 0}),
+            //     new PlanePoint(new double[]{1, 1, 5}),
+            //     new PlanePoint(new double[]{5, 1, 5}),
+            //     new PlanePoint(new double[]{1, 5, 5}),
+            //     new PlanePoint(new double[]{5, 5, 5}),
+            //     new PlanePoint(new double[]{3, 3, 3}),
+            // };
+            PlanePoint[] points = new PlanePoint[] {
+                new PlanePoint(new double[]{1, 1, 1, 1}),
+                new PlanePoint(new double[]{5, 1, 1, 1}),
+                new PlanePoint(new double[]{1, 5, 1, 1}),
+                new PlanePoint(new double[]{5, 5, 1,1}),
+                new PlanePoint(new double[]{1, 1, 5,1}),
+                new PlanePoint(new double[]{5, 1, 5,1}),
+                new PlanePoint(new double[]{1, 5, 5,1}),
+                new PlanePoint(new double[]{5, 5, 5,1}),
+                new PlanePoint(new double[]{1, 1, 1, 5}),
+                new PlanePoint(new double[]{5, 1, 1, 5}),
+                new PlanePoint(new double[]{1, 5, 1, 5}),
+                new PlanePoint(new double[]{5, 5, 1,5}),
+                new PlanePoint(new double[]{1, 1, 5,5}),
+                new PlanePoint(new double[]{5, 1, 5,5}),
+                new PlanePoint(new double[]{1, 5, 5,5}),
+                new PlanePoint(new double[]{5, 5, 5,5}),
+              
             };
+
 
             GiftWrappingAlgorithmTestClass giftWrapping = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
 
@@ -93,7 +113,7 @@ namespace GiftWrappingTest.ConvexHull_test
 
 
         [Test, TestCaseSource("Get2dPoints")]
-        public ConvexHull2d FindConvexHull2D(IList<Point> points)
+        public ConvexHull2d FindConvexHull2D(IList<PlanePoint> points)
         {
             GiftWrappingAlgorithmTestClass algorithm = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
 
@@ -146,15 +166,15 @@ namespace GiftWrappingTest.ConvexHull_test
             yield return new TestCaseData(points2).SetName("{m}_WhenMultiplePointsOnLine").Returns(expect2);
            
 
-            IEnumerable<Point> p1  = new Point[100];
-            p1 = p1.Select(((_, i) => new Point(new double[] {1, i+1})));
-            IEnumerable<Point> p2 = new Point[100];
-            p2 = p2.Select(((_, i) => new Point(new double[] { i+1, 102 })));
-            IEnumerable<Point> p3 = new Point[100];
-            p3 = p3.Select(((_, i) => new Point(new double[] { 100, 101-i })));
-            IEnumerable<Point> p4 = new Point[100];
-            p4 = p4.Select(((_, i) => new Point(new double[] { 100-i, 0.5 })));
-            List<Point> points3 = new List<Point>();
+            IEnumerable<PlanePoint> p1  = new PlanePoint[100];
+            p1 = p1.Select(((_, i) => new PlanePoint(new double[] {1, i+1})));
+            IEnumerable<PlanePoint> p2 = new PlanePoint[100];
+            p2 = p2.Select(((_, i) => new PlanePoint(new double[] { i+1, 102 })));
+            IEnumerable<PlanePoint> p3 = new PlanePoint[100];
+            p3 = p3.Select(((_, i) => new PlanePoint(new double[] { 100, 101-i })));
+            IEnumerable<PlanePoint> p4 = new PlanePoint[100];
+            p4 = p4.Select(((_, i) => new PlanePoint(new double[] { 100-i, 0.5 })));
+            List<PlanePoint> points3 = new List<PlanePoint>();
             points3.AddRange(p1);
             points3.AddRange(p2);
             points3.AddRange(p3);

@@ -8,7 +8,7 @@ namespace GiftWrappingTest.ConvexHull_test
 {
     public class GiftWrappingAlgorithmTestClass:GiftWrappingAlgorithm
     {
-        public GiftWrappingAlgorithmTestClass(IList<Point> points, double tolerance) : base(points, tolerance)
+        public GiftWrappingAlgorithmTestClass(IList<PlanePoint> points, double tolerance) : base(points, tolerance)
         {
         }
         public void FindFirstFaceTest(IList<Point> points) => base.FindConvexHull(points.ToPlanePoint());

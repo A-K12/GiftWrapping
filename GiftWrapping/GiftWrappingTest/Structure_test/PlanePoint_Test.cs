@@ -22,13 +22,14 @@ namespace GiftWrappingTest.Structure_test
        //     Assert.AreEqual(expectDimension, resultingDimension);
        // }
 
-        [Test, Ignore("The old functionality")]
+        [Test]
         public void Equals_EqualObjects_ReturnTrue()
         {
             PlanePoint p1 = new PlanePoint(new double[] { 4, 4, 0, 0 });
             PlanePoint p2 = new PlanePoint(new double[] { 4, 4, 0, 0 });
             PlanePoint pp1 = new PlanePoint(new double[] {1, 1, 1}, p1);
             Point pp2 = new PlanePoint(new double[] { 2,2,2}, p2);
+
 
             Assert.AreEqual(pp1, pp2);
         }

@@ -6,45 +6,53 @@ namespace GiftWrapping.Structures
     public class PlanePoint:Point
     {
 
-        private PlanePoint _originalPoint;
-        public PlanePoint OriginalPoint
-        {
-            get => _originalPoint ?? (this);
-        }
+        private readonly Point _originalPoint;
+
+        private readonly PlanePoint _previousPoint;
+      
         public PlanePoint GetPoint(int dimension)
         {
             if (dimension == Dim) return this;
-            return _originalPoint.GetPoint(dimension) ??
+            return _previousPoint.GetPoint(dimension) ??
                    throw new ArgumentException("There is no point of this dimension.");
         }
-        public PlanePoint(int n, PlanePoint originalPoint) : base(n)
+
+        public PlanePoint(int n, PlanePoint point) : base(n)
         {
-            _originalPoint = originalPoint;
+            _originalPoint = point._originalPoint;
+            _previousPoint = point;
+
         }
-        public PlanePoint(double[] np, PlanePoint originalPoint) : base(np)
+        public PlanePoint(double[] np, PlanePoint point) : base(np)
         {
-            _originalPoint = originalPoint;
+            _originalPoint = point._originalPoint;
+            _previousPoint = point;
         }
 
-        public PlanePoint(Point p, PlanePoint originalPoint) : base(p)
+        public PlanePoint(Point p, PlanePoint point) : base(p)
         {
-            _originalPoint = originalPoint;
+            _originalPoint = point._originalPoint;
+            _previousPoint = point;
         }
 
         public PlanePoint(int n) : base(n)
         {
+            _originalPoint = new Point(n);
         }
         public PlanePoint(double[] np) : base(np)
         {
+            _originalPoint = new Point(np);
         }
 
         public PlanePoint(Point p) : base(p)
         {
+            _originalPoint = new Point(p);
         }
 
         public PlanePoint(PlanePoint p) : base(p)
         {
-            _originalPoint = p.OriginalPoint;
+            _originalPoint = p._originalPoint;
+            _previousPoint = p._previousPoint;
         }
         public override bool Equals(object obj)
         {
@@ -57,16 +65,12 @@ namespace GiftWrapping.Structures
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return base.Equals((Point)other);
+            return _originalPoint.Equals(other._originalPoint);
         }
 
         public override int GetHashCode()
         {
-            if( ReferenceEquals(null, _originalPoint))
-            {
-                return base.GetHashCode();
-            }
-            return  _originalPoint.GetHashCode();
+            return _originalPoint.GetHashCode();
         }
     }
 }

@@ -14,25 +14,25 @@ namespace GiftWrappingTest.Structure_test
         public void Equals_EqualObjects_ReturnTrue()
         {
             List<PlanePoint> p1 = new List<PlanePoint> {
-                new PlanePoint(new double[]{0, 0, 0, 0}),
-                new PlanePoint(new double[]{4, 0, 0, 0}),
-                new PlanePoint(new double[]{0, 4, 0, 0}),
+                new PlanePoint(new double[]{0, 0}),
+                new PlanePoint(new double[]{4, 0}),
+                new PlanePoint(new double[]{0, 4}),
             };
             List<PlanePoint> p2 = new List<PlanePoint> {
-                new PlanePoint(new double[]{0, 0, 0, 0}),
-                new PlanePoint(new double[]{4, 0, 0, 0}),
-                new PlanePoint(new double[]{0, 0, 4, 0}),
+                new PlanePoint(new double[]{0, 0}),
+                new PlanePoint(new double[]{4, 0}),
+                new PlanePoint(new double[]{0, 4}),
             };
 
             List<PlanePoint> p3 = new List<PlanePoint> {
-                new PlanePoint(new double[]{0, 0, 0, 0}),
-                new PlanePoint(new double[]{4, 0, 0, 0}),
-                new PlanePoint(new double[]{0, 4, 0, 0}),
+                new PlanePoint(new double[]{0, 0}),
+                new PlanePoint(new double[]{4, 0}),
+                new PlanePoint(new double[]{0, 4}),
             };
             List<PlanePoint> p4 = new List<PlanePoint> {
-                new PlanePoint(new double[]{0, 0, 0, 0}),
-                new PlanePoint(new double[]{4, 0, 0, 0}),
-                new PlanePoint(new double[]{0, 0, 4, 0}),
+                new PlanePoint(new double[]{0, 0}),
+                new PlanePoint(new double[]{4, 0}),
+                new PlanePoint(new double[]{0, 4}),
             };
             ConvexHull2d c1 = p1.ToConvexHull2d();
             ConvexHull2d c2 = p2.ToConvexHull2d();

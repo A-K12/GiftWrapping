@@ -24,7 +24,7 @@ namespace GiftWrapping
             availablePoints[points.IndexOf(minPlanePoint)] = true;
             for (int i = 1; i < _dim; i++)
             {
-                double minCos = double.MinValue;
+                double maxCos = double.MinValue;
                 int nextPoint = default;
                 Hyperplane nextPlane = mainPlane;
                 for (int j = 0; j < points.Count; j++)
@@ -32,19 +32,28 @@ namespace GiftWrapping
                     if (availablePoints[j]) continue;
                     Vector vector = Point.ToVector(minPlanePoint, points[j]);
                     Vector[] tempBasis = SetVector(mainPlane.Basis, vector);
-                    Hyperplane newPlane = HyperplaneHelper.Create(minPlanePoint, tempBasis);
-                    double newCos = mainPlane.Cos(newPlane);
-                    if (Tools.LT(newCos, minCos)) continue;
-                    minCos = newCos;
+                    Hyperplane newPlane = default;
+                    try
+                    {
+                        newPlane = HyperplaneHelper.Create(minPlanePoint, tempBasis);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                    double newCos =Math.Abs(mainPlane.Cos(newPlane));
+                    if (Tools.LT(newCos, maxCos)) continue;
+                    maxCos = newCos;
                     nextPlane = newPlane;
                     nextPoint = j;
+                    if (Tools.EQ(maxCos, 1)) break;
                 }
 
                 availablePoints[nextPoint] = true;
                 mainPlane = nextPlane;
-                mainPlane.ReorientNormal();
+                _freeFieldsOfBasis[i-1] = true;
             }
-
+            mainPlane.SetOrientationNormal(points);
             return mainPlane;
         }
 
@@ -80,10 +89,10 @@ namespace GiftWrapping
         private Vector[] SetVector(Vector[] vectors, Vector vector)
         {
             Vector[] newVectors = (Vector[]) vectors.Clone();
-            if (vectors.Any(t => Vector.AreParallel(t, vector)))
-            {
-                return newVectors;
-            }
+            //if (vectors.Any(t => Vector.AreParallel(t, vector)))
+            //{
+            //    return newVectors;
+            //}
 
             for (int i = 0; i < vectors.Length; i++)
             {
@@ -95,6 +104,23 @@ namespace GiftWrapping
             throw new ArgumentException("Cannot insert a vector");
         }
 
+        //private Vector[] SetVector(Vector[] vectors, Vector vector)
+        //{
+        //    Vector[] newVectors = (Vector[])vectors.Clone();
+        //    if (vectors.Any(t => Vector.AreParallel(t, vector)))
+        //    {
+        //        return newVectors;
+        //    }
+
+        //    for (int i = 0; i < vectors.Length; i++)
+        //    {
+        //        if (_freeFieldsOfBasis[i]) continue;
+        //        newVectors[i] = vector;
+        //        return newVectors;
+        //    }
+
+        //    throw new ArgumentException("Cannot insert a vector");
+        //}
 
         private Vector FindNormal(Vector[] basis)
         {

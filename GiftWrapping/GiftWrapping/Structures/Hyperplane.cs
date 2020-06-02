@@ -55,6 +55,7 @@ namespace GiftWrapping.Structures
         public void ReorientNormal()
         {
             Normal = -Normal;
+            ComputeNumVariable();
         }
 
         public bool Equals(Hyperplane other)

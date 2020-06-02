@@ -15,14 +15,6 @@ namespace GiftWrapping.Structures
             return _points;
         }
 
-        public void GoToOriginalPoints()
-        {
-            for (int i = 0; i < _points.Length; i++)
-            {
-                _points[i] = _points[i].OriginalPoint;
-            }
-        }
-
         public Edge(PlanePoint p1, PlanePoint p2)
         {
             if (p1.Dim != p2.Dim) throw new ArgumentException("_points have different dimensions.");
@@ -36,12 +28,14 @@ namespace GiftWrapping.Structures
         }
         public override int GetHashCode()
         {
-            
-            int res = 0;
+            int sum = 0;
             foreach (PlanePoint point in _points)
-                res += point.GetHashCode();
+            {
+                int sum1 = point.GetHashCode();
+                sum += sum1;
+            }
 
-            return res;
+            return sum;
         }
         public override bool Equals(object obj)
         {
@@ -51,9 +45,13 @@ namespace GiftWrapping.Structures
             return Equals((Edge)obj);
         }
 
-        public bool Equals(Edge obj)
+        public bool Equals(ICell obj)
         {
-            return obj != null && _points.All(obj._points.Contains);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+
+            return _points.All(((Edge)obj)._points.Contains);
         }
 
     }
