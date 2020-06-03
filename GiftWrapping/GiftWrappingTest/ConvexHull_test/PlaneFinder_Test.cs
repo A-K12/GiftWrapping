@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
@@ -225,6 +226,77 @@ namespace GiftWrappingTest.ConvexHull_test
 
 
             Assert.AreEqual(points[2], result);
+        }
+
+
+        [Test]
+        public void Test_WhenCall_ReturnIndexVector()
+        {
+            PlanePoint[] points = new PlanePoint[] {
+               
+                new PlanePoint(new double[]{5, 1, 1, 1,1}),
+                new PlanePoint(new double[]{1, 5, 1, 1,1}),
+                new PlanePoint(new double[]{5, 5, 1,1,1}),
+                new PlanePoint(new double[]{1, 1, 5,1,1}),
+                new PlanePoint(new double[]{5, 1, 5,1,1}),
+                new PlanePoint(new double[]{1, 5, 5,1,1}),
+                new PlanePoint(new double[]{5, 5, 5,1,1}),
+                new PlanePoint(new double[]{1, 1, 1, 5,1}),
+                new PlanePoint(new double[]{5, 1, 1, 5,1}),
+                new PlanePoint(new double[]{1, 5, 1, 5,1}),
+                new PlanePoint(new double[]{5, 5, 1,5,1}),
+                new PlanePoint(new double[]{1, 1, 5,5,1}),
+                new PlanePoint(new double[]{1, 1, 1, 1,1}),
+                new PlanePoint(new double[]{5, 1, 5,5,1}),
+                new PlanePoint(new double[]{1, 5, 5,5,1}),
+                new PlanePoint(new double[]{5, 5, 5,5,1}),
+                new PlanePoint(new double[]{1, 1, 1, 1,5}),
+                new PlanePoint(new double[]{5, 1, 1, 1,5}),
+                new PlanePoint(new double[]{1, 5, 1, 1,5}),
+                new PlanePoint(new double[]{5, 5, 1,1,5}),
+                new PlanePoint(new double[]{1, 1, 5,1,5}),
+                new PlanePoint(new double[]{5, 1, 5,1,5}),
+                new PlanePoint(new double[]{1, 5, 5,1,5}),
+                new PlanePoint(new double[]{5, 5, 5,1,5}),
+                new PlanePoint(new double[]{1, 1, 1, 5,5}),
+                new PlanePoint(new double[]{5, 1, 1, 5,5}),
+                new PlanePoint(new double[]{1, 5, 1, 5,5}),
+                new PlanePoint(new double[]{5, 5, 1,5,5}),
+                new PlanePoint(new double[]{1, 1, 5,5,5}),
+                new PlanePoint(new double[]{5, 1, 5,5,5}),
+                new PlanePoint(new double[]{1, 5, 5,5,5}),
+                new PlanePoint(new double[]{5, 5, 5,5,5}),
+               
+
+            };
+
+
+            //PlaneFinder planeFinder = new PlaneFinder();
+            //Hyperplane result = planeFinder.FindFirstPlane(points.ToPlanePoint());
+
+             Stopwatch sp = new Stopwatch();
+            // sp.Start();
+            //
+            // sp.Stop();
+            //
+            // double first = sp.ElapsedMilliseconds;
+            sp.Reset();
+            sp.Start();
+            PlaneFinder planeFinder1 = new PlaneFinder();
+            Hyperplane result1 = planeFinder1.FindFirstPlane(points.ToPlanePoint());
+            sp.Stop();
+         
+
+            double sec = sp.ElapsedMilliseconds;
+            sp.Reset();
+            sp.Start();
+            PlaneFinder planeFinder2 = new PlaneFinder();
+            Hyperplane result2 = planeFinder1.FindFirstPlane(points.ToPlanePoint());
+            sp.Stop();
+
+            double sec2 = sp.ElapsedMilliseconds;
+
+            Assert.AreEqual(points[2], result1);
         }
 
     }

@@ -18,6 +18,13 @@ namespace GiftWrapping.LinearEquations
             Variables = new IndexVector (new double[Matrix.Cols]);
         }
 
+        public LinearEquations(double[,] leftSide, double[] rightSide)
+        {
+            Matrix = new IndexMatrix(leftSide);
+            Vector = new IndexVector(rightSide);
+            Variables = new IndexVector(new double[Matrix.Cols]);
+        }
+
         public void SwapRows(Index index1, Index index2)
         {
             Matrix.SwapRows(index1, index2);

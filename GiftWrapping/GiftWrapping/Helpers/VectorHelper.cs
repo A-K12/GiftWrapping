@@ -35,6 +35,33 @@ namespace GiftWrapping.Helpers
             return new Matrix(n, m, cells.ToArray());
         }
 
+        public static double[,] ToArray(this IList<Vector> vectors)
+        {
+            if (vectors.Count == 0)
+            {
+                throw new ArgumentException("Value cannot be an empty collection.", nameof(vectors));
+            }
+            if (!vectors.HaveSameDimension())
+            {
+                throw new ArgumentException("Basis don't have same dimension");
+            }
+            int n = vectors.Count, m = vectors[0].Dim;
+            double[,] cells = new double[n,m];
+            for (int i = 0; i < cells.GetLength(0); i++)
+            {
+                for (int j = 0; j < cells.GetLength(1); j++)
+                {
+                    cells[i, j] = vectors[i][j];
+                }
+            }
+            // for (int i = 0; i < n; i++)
+            // {
+            //     Array.Copy(vectors[i], 0, cells, m * i, m);
+            // }
+
+            return cells;
+        }
+
         public static Matrix ToVerticalMatrix(this IList<Vector> vectors)
         {
             if (vectors.Count == 0)

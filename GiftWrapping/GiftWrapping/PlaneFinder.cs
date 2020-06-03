@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
 using GiftWrapping.Helpers;
@@ -10,75 +11,66 @@ namespace GiftWrapping
 {
     public class PlaneFinder
     {
-        private int _dim;
-        private bool[] _freeFieldsOfBasis;
-
-
         public Hyperplane FindFirstPlane(IList<PlanePoint> points)
         {
-            _dim = points[0].Dim;
-            _freeFieldsOfBasis = new bool[_dim - 1];
+            int dim = points[0].Dim;
             PlanePoint minPlanePoint = points.Min();
-            Hyperplane mainPlane = GetFirstHyperplane(minPlanePoint);
+            Vector mainNormal = GetFirstNormal(dim);
+            Vector[] mainBasis = GetFirstBasis(dim);
             bool[] availablePoints = new bool[points.Count];
             availablePoints[points.IndexOf(minPlanePoint)] = true;
-            for (int i = 1; i < _dim; i++)
+            for (int i = 0; i < dim-1; i++)
             {
                 double maxCos = double.MinValue;
-                int nextPoint = default;
-                Hyperplane nextPlane = mainPlane;
+                int processedPoint = default;
+                Vector[] nextBasis = default;
+                Vector nextNormal = default;
                 for (int j = 0; j < points.Count; j++)
                 {
                     if (availablePoints[j]) continue;
                     Vector vector = Point.ToVector(minPlanePoint, points[j]);
-                    Vector[] tempBasis = SetVector(mainPlane.Basis, vector);
-                    Hyperplane newPlane = default;
+                    Vector[] tempBasis = SetVector(mainBasis, vector, i);
+                    Vector tempNormal = default;
                     try
                     {
-                        newPlane = HyperplaneHelper.Create(minPlanePoint, tempBasis);
+                        tempNormal = FindNormal(tempBasis);
                     }
                     catch
                     {
                         continue;
                     }
-                    double newCos =Math.Abs(mainPlane.Cos(newPlane));
-                    if (Tools.LT(newCos, maxCos)) continue;
+                    double newCos = mainNormal * tempNormal / (mainNormal.Length * tempNormal.Length);
+                    if (Tools.LT(Math.Abs(newCos), maxCos)) continue;
+                    processedPoint = j;
                     maxCos = newCos;
-                    nextPlane = newPlane;
-                    nextPoint = j;
+                    nextNormal = tempNormal;
+                    nextBasis = tempBasis;
                     if (Tools.EQ(maxCos, 1)) break;
                 }
-
-                availablePoints[nextPoint] = true;
-                mainPlane = nextPlane;
-                _freeFieldsOfBasis[i-1] = true;
+                availablePoints[processedPoint] = true;
+                mainBasis = nextBasis;
+                mainNormal = nextNormal;
             }
-            mainPlane.SetOrientationNormal(points);
-            return mainPlane;
+            Hyperplane plane = new Hyperplane(minPlanePoint, mainNormal);
+            plane.Basis = mainBasis.GetOrthonormalBasis();
+            plane.SetOrientationNormal(points);
+            return plane;
         }
 
-        private Hyperplane GetFirstHyperplane(PlanePoint point)
+        private Vector GetFirstNormal(int dimension)
         {
-            Vector normal = GetFirstNormal();
-            Vector[] basis = GetFirstBasis();
-
-            return  new Hyperplane(point, normal) {Basis = basis};
-        }
-
-        private Vector GetFirstNormal()
-        {
-            double[] normal = new double[_dim];
+            double[] normal = new double[dimension];
             normal[0] = -1;
 
             return new Vector(normal);
         }
 
-        private Vector[] GetFirstBasis()
+        private Vector[] GetFirstBasis(int dimension)
         {
-            Vector[] vectors = new Vector[_dim - 1];
+            Vector[] vectors = new Vector[dimension - 1];
             for (int i = 0; i < vectors.Length; i++)
             {
-                double[] cells = new double[_dim];
+                double[] cells = new double[dimension];
                 cells[i + 1] = 1;
                 vectors[i] = new Vector(cells);
             }
@@ -86,46 +78,17 @@ namespace GiftWrapping
             return vectors;
         }
 
-        private Vector[] SetVector(Vector[] vectors, Vector vector)
+        private Vector[] SetVector(Vector[] vectors, Vector vector, int index)
         {
             Vector[] newVectors = (Vector[]) vectors.Clone();
-            //if (vectors.Any(t => Vector.AreParallel(t, vector)))
-            //{
-            //    return newVectors;
-            //}
-
-            for (int i = 0; i < vectors.Length; i++)
-            {
-                if (_freeFieldsOfBasis[i]) continue;
-                newVectors[i] = vector;
-                return newVectors;
-            }
-
-            throw new ArgumentException("Cannot insert a vector");
+            newVectors[index] = vector;
+            return newVectors;
         }
-
-        //private Vector[] SetVector(Vector[] vectors, Vector vector)
-        //{
-        //    Vector[] newVectors = (Vector[])vectors.Clone();
-        //    if (vectors.Any(t => Vector.AreParallel(t, vector)))
-        //    {
-        //        return newVectors;
-        //    }
-
-        //    for (int i = 0; i < vectors.Length; i++)
-        //    {
-        //        if (_freeFieldsOfBasis[i]) continue;
-        //        newVectors[i] = vector;
-        //        return newVectors;
-        //    }
-
-        //    throw new ArgumentException("Cannot insert a vector");
-        //}
 
         private Vector FindNormal(Vector[] basis)
         {
             Matrix leftSide = basis.ToHorizontalMatrix();
-            Vector rightSide = new Vector(leftSide.Rows);
+            double[] rightSide = new double[basis.Length];
 
             return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide);
         }

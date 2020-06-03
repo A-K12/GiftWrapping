@@ -28,6 +28,19 @@ namespace GiftWrappingTest.Structure_test
 
 
         [Test]
+        public void ToString_WhenCall_ReturnsString()
+        {
+
+            Point point = new Point(new double[3]{1,2,3});
+            string expect = "1 2 3";
+
+            string result = point.ToString();
+
+            result.Should().Equals(expect);
+        }
+
+
+        [Test]
         public void GetDimension_WhenCall_ReturnDimension()
         {
             int expectDimension = 555;

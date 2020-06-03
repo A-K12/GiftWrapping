@@ -229,11 +229,11 @@ namespace GiftWrapping.Structures
 
         public override string ToString()
         {
-            string res = "(" + _p[0];
+            string res =_p[0].ToString();
             int d = Dim, i;
             for (i = 1; i < d; i++)
-                res += ";" + _p[i];
-            res += ")";
+                res += " " + _p[i];
+            // res += ")";
             return res;
         }
 

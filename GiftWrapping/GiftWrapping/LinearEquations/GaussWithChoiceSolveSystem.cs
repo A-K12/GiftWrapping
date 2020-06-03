@@ -11,7 +11,7 @@ namespace GiftWrapping.LinearEquations
 {
     public class GaussWithChoiceSolveSystem
     {
-        public static Vector FindAnswer(Matrix leftSide, Vector rightSide )
+        public static Vector FindAnswer(double[,] leftSide, double[] rightSide )
         {
             LinearEquations equations = new LinearEquations(leftSide, rightSide);
             for (int i = 0; i < equations.Matrix.Rows; i++)

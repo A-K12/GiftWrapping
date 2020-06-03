@@ -13,19 +13,16 @@ namespace GiftWrapping
 {
     public class GiftWrappingAlgorithm
     {
-        private double tolerance;
-
-        private IList<PlanePoint> _points;
-
-        private ICell _cell;
-        public GiftWrappingAlgorithm(IList<PlanePoint> points, double tolerance)
+        private readonly IList<PlanePoint> _points;
+        private PlaneFinder _planeFinder;
+        public GiftWrappingAlgorithm(IList<PlanePoint> points)
         {
             if (points.Count < 3)
             {
                 throw new ArgumentException("The number of _points must be more than three.");
             }
-            _cell = new ConvexHull(points[0].Dim);
-            this._points = points.Select(point => new PlanePoint(point)).ToArray();
+            _planeFinder = new PlaneFinder();
+            _points = points;
         }
 
         public IFace Create()
@@ -47,7 +44,7 @@ namespace GiftWrapping
             ConvexHull convexHull = new ConvexHull(dim);
             Queue<(IFace, bool[])> unprocessedFaces = new Queue<(IFace, bool[])>();
             Dictionary<ICell, ICell> processedCells = new Dictionary<ICell, ICell>();
-            Hyperplane currentHyperplane = FindFirstPlane(points);
+            Hyperplane currentHyperplane = _planeFinder.FindFirstPlane(points);
             List<PlanePoint> planePoints = new List<PlanePoint>();
             bool[] processedPoints = new bool[points.Count];
             for (int i = 0; i < points.Count; i++)
@@ -295,15 +292,6 @@ namespace GiftWrapping
         private IndexMap GetIndexMap(IList<Point> points)
         {
             return default;
-        }
-
-        protected Hyperplane FindFirstPlane(IList<PlanePoint> points)
-        {
-            PlaneFinder planeFinder = new PlaneFinder();
-
-            return planeFinder.FindFirstPlane(points);
-
-            //Todo ориентация первой нормали
         }
     }
 }

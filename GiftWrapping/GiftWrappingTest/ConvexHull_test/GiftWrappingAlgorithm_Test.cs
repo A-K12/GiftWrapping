@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
 using GiftWrapping;
@@ -44,7 +45,7 @@ namespace GiftWrappingTest.ConvexHull_test
         [Test]
         public void FindFirstPlane_ReturnHyperplane()
         {
-            // PlanePoint[] points = new PlanePoint[] {
+            //PlanePoint[] points = new PlanePoint[] {
             //     new PlanePoint(new double[]{1, 1, 0}),
             //     new PlanePoint(new double[]{5, 1, 0}),
             //     new PlanePoint(new double[]{1, 5, 0}),
@@ -55,30 +56,92 @@ namespace GiftWrappingTest.ConvexHull_test
             //     new PlanePoint(new double[]{5, 5, 5}),
             //     new PlanePoint(new double[]{3, 3, 3}),
             // };
+            //PlanePoint[] points = new PlanePoint[] {
+            //    new PlanePoint(new double[]{1, 1, 1, 1}),
+            //    new PlanePoint(new double[]{5, 1, 1, 1}),
+            //    new PlanePoint(new double[]{1, 5, 1, 1}),
+            //    new PlanePoint(new double[]{5, 5, 1,1}),
+            //    new PlanePoint(new double[]{1, 1, 5,1}),
+            //    new PlanePoint(new double[]{5, 1, 5,1}),
+            //    new PlanePoint(new double[]{1, 5, 5,1}),
+            //    new PlanePoint(new double[]{5, 5, 5,1}),
+            //    new PlanePoint(new double[]{1, 1, 1, 5}),
+            //    new PlanePoint(new double[]{5, 1, 1, 5}),
+            //    new PlanePoint(new double[]{1, 5, 1, 5}),
+            //    new PlanePoint(new double[]{5, 5, 1,5}),
+            //    //new PlanePoint(new double[]{1, 1, 5,5}),
+            //    //new PlanePoint(new double[]{5, 1, 5,5}),
+            //    //new PlanePoint(new double[]{1, 5, 5,5}),
+            //    //new PlanePoint(new double[]{5, 5, 5,5}),
+
+            //};
+
             PlanePoint[] points = new PlanePoint[] {
-                new PlanePoint(new double[]{1, 1, 1, 1}),
-                new PlanePoint(new double[]{5, 1, 1, 1}),
-                new PlanePoint(new double[]{1, 5, 1, 1}),
-                new PlanePoint(new double[]{5, 5, 1,1}),
-                new PlanePoint(new double[]{1, 1, 5,1}),
-                new PlanePoint(new double[]{5, 1, 5,1}),
-                new PlanePoint(new double[]{1, 5, 5,1}),
-                new PlanePoint(new double[]{5, 5, 5,1}),
-                new PlanePoint(new double[]{1, 1, 1, 5}),
-                new PlanePoint(new double[]{5, 1, 1, 5}),
-                new PlanePoint(new double[]{1, 5, 1, 5}),
-                new PlanePoint(new double[]{5, 5, 1,5}),
-                new PlanePoint(new double[]{1, 1, 5,5}),
-                new PlanePoint(new double[]{5, 1, 5,5}),
-                new PlanePoint(new double[]{1, 5, 5,5}),
-                new PlanePoint(new double[]{5, 5, 5,5}),
-              
+                new PlanePoint(new double[]{1, 1, 1, 1,1}),
+                new PlanePoint(new double[]{5, 1, 1, 1,1}),
+                new PlanePoint(new double[]{1, 5, 1, 1,1}),
+                new PlanePoint(new double[]{5, 5, 1,1,1}),
+                new PlanePoint(new double[]{1, 1, 5,1,1}),
+                new PlanePoint(new double[]{5, 1, 5,1,1}),
+                new PlanePoint(new double[]{1, 5, 5,1,1}),
+                new PlanePoint(new double[]{5, 5, 5,1,1}),
+                new PlanePoint(new double[]{1, 1, 1, 5,1}),
+                new PlanePoint(new double[]{5, 1, 1, 5,1}),
+                new PlanePoint(new double[]{1, 5, 1, 5,1}),
+                new PlanePoint(new double[]{5, 5, 1,5,1}),
+                new PlanePoint(new double[]{1, 1, 5,5,1}),
+                new PlanePoint(new double[]{5, 1, 5,5,1}),
+                new PlanePoint(new double[]{1, 5, 5,5,1}),
+                new PlanePoint(new double[]{5, 5, 5,5,1}),
+                new PlanePoint(new double[]{1, 1, 1, 1,5}),
+                new PlanePoint(new double[]{5, 1, 1, 1,5}),
+                new PlanePoint(new double[]{1, 5, 1, 1,5}),
+                new PlanePoint(new double[]{5, 5, 1,1,5}),
+                new PlanePoint(new double[]{1, 1, 5,1,5}),
+                new PlanePoint(new double[]{5, 1, 5,1,5}),
+                new PlanePoint(new double[]{1, 5, 5,1,5}),
+                new PlanePoint(new double[]{5, 5, 5,1,5}),
+                new PlanePoint(new double[]{1, 1, 1, 5,5}),
+                new PlanePoint(new double[]{5, 1, 1, 5,5}),
+                new PlanePoint(new double[]{1, 5, 1, 5,5}),
+                new PlanePoint(new double[]{5, 5, 1,5,5}),
+                new PlanePoint(new double[]{1, 1, 5,5,5}),
+                new PlanePoint(new double[]{5, 1, 5,5,5}),
+                new PlanePoint(new double[]{1, 5, 5,5,5}),
+                new PlanePoint(new double[]{5, 5, 5,5,5}),
+
             };
+            //PlanePoint[] points = new PlanePoint[1000];
+            //Random rnd = new Random();
+            //for (int j = 0; j < points.Length; j++)
+            //{
+            //    double[] p = new double[]{rnd.Next(1,500), rnd.Next(250, 500), rnd.Next(500, 600)};
+            //    points[j] = new PlanePoint(p);
+            //}
+
 
 
             GiftWrappingAlgorithmTestClass giftWrapping = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
-
+            Stopwatch sp = new Stopwatch();
+            sp.Start();
             IFace result = giftWrapping.FindConvexHull(points.ToPlanePoint());
+            sp.Stop();
+
+            double first = sp.ElapsedMilliseconds;
+
+            //sp.Reset();
+            //sp.Start();
+            //IFace result1 = giftWrapping.FindConvexHull(points.ToPlanePoint());
+            //sp.Stop();
+
+            //double sec = sp.ElapsedMilliseconds;
+            //int i = 0;
+            //((ConvexHull)result).Convert(@"D:\Projects\GiftWrapping", "test31" + i++);
+            //foreach (ICell cell in result.InnerCells)
+            //{
+            //    ((ConvexHull)cell).Convert(@"D:\Projects\GiftWrapping", "test1"+i++);
+            //}
+
 
             Assert.IsTrue(false);
         }
