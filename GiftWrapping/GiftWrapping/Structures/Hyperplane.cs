@@ -134,18 +134,35 @@ namespace GiftWrapping.Structures
             return new Vector(newVector);
         }
 
+        public void OrthonormalBasis()
+        {
+            Vector[] b = Basis.GetOrthonormalBasis();
+            Basis = b;
+        }
         public void SetOrientationNormal(IEnumerable<PlanePoint> innerPoints)
         {
             foreach (PlanePoint planePoint in innerPoints)
             {
                 Vector vector = Point.ToVector(MainPoint, planePoint.GetPoint(Dimension));
                 double dotProduct = vector * Normal;
-                if(Tools.EQ(dotProduct)) continue;
+                if (Tools.EQ(dotProduct)) continue;
                 if (Tools.GT(dotProduct))
                 {
                     ReorientNormal();
                 }
                 return;
+            }
+            throw new ArgumentException("All points lie on the plane.");
+        }
+
+        public void SetOrientationNormal(PlanePoint innerPoint)
+        {
+            Vector vector = Point.ToVector(MainPoint, innerPoint);
+            double dotProduct = vector * Normal;
+            if (Tools.EQ(dotProduct)) throw new ArgumentException("The point lies on the plane.");
+            if (Tools.GT(dotProduct))
+            {
+                ReorientNormal();
             }
         }
 

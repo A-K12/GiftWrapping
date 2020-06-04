@@ -39,8 +39,8 @@ namespace GiftWrapping
                     {
                         continue;
                     }
-                    double newCos = mainNormal * tempNormal / (mainNormal.Length * tempNormal.Length);
-                    newCos = Math.Abs(newCos);
+                    // double newCos = mainNormal * tempNormal / (mainNormal.Length * tempNormal.Length);
+                    double newCos = Math.Abs(mainNormal.Cos(tempNormal));//Ориентация нормали 
                     if (Tools.LT(newCos, maxCos)) continue;
                     processedPoint = j;
                     maxCos = newCos;

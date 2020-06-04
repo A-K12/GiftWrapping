@@ -5,28 +5,27 @@ namespace GiftWrapping.Structures
 {
     public class ConvexHull : IFace
     {
-        private readonly List<ICell> _adjacentCells, _innerCells;
         public int Dimension { get; }
-        public IEnumerable<ICell> AdjacentCells => _adjacentCells;
-        public IEnumerable<ICell> InnerCells => _innerCells;
-        public void AddAdjacentCell(ICell cell) => _adjacentCells.Add(cell);
+        public List<ICell> AdjacentCells { get; }
+        public List<ICell> InnerCells { get; }
+        public void AddAdjacentCell(ICell cell) => AdjacentCells.Add(cell);
 
-        public void AddInnerCell(ICell cell) => _innerCells.Add(cell);
+        public void AddInnerCell(ICell cell) => InnerCells.Add(cell);
         public Hyperplane Hyperplane { get; set; }
  
         public ConvexHull(int dimension)
         {
             Dimension = dimension;
-            _innerCells = new List<ICell>();
-            _adjacentCells = new List<ICell>();
+            InnerCells = new List<ICell>();
+            AdjacentCells = new List<ICell>();
         }
 
         public ConvexHull(Hyperplane hyperplane)
         {
             Hyperplane = hyperplane;
             Dimension = hyperplane.Dimension;
-            _innerCells = new List<ICell>();
-            _adjacentCells = new List<ICell>();
+            InnerCells = new List<ICell>();
+            AdjacentCells = new List<ICell>();
         }
         public ICollection<PlanePoint> GetPoints()
         {
@@ -51,7 +50,7 @@ namespace GiftWrapping.Structures
         public override int GetHashCode()
         {
             int res = 0;
-            foreach (ICell cell in _innerCells)
+            foreach (ICell cell in InnerCells)
                 res += cell.GetHashCode();
 
             res += Dimension.GetHashCode();
@@ -65,8 +64,8 @@ namespace GiftWrapping.Structures
             if (other.GetType() != this.GetType()) return false;
             ConvexHull convexHull = (ConvexHull)other;
             return Dimension == other.Dimension &&
-                   _innerCells.Count == convexHull._innerCells.Count && 
-                   _innerCells.All(convexHull._innerCells.Contains);
+                   InnerCells.Count == convexHull.InnerCells.Count && 
+                   InnerCells.All(convexHull.InnerCells.Contains);
         }
     }
 }

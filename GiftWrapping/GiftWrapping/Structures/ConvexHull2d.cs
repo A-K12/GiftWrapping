@@ -11,31 +11,32 @@ namespace GiftWrapping.Structures
     public class ConvexHull2d:IFace 
     {
         private readonly List<PlanePoint> _points;
-        private readonly List<ICell> _adjacentCells, _innerCells;
         public int Dimension => 2;
-        public IEnumerable<ICell> AdjacentCells => _adjacentCells;
-        public IEnumerable<ICell> InnerCells => _innerCells;
+        public List<ICell> AdjacentCells { get; }
+        public List<ICell> InnerCells { get; }
         public Hyperplane Hyperplane { get; set; }
 
         public ConvexHull2d(IEnumerable<PlanePoint> points)
         {
             _points = new List<PlanePoint>(points);
-            _adjacentCells = new List<ICell>();
-            _innerCells = GetInnerCells().ToList();
+            AdjacentCells = new List<ICell>();
+            InnerCells = new List<ICell>(_points.Count);
+            ComputeData();
         }
-        private IEnumerable<ICell> GetInnerCells()
+        private void ComputeData()
         {
-            Edge firstEdge = new Edge(_points[^1], _points[0]);
-            firstEdge.Hyperplane = HyperplaneHelper.Create(firstEdge.GetPoints().ToArray());
-            firstEdge.Hyperplane.SetOrientationNormal(_points);
-            yield return firstEdge;
-            
+            Edge edge = new Edge(_points[^1], _points[0]);
+            edge.Hyperplane = HyperplaneHelper.Create(edge.GetPoints().ToArray());
+            edge.Hyperplane.OrthonormalBasis();
+            edge.Hyperplane.SetOrientationNormal(_points);
+            InnerCells.Add(edge);
             for (int i = 0; i < _points.Count - 1; i++)
             {
-                Edge nextEdge = new Edge(_points[i], _points[i + 1]);
-                nextEdge.Hyperplane = HyperplaneHelper.Create(nextEdge.GetPoints().ToArray());
-                nextEdge.Hyperplane.SetOrientationNormal(_points);
-                yield return nextEdge;
+                edge = new Edge(_points[i], _points[i + 1]);
+                edge.Hyperplane = HyperplaneHelper.Create(edge.GetPoints().ToList());
+                edge.Hyperplane.OrthonormalBasis();
+                edge.Hyperplane.SetOrientationNormal(_points);
+                InnerCells.Add(edge);
             }
         }
 
@@ -43,7 +44,7 @@ namespace GiftWrapping.Structures
         {
             if (cell.Dimension == Dimension)
             {
-                _adjacentCells.Add(cell);
+                AdjacentCells.Add(cell);
             }
         }
 

@@ -117,5 +117,27 @@ namespace GiftWrapping.Helpers
 
             return vector * coefficient;
         }
+
+        public static double Cos(this Vector v1, Vector v2)
+        {
+            return v1 * v2/ (v1.Length * v2.Length);
+        }
+
+
+        public static void SetOrientationNormal(this Vector normal, PlanePoint mainPoint, IEnumerable<PlanePoint> innerPoints)
+        {
+            foreach (PlanePoint planePoint in innerPoints)
+            {
+                Vector vector = Point.ToVector(mainPoint, planePoint.GetPoint(mainPoint.Dim));
+                double dotProduct = vector * normal;
+                if (Tools.EQ(dotProduct)) continue;
+                if (Tools.GT(dotProduct))
+                {
+                    normal = -normal;
+                    return;
+                }
+            }
+            //throw new ArgumentException("All points lie on the plane.");
+        }
     }
 }

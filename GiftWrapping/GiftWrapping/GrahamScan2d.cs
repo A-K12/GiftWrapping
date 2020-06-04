@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GiftWrapping.Structures;
 
@@ -9,13 +10,17 @@ namespace GiftWrapping
     {
         public IFace FindConvexHull(IList<PlanePoint> points)
         {
+          
             List<PlanePoint> sortPoints = points.ToList().MergeSort<PlanePoint>();
+           
             List<PlanePoint> up = new List<PlanePoint>(), 
                 down = new List<PlanePoint>();
             PlanePoint minPoint = sortPoints[0];
             PlanePoint maxPoint = sortPoints[^1];
             up.Add(minPoint);
             down.Add(minPoint);
+            Stopwatch sp = new Stopwatch();
+            sp.Start();
             for (int i = 1; i < sortPoints.Count; i++)
             {
                 if (i == sortPoints.Count - 1 || cw(minPoint, sortPoints[i], maxPoint))
@@ -36,6 +41,8 @@ namespace GiftWrapping
                     down.Add(sortPoints[i]);
                 }
             }
+            sp.Stop();
+            long ret = sp.ElapsedMilliseconds;
             // for (int i = 0; i < up.Count(); ++i)
             //     points.Add(up[i]);
             for (int i = down.Count() - 2; i > 0; --i)

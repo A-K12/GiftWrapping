@@ -79,9 +79,9 @@ namespace GiftWrappingTest.Structure_test
         public void LessOperator_Point_ReturnTrue()
         {
             Point p1 = new Point(new double[] { 1, 100000, 1, 0 });
-            Point p2 = new Point(new double[] { 2, 0, 0, 0 });
+            Point p2 = new Point(new double[] { 1, 100, 0, 0 });
 
-            bool result = p1 < p2;
+            bool result = p2 < p1;
 
 
             result.Should().BeTrue();
