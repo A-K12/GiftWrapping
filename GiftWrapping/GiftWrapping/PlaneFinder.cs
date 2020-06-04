@@ -40,7 +40,8 @@ namespace GiftWrapping
                         continue;
                     }
                     double newCos = mainNormal * tempNormal / (mainNormal.Length * tempNormal.Length);
-                    if (Tools.LT(Math.Abs(newCos), maxCos)) continue;
+                    newCos = Math.Abs(newCos);
+                    if (Tools.LT(newCos, maxCos)) continue;
                     processedPoint = j;
                     maxCos = newCos;
                     nextNormal = tempNormal;

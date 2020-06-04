@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Transactions;
@@ -14,7 +15,8 @@ namespace GiftWrapping
     public class GiftWrappingAlgorithm
     {
         private readonly IList<PlanePoint> _points;
-        private PlaneFinder _planeFinder;
+        private readonly PlaneFinder _planeFinder;
+        private readonly IAlgorithm _algorithm2d;
         public GiftWrappingAlgorithm(IList<PlanePoint> points)
         {
             if (points.Count < 3)
@@ -22,6 +24,7 @@ namespace GiftWrapping
                 throw new ArgumentException("The number of _points must be more than three.");
             }
             _planeFinder = new PlaneFinder();
+            _algorithm2d = new GiftWrapping2d();
             _points = points;
         }
 
@@ -30,12 +33,12 @@ namespace GiftWrapping
             return FindConvexHull(_points);
         }
 
-        public IFace FindConvexHull(IList<PlanePoint> points)
+        private IFace FindConvexHull(IList<PlanePoint> points)
         {
             int dim = points[0].Dim;
             if (dim == 2)
             {
-                return FindConvexHull2D(points);
+                return _algorithm2d.FindConvexHull(points);
             }
             if (points.Count == dim + 1)
             {
@@ -53,7 +56,11 @@ namespace GiftWrapping
                 processedPoints[i] = true;
                 planePoints.Add(currentHyperplane.ConvertPoint(points[i]));
             }
+            Stopwatch sp = new Stopwatch();
+            sp.Start();
             IFace currentHull = FindConvexHull(planePoints);
+            sp.Stop();
+            double first = sp.ElapsedMilliseconds;
             if (planePoints.Count == points.Count)
             {
                 return currentHull;
@@ -71,9 +78,10 @@ namespace GiftWrapping
                 foreach (ICell cell in currentHull.InnerCells)
                 {
                     ICell adjacentCell = processedCells.GetValueOrDefault(cell);
-                    if (adjacentCell is null) continue;
+                    if (ReferenceEquals(adjacentCell, null)) continue;
                     double maxCos = double.MinValue;
                     Hyperplane nextHyperplane = currentHyperplane;
+                  
                     foreach (Hyperplane hyperplane in GetHyperplanes(cell,currentHull, processedPoints, points))
                     {
                         hyperplane.SetOrientationNormal(currentHull.GetPoints());
@@ -86,15 +94,26 @@ namespace GiftWrapping
                     }
                     planePoints.Clear();
                     bool[] newPointMap = new bool[points.Count];
+                    Stopwatch sp1 = new Stopwatch();
+                    sp1.Start();
                     for (int i = 0; i < points.Count; i++)
                     {
                         if (!nextHyperplane.IsPointInPlane(points[i])) continue;
                         newPointMap[i] = true;
                         planePoints.Add(nextHyperplane.ConvertPoint(points[i]));
                     }
+                    sp1.Stop();
+                    long time = sp1.ElapsedMilliseconds;
+                    if (dim == 4)
+                    {
+
+                    }
                     IFace newHull = FindConvexHull(planePoints);
                     newHull.Hyperplane = nextHyperplane;
+                    
                     convexHull.AddInnerCell(newHull);
+                   
+                    
                     foreach (ICell c in newHull.InnerCells)
                     {
                         ICell adj = processedCells.GetValueOrDefault(c);
@@ -106,11 +125,11 @@ namespace GiftWrapping
                         }
                         processedCells[c] = newHull;
                     }
+                    
                     unprocessedFaces.Enqueue((newHull, newPointMap));
                 }
-              
+               
             }
-
             return convexHull;
         }
 
@@ -119,7 +138,7 @@ namespace GiftWrapping
             int dim = points[0].Dim;
             if (dim == 2)
             {
-                return FindConvexHull2D(points);
+                return _algorithm2d.FindConvexHull(points);
             }
             ConvexHull convexHull = new ConvexHull(dim);
             // Queue<(ICell, Hyperplane, bool[])> unprocessedFaces = new Queue<(ICell, Hyperplane, bool[])>();
@@ -217,7 +236,7 @@ namespace GiftWrapping
             int dim = points[0].Dim;
             if (dim == 2)
             {
-                return FindConvexHull2D(points);
+                return _algorithm2d.FindConvexHull(points);
             }
             ConvexHull convexHull = new ConvexHull(dim);
             for (int i = 0; i < points.Count; i++)
@@ -240,54 +259,6 @@ namespace GiftWrapping
         }
 
 
-        public ConvexHull2d FindConvexHull2D(IList<PlanePoint> points)
-        {
-            if (points.Count == 3)
-            {
-                return new ConvexHull2d(points);
-            }
-            List<PlanePoint> hullPoints = new List<PlanePoint>();
-            PlanePoint first = points.Min();
-            Vector currentVector = new Vector(new double[] {0, -1});
-            PlanePoint currentPlanePoint = first;
-            do
-            {
-                hullPoints.Add(currentPlanePoint);
-                double maxCos = double.MinValue;
-                double maxLen = double.MinValue;
-                PlanePoint next = currentPlanePoint;
-                Vector maxVector = currentVector;
-                foreach (PlanePoint point in points)
-                {
-                    if (currentPlanePoint == point) continue;
-                    Vector newVector = Point.ToVector(currentPlanePoint, point);
-                    double newCos = currentVector * newVector;
-                    newCos /= newVector.Length*currentVector.Length;
-                    if (Tools.GT(newCos, maxCos))
-                    {
-                        maxCos = newCos;
-                        next = point;
-                        maxLen = Point.Length(currentPlanePoint, next);
-                        maxVector = newVector;
-                    }
-                    else if (Tools.EQ(maxCos, newCos))
-                    {
-                        double dist = Point.Length(currentPlanePoint, point);
-                        if (Tools.LT(maxLen, dist))
-                        {
-                            next = point;
-                            maxVector = newVector;
-                            maxLen = dist;
-                        }
-                    }
-                }
-
-                currentPlanePoint = next;
-                currentVector = maxVector;
-            } while (first != currentPlanePoint);
-
-            return new ConvexHull2d(hullPoints);
-        }
 
         private IndexMap GetIndexMap(IList<Point> points)
         {

@@ -55,7 +55,6 @@ namespace GiftWrapping.Structures
                 res += cell.GetHashCode();
 
             res += Dimension.GetHashCode();
-            res += _innerCells.Count;
             return res;
         }
 

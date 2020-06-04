@@ -229,7 +229,7 @@ namespace GiftWrappingTest.ConvexHull_test
         }
 
 
-        [Test]
+        [Test, Ignore("SandBox")]
         public void Test_WhenCall_ReturnIndexVector()
         {
             PlanePoint[] points = new PlanePoint[] {

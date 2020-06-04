@@ -11,6 +11,6 @@ namespace GiftWrappingTest.ConvexHull_test
         public GiftWrappingAlgorithmTestClass(IList<PlanePoint> points, double tolerance) : base(points)
         {
         }
-        public void FindFirstFaceTest(IList<Point> points) => base.FindConvexHull(points.ToPlanePoint());
+        public IFace Create() => base.Create();
     }
 }
