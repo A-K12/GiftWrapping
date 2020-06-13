@@ -11,7 +11,8 @@ namespace RunTest
     {
         static void Main(string[] args)
         {
-            PlanePoint[] points1 = PointsReader.Read(@"D:\1.txt");
+            PlanePoint[] points1 = PointsReader.MakeVertices(10);
+            //Read(@"D:\1.txt");
             //
             // List<PlanePoint> points = new List<PlanePoint> {
             //     new PlanePoint(new double[]{1, 1, 1, 1}),
@@ -33,12 +34,12 @@ namespace RunTest
             //
             // };
 
-            Random r = new Random();
-            List<PlanePoint> points = new List<PlanePoint>();
-            for (int i = 0; i < 10; i++)
-            {
-                points.Add(new PlanePoint(new double[] { r.NextDouble(), r.NextDouble(), r.NextDouble() }));
-            }
+            //Random r = new Random();
+            //List<PlanePoint> points = new List<PlanePoint>();
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    points.Add(new PlanePoint(new double[] { r.NextDouble(), r.NextDouble(), r.NextDouble() }));
+            //}
 
             // PlanePoint[] points = new PlanePoint[] {
             //      new PlanePoint(new double[]{1, 1, 1, 1,1}),
@@ -82,7 +83,7 @@ namespace RunTest
             //    points1[i] = new PlanePoint(((Point)points1[i]) + min);
             //}
 
-            GiftWrappingAlgorithm giftWrapping = new GiftWrappingAlgorithm(points);
+            GiftWrappingAlgorithm giftWrapping = new GiftWrappingAlgorithm(points1);
             Stopwatch sp = new Stopwatch();
             // IFace result = giftWrapping.Create();
             Console.Out.WriteLine("Start");
