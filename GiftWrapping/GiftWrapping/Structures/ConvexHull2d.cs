@@ -15,29 +15,40 @@ namespace GiftWrapping.Structures
         public List<ICell> AdjacentCells { get; }
         public List<ICell> InnerCells { get; }
         public Hyperplane Hyperplane { get; set; }
-
+        public IFace Parent { get; set; }
         public ConvexHull2d(IEnumerable<PlanePoint> points)
         {
             _points = new List<PlanePoint>(points);
             AdjacentCells = new List<ICell>();
             InnerCells = new List<ICell>(_points.Count);
+            
             ComputeData();
         }
         private void ComputeData()
         {
             Edge edge = new Edge(_points[^1], _points[0]);
             edge.Hyperplane = HyperplaneHelper.Create(edge.GetPoints().ToArray());
-            edge.Hyperplane.OrthonormalBasis();
+           // edge.Hyperplane.OrthonormalBasis();
             edge.Hyperplane.SetOrientationNormal(_points);
-            InnerCells.Add(edge);
+            //InnerCells.Add(edge);
+            AddInnerCell(edge);
             for (int i = 0; i < _points.Count - 1; i++)
             {
                 edge = new Edge(_points[i], _points[i + 1]);
                 edge.Hyperplane = HyperplaneHelper.Create(edge.GetPoints().ToList());
-                edge.Hyperplane.OrthonormalBasis();
+             //   edge.Hyperplane.OrthonormalBasis();
                 edge.Hyperplane.SetOrientationNormal(_points);
-                InnerCells.Add(edge);
+               // InnerCells.Add(edge);
+                AddInnerCell(edge);
             }
+       
+
+        }
+
+        private void AddInnerCell(ICell cell)
+        {
+            cell.Parent = this;
+            InnerCells.Add(cell);
         }
 
         public void AddAdjacentCell(ICell cell)
@@ -53,15 +64,14 @@ namespace GiftWrapping.Structures
             return _points;
         }
 
-
         public bool Equals(ICell other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             if (other.GetType() != this.GetType()) return false;
             ConvexHull2d convexHull = (ConvexHull2d) other;
-            return Dimension == other.Dimension && 
-                   _points.Count == convexHull._points.Count && 
+            return Dimension == other.Dimension &&
+                   _points.Count == convexHull._points.Count &&
                    _points.All(convexHull._points.Contains);
         }
 
@@ -81,6 +91,7 @@ namespace GiftWrapping.Structures
                 res += point.GetHashCode();
             res += Dimension.GetHashCode();
             return res;
+ 
         }
     }
 }

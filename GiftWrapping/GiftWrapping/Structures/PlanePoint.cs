@@ -5,8 +5,7 @@ namespace GiftWrapping.Structures
 {
     public class PlanePoint:Point
     {
-
-        private readonly Point _originalPoint;
+        public Point OriginalPoint { get; }
 
         private readonly PlanePoint _previousPoint;
       
@@ -17,41 +16,46 @@ namespace GiftWrapping.Structures
                    throw new ArgumentException("There is no point of this dimension.");
         }
 
+        public PlanePoint(double x, double y, double z) : base(new double[] { x, y, z })
+        {
+            OriginalPoint = new Point(new double[] {x, y, z});
+
+        }
         public PlanePoint(int n, PlanePoint point) : base(n)
         {
-            _originalPoint = point._originalPoint;
+            OriginalPoint = point.OriginalPoint;
             _previousPoint = point;
 
         }
         public PlanePoint(double[] np, PlanePoint point) : base(np)
         {
-            _originalPoint = point._originalPoint;
+            OriginalPoint = point.OriginalPoint;
             _previousPoint = point;
         }
 
         public PlanePoint(Point p, PlanePoint point) : base(p)
         {
-            _originalPoint = point._originalPoint;
+            OriginalPoint = point.OriginalPoint;
             _previousPoint = point;
         }
 
         public PlanePoint(int n) : base(n)
         {
-            _originalPoint = new Point(n);
+            OriginalPoint = new Point(n);
         }
         public PlanePoint(double[] np) : base(np)
         {
-            _originalPoint = new Point(np);
+            OriginalPoint = new Point(np);
         }
 
         public PlanePoint(Point p) : base(p)
         {
-            _originalPoint = new Point(p);
+            OriginalPoint = new Point(p);
         }
 
         public PlanePoint(PlanePoint p) : base(p)
         {
-            _originalPoint = p._originalPoint;
+            OriginalPoint = p.OriginalPoint;
             _previousPoint = p._previousPoint;
         }
         public override bool Equals(object obj)
@@ -65,12 +69,12 @@ namespace GiftWrapping.Structures
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return _originalPoint.Equals(other._originalPoint);
+            return OriginalPoint.Equals(other.OriginalPoint);
         }
 
         public override int GetHashCode()
         {
-            return _originalPoint.GetHashCode();
+            return OriginalPoint.GetHashCode();
         }
     }
 }

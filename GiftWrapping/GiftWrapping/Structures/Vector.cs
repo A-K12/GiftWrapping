@@ -190,7 +190,13 @@ namespace GiftWrapping.Structures
 #endif
       Vector res = new Vector(Dim);
       for (int i = 0; i < Dim; i++)
-        res._v[i] = _v[i] / Length;
+      {
+          res._v[i] = _v[i] / Length;
+          if (Tools.EQ(res._v[i]))
+          {
+              res._v[i] = 0;
+          }
+      }
       res.Length = 1.0;
       return res;
     }
@@ -411,7 +417,12 @@ namespace GiftWrapping.Structures
 #endif
       double res = 0;
       for (i = 0; i < d; i++)
-        res += v1._v[i] * v2._v[i];
+      {
+          if(Tools.EQ(v1._v[i])|| Tools.EQ(v2._v[i]))
+              continue;
+          res += v1._v[i] * v2._v[i];
+      }
+      
       return res;
     }
 

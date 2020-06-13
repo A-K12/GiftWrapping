@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GiftWrapping", "GiftWrappin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GiftWrappingTest", "GiftWrappingTest\GiftWrappingTest.csproj", "{2716BECD-4E9F-4F92-ADAB-A65159845012}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunTest", "RunTest\RunTest.csproj", "{0C577711-7846-44E8-A0A7-80B78AE60429}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2716BECD-4E9F-4F92-ADAB-A65159845012}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2716BECD-4E9F-4F92-ADAB-A65159845012}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2716BECD-4E9F-4F92-ADAB-A65159845012}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C577711-7846-44E8-A0A7-80B78AE60429}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C577711-7846-44E8-A0A7-80B78AE60429}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C577711-7846-44E8-A0A7-80B78AE60429}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C577711-7846-44E8-A0A7-80B78AE60429}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

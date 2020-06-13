@@ -8,7 +8,7 @@ namespace GiftWrapping.Structures
 {
     public class Hyperplane
     {
-        private double NumericVariable { get; set; }
+        public double NumericVariable { get; private set; }
         public Vector Normal { get; private set; }
         public PlanePoint MainPoint { get; set; }
         public int Dimension { get; }
@@ -102,7 +102,8 @@ namespace GiftWrapping.Structures
         public bool IsPointInPlane(Point point)
         {
             Vector v = Point.ToVector(MainPoint, point);
-            return Tools.EQ(Normal * v);
+            bool result = Tools.EQ(Normal * v);
+            return result;
         }
 
         public PlanePoint ConvertPoint(PlanePoint point)

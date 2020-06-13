@@ -15,45 +15,34 @@ namespace GiftWrapping
         {
             int dim = points[0].Dim;
             PlanePoint minPlanePoint = points.Min();
-            Vector mainNormal = GetFirstNormal(dim);
             Vector[] mainBasis = GetFirstBasis(dim);
             bool[] availablePoints = new bool[points.Count];
             availablePoints[points.IndexOf(minPlanePoint)] = true;
-            for (int i = 0; i < dim-1; i++)
+            for (int i = 0; i < dim - 1; i++)
             {
-                double maxCos = double.MinValue;
+                Vector[] basis = mainBasis.Where((_, i1) => i1 != i).ToArray();
+                Vector mainVector = mainBasis[i];
+                double minCos = double.MaxValue;
                 int processedPoint = default;
                 Vector[] nextBasis = default;
-                Vector nextNormal = default;
                 for (int j = 0; j < points.Count; j++)
                 {
                     if (availablePoints[j]) continue;
                     Vector vector = Point.ToVector(minPlanePoint, points[j]);
-                    Vector[] tempBasis = SetVector(mainBasis, vector, i);
-                    Vector tempNormal = default;
-                    try
-                    {
-                        tempNormal = FindNormal(tempBasis);
-                    }
-                    catch
-                    {
+                    vector = basis.GetOrthonormalVector(vector);
+                    if(Tools.EQ(vector.Length)) 
                         continue;
-                    }
-                    // double newCos = mainNormal * tempNormal / (mainNormal.Length * tempNormal.Length);
-                    double newCos = Math.Abs(mainNormal.Cos(tempNormal));//Ориентация нормали 
-                    if (Tools.LT(newCos, maxCos)) continue;
+                    Vector[] tempBasis = SetVector(mainBasis, vector, i);
+                    double newCos = vector.Cos(mainVector);
+                    if (Tools.GT(newCos, minCos)) continue;
                     processedPoint = j;
-                    maxCos = newCos;
-                    nextNormal = tempNormal;
+                    minCos = newCos;
                     nextBasis = tempBasis;
-                    if (Tools.EQ(maxCos, 1)) break;
                 }
                 availablePoints[processedPoint] = true;
                 mainBasis = nextBasis;
-                mainNormal = nextNormal;
             }
-            Hyperplane plane = new Hyperplane(minPlanePoint, mainNormal);
-            plane.Basis = mainBasis.GetOrthonormalBasis();
+            Hyperplane plane = HyperplaneHelper.Create(minPlanePoint, mainBasis);
             plane.SetOrientationNormal(points);
             return plane;
         }

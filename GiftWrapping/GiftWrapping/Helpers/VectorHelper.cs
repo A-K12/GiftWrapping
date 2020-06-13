@@ -110,6 +110,19 @@ namespace GiftWrapping.Helpers
             return basis;
         }
 
+        public static Vector GetOrthonormalVector(this IList<Vector> basis, Vector vector)
+        {
+            //TODO Checking vectors
+            Vector v = new Vector(vector);
+           // Vector[] basis = b.Select((vector => new Vector(vector))).ToArray();
+            foreach (Vector b in basis)
+            {
+                v -= v.ProjectVectorTo(b);
+            }
+
+            return Tools.EQ(v.Length)?v:v / v.Length;
+        }
+
         public static Vector ProjectVectorTo(this Vector v, Vector vector)
         {
             double coefficient = v * vector;
@@ -124,7 +137,7 @@ namespace GiftWrapping.Helpers
         }
 
 
-        public static void SetOrientationNormal(this Vector normal, PlanePoint mainPoint, IEnumerable<PlanePoint> innerPoints)
+        public static Vector SetOrientationNormal(this Vector normal, PlanePoint mainPoint, IEnumerable<PlanePoint> innerPoints)
         {
             foreach (PlanePoint planePoint in innerPoints)
             {
@@ -134,10 +147,11 @@ namespace GiftWrapping.Helpers
                 if (Tools.GT(dotProduct))
                 {
                     normal = -normal;
-                    return;
                 }
+
+                return normal;
             }
-            //throw new ArgumentException("All points lie on the plane.");
+            throw new ArgumentException("All points lie on the plane.");
         }
     }
 }

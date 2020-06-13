@@ -4,16 +4,18 @@ using System.Linq;
 
 namespace GiftWrapping.Structures
 {
-    public class Edge:IEdge
+    public class Edge:ICell
     {
         private readonly PlanePoint[] _points;
-        public int Dimension => 2;
+        public int Dimension => 1;
         public Hyperplane Hyperplane { get; set; }
+        public IFace Parent { get; set; }
         public ICollection<PlanePoint> GetPoints()
         {
-            
             return _points;
         }
+
+
 
         public Edge(PlanePoint p1, PlanePoint p2)
         {
@@ -34,7 +36,7 @@ namespace GiftWrapping.Structures
                 int sum1 = point.GetHashCode();
                 sum += sum1;
             }
-
+            
             return sum;
         }
         public override bool Equals(object obj)
