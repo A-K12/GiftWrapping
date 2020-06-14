@@ -1,11 +1,13 @@
-\documentclass{beamer}
+\documentclass[]{beamer} %aspectratio=169
 \usepackage[english,russian]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{graphicx}
 \usepackage{import}
 % Стиль презентации
 \usetheme{Warsaw}
-
-\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+% \beamertemplatenavigationsymbolsempty
 \graphicspath{{./img/}{./img/giftWraping2D/}{./img/firstPlane/}{./img/crossP/}{./img/crossPN/}{./img/heap/}}
 \usefonttheme[onlymath]{serif}
 \def\svgwidth{\linewidth}
@@ -17,7 +19,7 @@
 % Создание заглавной страницы
 \frame{\titlepage}
 % Автоматическая генерация содержания
-\frame{\frametitle{Содержание}\tableofcontents}
+% \frame{\frametitle{Содержание}\tableofcontents}
 \begin{frame}{Постановка задачи}
    Требуется разработать алгоритм построения выпуклой оболочки многомерного роя точек, находящихся в необщем положении.
    \vfill
@@ -101,11 +103,9 @@
       % На плоскости много алгоритмов. Для многомерного случая он реализован в библиотеках segal b leda.
 \end{frame}
 
-\begin{frame}{Алгоритм Джарвиса на плоскости}
-    \only<1-4>{Построение первой грани}
-    \only<5-12>{Переход к следующей грани}
-    \only<13->{Конец построения}
-    \begin{center}
+\begin{frame}[t]{Алгоритм Джарвиса на плоскости}
+    \vspace*{-10mm}
+    \centering{
       \includegraphics<1>[width=0.7\linewidth]{gift.pdf}%
       \includegraphics<2>[width=0.7\linewidth]{gift2.pdf}%
       \includegraphics<3>[width=0.7\linewidth]{gift3.pdf}%
@@ -119,14 +119,19 @@
       \includegraphics<11>[width=0.7\linewidth]{gift11.pdf}%
       \includegraphics<12>[width=0.7\linewidth]{gift13.pdf}%
       \includegraphics<13>[width=0.7\linewidth]{gift14.pdf}%
-    \end{center}
+    }
+    % \vspace*{-6mm}
+
+    % \only<1-4>{Построение первой грани}
+    \only<1>{Найти минимальную точку. Провести через точку вертикальный вектор.}
+    \only<2>{Поочередно проводим векторы к свободным точкам.}
+    \only<3>{Берется точка, образующая максимальный угол, между векторами.}
+    \only<4>{Начальная грань построена. Находим вектор ребра.}
+    \only<5-12>{Построение следующего ребра.}
+    \only<13->{Конец построения}
 \end{frame}
 
 \begin{frame}{Алгорим Джарвиса при общем положении точек}
-
-    % Грань -  Симплекс.ував
-
-    % \vfill
     Проблемы расширения:
        \begin{itemize}
         \item  поиск первой грани;
@@ -146,46 +151,36 @@
 %Продолжая с остальными веркторами базса туже самую процедуру.
 % Далее не доделано, остальное будет доделан в следю раз
 
-\begin{frame}{Поиск первой грани}
-    \only<1>{\input{./img/firstPlane/first.pdf_tex}}%
-    \only<2>{\input{./img/firstPlane/first1.pdf_tex}}%
-    \only<3>{\input{./img/firstPlane/first2.pdf_tex}}%
-    \only<4>{\input{./img/firstPlane/first3.pdf_tex}}%
-    \only<5>{\input{./img/firstPlane/first3_1.pdf_tex}}%
-    \only<6>{\input{./img/firstPlane/first4.pdf_tex}}%
-    \only<7>{\input{./img/firstPlane/first5.pdf_tex}}%
-    \only<8>{\input{./img/firstPlane/first6.pdf_tex}}%
-    \only<9>{\input{./img/firstPlane/first6_1.pdf_tex}}%
-    \only<10>{\input{./img/firstPlane/first7.pdf_tex}}%
-    \only<11>{\input{./img/firstPlane/first8.pdf_tex}}%
-    \only<12>{\input{./img/firstPlane/first9.pdf_tex}}%
+\begin{frame}[t]{Поиск первой грани}
+    \vspace*{-8mm}\hspace*{15mm}%
+        \only<1>{\noindent\input{./img/firstPlane/first.pdf_tex}}%
+        \only<1>{\input{./img/firstPlane/first1.pdf_tex}}%
+        \only<2>{\input{./img/firstPlane/first2.pdf_tex}}%
+        \only<3>{\input{./img/firstPlane/first3.pdf_tex}}%
+        \only<4>{\input{./img/firstPlane/first3_1.pdf_tex}}%
+        \only<5>{\input{./img/firstPlane/first4.pdf_tex}}%
+        \only<6>{\input{./img/firstPlane/first5.pdf_tex}}%
+        \only<7>{\input{./img/firstPlane/first6.pdf_tex}}%
+        \only<8>{\input{./img/firstPlane/first6_1.pdf_tex}}%
+        \only<9>{\input{./img/firstPlane/first7.pdf_tex}}%
+        \only<10>{\input{./img/firstPlane/first8.pdf_tex}}%
+        \only<11>{\input{./img/firstPlane/first9.pdf_tex}}%
+    \centering{
+    \only<1>{ \par Находим минимальную точку.}
+    \only<2>{\vspace*{-3mm}\par Формируем базис плоскости из векторов базиса пространства. \\ Создаем базис подпространства, исключая первый вектор базиса плоскости.}%
+    \only<3>{\par Поочередно проводим векторы к свободным точкам. }%
+    \only<4>{Ортонормируем эти векторы на фоне базиса подпространства\\ (шаг процедуры Грама–Шмидта)}
+    \only<5>{\vspace*{-5mm}\par  Выбираем вектор, образующий наибольший угол с первым вектором базиса. Заменяем первый вектор базиса. Запоминаем точку.}%
+    \only<6>{\par Создаем базис подпространства, исключая второй вектор базиса плоскости.}%
+    \only<7>{\par Поочередно проводим векторы к свободным точкам. }%
+    \only<8>{Ортонормируем эти векторы на фоне базиса подпространства\\ (шаг процедуры Грама–Шмидта)}
+    \only<9-10>{\vspace*{-5mm}\par Выбираем вектор, образующий наибольший угол со вторым вектором базиса. Заменяем второй вектор базиса. Запоминаем точку.}%
+    \only<11>{\par Начальная грань найдена. Грань добавляется в очередь на рассмотрение. }%
+    % \only<4>{\par Базис новой плоскости формируется из базиса ребра и вектора в точку.}%
 
-    \only<2>{\vspace*{-3mm}\par На этом этапе базис плоскости формируется из векторов базиса пространства.}%
-    \only<4>{\vspace*{-3mm}\par Базис новой плоскости формируется из базиса ребра и вектора в точку.}%
-    % Базис всех кординатных осей, кроме Ox1;
-%
-% Выкинули первый вектор базиса и начали добавлять из текущей точки в пробную точку, находя нормаль.
-%Продолжая с остальными веркторами базса туже самую процедуру.
+    }
 \end{frame}
 
-\begin{frame}{Как происходит переход через ребро }
-    \only<1>{Берем ребро грани}
-    \only<2>{Находим базис ребра}
-    \only<3>{Находим вектор базиса грани}
-    \only<4>{Берем плоскость грани}
-    \only<5>{Перебираем свободные точки}
-    \only<6>{Ортонормируем вектор грани по базису ребра}
-    \only<7>{Находим максимальный угол}
-    \only<8>{Переходи выполнен}
-    \only<1>{\input{./img/crossP/cross.pdf_tex}}%
-    \only<2>{\input{./img/crossP/cross_01.pdf_tex}}%
-    \only<3>{\input{./img/crossP/cross_02.pdf_tex}}%
-    \only<4>{\input{./img/crossP/cross_03.pdf_tex}}%
-    \only<5>{\input{./img/crossP/cross_05.pdf_tex}}%
-    \only<6>{\input{./img/crossP/cross1.pdf_tex}}%
-    \only<7>{\input{./img/crossP/cross2.pdf_tex}}%
-    \only<8>{\input{./img/crossP/cross3.pdf_tex}}%
-\end{frame}
 \begin{frame}{Обход граней}
     \begin{itemize}
         \item Перебор ребер - обход в ширину.
@@ -202,6 +197,33 @@
         \item если найденная грань еще не обрабатывалась, добавляем в очередь.
     \end{itemize}
 \end{frame}
+
+\begin{frame}[t]{Как происходит переход через ребро }
+    \vspace*{-8mm}\hspace*{15mm}%
+    \only<1>{\input{./img/crossP/cross.pdf_tex}}%
+    \only<2>{\input{./img/crossP/cross_01.pdf_tex}}%
+    \only<3>{\input{./img/crossP/cross_02.pdf_tex}}%
+    %\only<4>{\input{./img/crossP/cross_03.pdf_tex}}%
+    \only<4>{\input{./img/crossP/cross_05.pdf_tex}}%
+    \only<5>{\input{./img/crossP/cross1.pdf_tex}}%
+    \only<6>{\input{./img/crossP/cross2.pdf_tex}}%
+    \only<7>{\input{./img/crossP/cross3.pdf_tex}}%
+
+    % \vspace*{-3mm}
+    % Если очередь граней на обработку не пуста забираем грань из очереди.
+    % и рассматриваем его.
+\centering{
+    \only<1>{Берем очередное ребро грани}
+    \only<2>{Находим базис ребра.}
+    \only<3>{Проводим вектор к свободной точки грани и ортонормируем этот вектор на фоне базиса ребра. \\ (шаг процедуры Грама–Шмидта)}
+    \only<4>{Поочередно проводим вектора к свободным точкам грани.}
+    \only<5>{Ортонормируем эти векторы на фоне базиса ребра.}
+    \only<6>{Берем плоскость, образующая максимальный угол между вектором грани и вектором свободной точки}
+    \only<7>{Грань найдена. Если грань новая добавляем в очередь.  Переходим к рассмотрению следующего ребра.}
+}
+\end{frame}
+
+
 \begin{frame}{Результат}
 
     % Для обхога всех граней был использован обход в ширину.
@@ -210,10 +232,10 @@
     % Для хранения информации о найденных гранях была использована хэш таблица.
     Сложность --- $O(n\cdot F\cdot d^2)$,\\
     где $F$ --- количество граней, $n$ --- количество точек, $d^2$~---~порядок количества ребер у $d$-мерного симплекса.
-    \vfill
-    \begin{center}
-        \includegraphics[width=0.6\linewidth]{simplex.jpg}%
-    \end{center}
+    % \vfill
+    % \begin{center}
+    %     \includegraphics[width=0.6\linewidth]{simplex.jpg}%
+    % \end{center}
 
 
     % Если для расматриваемого ребра была уже найдена
@@ -227,46 +249,10 @@
     % \vfill
     Проблемы расширения:
        \begin{itemize}
-        \item  хранение выпуклой оболочки;
         \item  построение грани;
-        \item  обход ребер.
         \end{itemize}
 \end{frame}
 
-\begin{frame}{Хранение выпуклой оболочки}
-    % В результате появляются новые требования к хранению.
-
-    % \begin{itemize}
-    %     \item в несимплициальном случае недостаточно хранить только вершины, нужно хранить ребра, которые в свою очередь могут быть многомерными несимплициальными многогранниками;
-    %     \item для дальнейшего использования разумно хранить список соседних граней;
-    % \end{itemize}
-    Требования к хранению:
-    \begin{itemize}
-        \item нужно хранить ребра, которые в свою очередь могут быть многомерными несимплициальными многогранниками;
-        \item необходимо хранить список соседних граней;
-        \item нужно хранить информацию о плоскости грани.
-    \end{itemize}
-
-    \pause
-    \vfill
-
-    % Решение:
-
-    % Выпуклая оболочка $n$ - мерного пространства, это граф $F:=(V,E)$ , где $V$- непустое множество граней, а $E$ - множество пар соседних граней.
-
-    Грань хранит:
-    \begin{itemize}
-        \item информацию плоскости: базис, уравнение плоскости;
-        \item список соседних граней;
-        \item структура грани:
-        \begin{itemize}
-            \item Если $R^d$ $(d>2)$, список ребер;
-            \item Если $R^2$, список точек;
-        \end{itemize}
-        \end{itemize}
-
-    %Для дальнейших вычислений необходимо хранить базис и уравнения плоскости. для каждой грани.
-\end{frame}
 
 % \begin{frame}{Хранение выпуклой оболочки}
 
@@ -291,7 +277,8 @@
 
     Отдельное рассмотрение случая двумерного аффинного подпространства.
 
-    \begin{minipage}{.4\textwidth}
+    \hspace*{10mm}
+    \begin{minipage}{.3\textwidth}
         \centering
         \includegraphics[width=\linewidth]{affine.pdf}
       \end{minipage}
@@ -299,7 +286,7 @@
         \centering
         \includegraphics[width=0.8\linewidth]{affine2.pdf}
       \end{minipage}
-      \begin{minipage}{.4\textwidth}
+      \begin{minipage}{.3\textwidth}
         \centering
         \includegraphics[width=\linewidth]{affine1.pdf}
       \end{minipage}
@@ -315,51 +302,116 @@
 % После того как плоскость грани найдена, решая недоопределенную систему линейных уравлений находим нормаль плоскости.
 % С помощью нормали находим все точки и переводим их координаты в базис плоскости.
 %После этого ищем выпуклую оболочку набора точек.
-\begin{frame}{Поиск первой грани}
-    \vspace*{-5mm}
+\begin{frame}[t]{Поиск первой грани}
+    \vspace*{-8mm}\hspace*{15mm}%
+    \only<1>{\input{./img/affinePoint.pdf_tex}}%
+    \only<2>{\input{./img/affinePoint05.pdf_tex}}%
+    \only<3>{\input{./img/affinePoint1.pdf_tex}}%
+    \only<4>{\input{./img/affinePoint15.pdf_tex}}%
+    \only<5>{\input{./img/affinePoint16.pdf_tex}}%
+    \only<6>{\input{./img/affinePoint3.pdf_tex}}%
 
-     \centerline{
-        \only<1>{\input{./img/affinePoint.pdf_tex}}%
-        \only<2>{\input{./img/affinePoint05.pdf_tex}}%
-        \only<3>{\input{./img/affinePoint1.pdf_tex}}%
-        \only<4>{\input{./img/affinePoint15.pdf_tex}}%
-        \only<5>{\input{./img/affinePoint16.pdf_tex}}%
-        \only<6>{\input{./img/affinePoint3.pdf_tex}}%
-     }
 
-    \only<1>{Найти плоскость грани \\}%
-    \only<2>{Вычислить нормаль плоскости \\}%
-    \only<3>{Найти точки и перевести в базис плоскости \\}%
-    \only<4>{Построить выпуклую оболочку \\}%
-    \only<5>{Найти и запомнить базисы ребер \\}%
-    \only<6>{Заменить точки выпуклой оболочки на исходные и пересчитать базисные векторы ребер в координаты исходного пространства. Добавить грань в очередь на обработку. \\}%
+\centering{
+    \only<1>{Находими плоскость грани \\}%
+    \only<2>{Вычисляем нормаль плоскости \\}%
+    \only<3>{Находим точки и переводим в базис плоскости \\}%
+    \only<4>{Строим выпуклую оболочку \\}%
+    \only<5>{Если базисы ребер неизвестны, находим. Запоминаем базисы. \\}%
+    \only<6>{\vspace*{-3mm}Заменяем точки выпуклой оболочки на исходные и пересчитываем базисные векторы ребер в координаты исходного пространства. Добавляем грань в очередь на обработку. \\}%
+}
 \end{frame}
 
-\begin{frame}{Переход через ребро}
-    \vspace*{-5mm}
+\begin{frame}{Алгорим Джарвиса при необщем положении точек}
+    % Грань -  Симплекс.ував
+       % \vfill
+       Проблемы расширения:
+          \begin{itemize}
+            \item  построение грани;
+           \item  хранение выпуклой оболочки;
+           \end{itemize}
+\end{frame}
 
-    % \only<1>{\input{./img/crossPN/crossPN.pdf_tex}}%
+\begin{frame}{Хранение выпуклой оболочки}
+    % В результате появляются новые требования к хранению.
+
+    % \begin{itemize}
+    %     \item в несимплициальном случае недостаточно хранить только вершины, нужно хранить ребра, которые в свою очередь могут быть многомерными несимплициальными многогранниками;
+    %     \item для дальнейшего использования разумно хранить список и информацию о плоскости грани соседних граней;
+    % \end{itemize}
+    Необходимо хранить:
+    \begin{itemize}
+        \item Информацию о ребрах:
+        \begin{itemize}
+            \item Если $R^d$ $(d>2)$, список ребер, которые могут быть многомерными несимплициальными многогранниками;
+            \item Если $R^2$, списки точек и базисов ребер;
+        \end{itemize}
+        \item необходимо хранить список соседних граней;
+        \item нужно хранить информацию о плоскости грани.
+        \begin{itemize}
+            \item базис и начальную точку;
+            \item уравнение плоскости;
+        \end{itemize}
+    \end{itemize}
+
+    % \pause
+    % \vfill
+
+    % % Решение:
+
+    % % Выпуклая оболочка $n$ - мерного пространства, это граф $F:=(V,E)$ , где $V$- непустое множество граней, а $E$ - множество пар соседних граней.
+
+    % Грань хранит:
+    % \begin{itemize}
+    %     \item информацию плоскости:
+    %     \item список соседних граней;
+    %     \item структура грани:
+    %     \end{itemize}
+
+    %Для дальнейших вычислений необходимо хранить базис и уравнения плоскости. для каждой грани.
+\end{frame}
+
+
+
+\begin{frame}{Алгорим Джарвиса при необщем положении точек}
+    % Грань -  Симплекс.ував
+       % \vfill
+       Проблемы расширения:
+          \begin{itemize}
+            \item  построение грани;
+           \item  хранение выпуклой оболочки;
+           \item  обход ребер.
+           \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Переход через ребро}
+    \vspace*{-8mm}\hspace*{15mm}%
     \only<1>{\input{./img/crossPN/crossPN1.pdf_tex}}%
     \only<2>{\input{./img/crossPN/crossPN2.pdf_tex}}%
     \only<3>{\input{./img/crossPN/crossPN3.pdf_tex}}%
     \only<4>{\input{./img/crossPN/crossPN4.pdf_tex}}%
     \only<5>{\input{./img/crossPN/crossPN5.pdf_tex}}%
     % \only<6>{\input{./img/crossPN/crossPN6.pdf_tex}}%
-    \only<6>{\input{./img/crossPN/crossPN7.pdf_tex}}%
-    \only<7>{\input{./img/crossPN/crossPN8.pdf_tex}}%
-    \only<8>{\input{./img/crossPN/crossPN9.pdf_tex}}%
+    \only<6-7>{\input{./img/crossPN/crossPN7.pdf_tex}}%
+    \only<8-9>{\input{./img/crossPN/crossPN8.pdf_tex}}%
+    \only<10>{\input{./img/crossPN/crossPN9.pdf_tex}}%
 
-
-    \only<1>{Если очередь граней на обработку пуста, остановить работу. Иначе взять грань из очереди. \\}%
+    % \vspace*{-3mm}
+\centering{
+    % Если очередь граней на обработку пуста, остановить работу
+    \only<1>{Пока очередь граней на обработку не пуста повторять.\\ Взять грань из очереди. \\}%
     \only<2>{Взять очередное ребро обрабатываемой грани.\\}%
     \only<3>{Поочередно провести векторы к свободным точкам.\\}%
-    \only<3>{Ортонормировать эти векторы на фоне базиса ребра (шаг процедуры Грама--Шмидта) \\}%
+    \only<3>{Ортонормировать эти векторы на фоне базиса ребра \\(шаг процедуры Грама--Шмидта) \\}%
     \only<4>{Найти вектор, образующий максимальный угол с вектором грани. \\}%
     \only<5>{Плоскость грани найдена.\\}%
-    \only<6>{Определить нормаль плоскости. Построить хэш плоскости грани и проверить, обработана ли она уже. Если обработана, запомнить информацию о соседстве граней и перейти к следующему ребру обрабатываемой грани. Иначе продолжить обработку новой грани. \\}%
-    \only<7>{Найти точки, попавшие в плоскость грани. Если их $d+1$ штука, то грань симплициальная и не требует особой обработки. Иначе запустить рекурсивно алгоритм овыпукления в аффинном подпространстве.\\}%
+    \only<6>{ Определить нормаль плоскости. Построить хэш плоскости грани и проверить, обработана ли она уже. \\ }%
+    \only<7>{Если обработана, запомнить информацию о соседстве граней и перейти к следующему ребру обрабатываемой грани. Иначе продолжить обработку новой грани. \\}
+    \only<8>{Найти точки, попавшие в плоскость грани. \\}%
+    \only<9>{Если их $d+1$ штука, то грань симплициальная и не требует особой обработки. Иначе запустить рекурсивно алгоритм овыпукления в аффинном подпространстве.\\}
     %  и выразить их в координатах пространства плоскости грани.
-    \only<8>{Грань построена. Запомнить информацию о соседстве. Добавить в очередь на обработку.\\}%
+    \only<10>{Грань построена. Запомнить информацию о соседстве. Добавить в очередь на обработку.\\}%
+}
 \end{frame}
 % \begin{frame}{Проблема построения грани}
 %     % Как мы вытаскиваем объект исходного пространства.
@@ -453,10 +505,10 @@
     % Для хранения информации о найденных гранях была использована хэш таблица.
     Сложность --- $O\big((hn)^{d-1}\big)$,\\
     где $h$ --- количество ребер, $n$ --- количество точек, $d$~---~размерность.
-    \vfill
-    \begin{center}
-        \includegraphics[width=0.6\linewidth]{simplex.jpg}%
-    \end{center}
+    % \vfill
+    % \begin{center}
+    %     \includegraphics[width=0.6\linewidth]{simplex.jpg}%
+    % \end{center}
 
 
     % Если для расматриваемого ребра была уже найдена
@@ -468,18 +520,39 @@
 
 
 \begin{frame}{Тестовая реализация}
-
-Платформа -.Net Core. \\
-Язык - C\#.
-
+        \begin{itemize}
+                \item Платформа -.Net Core.
+                \item Язык - C\#.
+        \end{itemize}
+        \vfill
+        \centering{
+        \begin{minipage}{.3\textwidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{dotnet.pdf}
+          \end{minipage}
+          \begin{minipage}{.3\textwidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{csharp.pdf}
+          \end{minipage}
+        }
 \end{frame}
 
-\begin{frame}{Пример работы алгоритма}
-    \begin{center}
-        \includegraphics[width=\linewidth]{regular.jpg}
-    \end{center}
+
+\begin{frame}{Результаты тестов}
+    \begin{itemize}
+        \item трехмерный тетраэдр
+        \item четырехмерный тетраэдр
+        \item четырехмерный гиперкуб
+        \item трех мерный куб с точками
+
+    \end{itemize}
 \end{frame}
 
+
+\begin{frame}{Результаты тестов}
+    \centering{
+    Спасибо за внимание!}
+\end{frame}
 % \begin{frame}{Пример работы алгоритма}
 %     Массив точек четырехмерном пространства.
 % \end{frame}
