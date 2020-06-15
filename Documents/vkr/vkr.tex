@@ -23,6 +23,22 @@
 
 \graphicspath{{./images/2D/}}
 
+\usepackage{listings}
+\usepackage{lmodern}  % for bold teletype font
+\usepackage{amsmath}  % for \hookrightarrow
+\usepackage{xcolor}   % for \textcolor
+
+\lstset{
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  frame=single,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+  rulecolor=\color{blue!80!black},
+  language=[Sharp]C
+}
+
+
 \usepackage{setspace}
 \onehalfspacing
 
@@ -105,7 +121,7 @@
 % \noindent
 % \bigskip
 \noindent
-Корабельников А. А. МНОГОМЕРНЫЙ АЛГОРИТМ ОВЫПУКЛЕНИЯ РОЯ ТОЧЕК, НАХОДЯЩИХСЯ В НЕОБЩЕМ ПОЛОЖЕНИИ, выпускная квалификационная работа: стр.~\ref{lastpage}, рис.~???,
+Корабельников А. А. МНОГОМЕРНЫЙ АЛГОРИТМ ОВЫПУКЛЕНИЯ РОЯ ТОЧЕК, НАХОДЯЩИХСЯ В НЕОБЩЕМ ПОЛОЖЕНИИ, выпускная квалификационная работа: стр.~\pageref{lastpage}, рис.~???,
 библ.~???~назв.
 
 \medskip
@@ -400,7 +416,7 @@
 %     \Return $F$
 % \end{algorithm*}
 
-\subsubsection{Алгоритм заворачивания подарка в многомерном пространстве в случае общего положения точек}
+\subsubsection{Алгоритм заворачивания подарка в многомерном пространстве в случае необщего положения точек}
 \label{sec:generic}
 
 Как говорилось выше, две основных проблемы, которые могут возникнуть при необщем положении точек роя~--- появление в плоскости грани дополнительных точек, не являющихся вершинами выпуклой оболочки, и появление у грани большого количества рёбер. И как тоже было сказано выше, естественным решением обеих проблем является рекурсивный запуск алгоритма овыпукления в аффинном подпространстве грани.
@@ -489,19 +505,144 @@
 
 \newpage
 \subsection{Программная реализация}
+В качестве языка программирования для тестовой реализации данного дипломного проекта был выбран С\# --- объектно-ориентированный язык программирования.
+
+Реализация будет разработана на платформе .Net Core.
+Это платформа разработки общего назначения с открытым исходным кодом.
+На данной платформе можно реализовывать приложения под Windows, Linux и macOS с поддержкой процессоров x64, x86, ARM32 и ARM64. Платформа .Net Core поддерживает насколько языков программирования.
+
+В результате дипломной работы была разработана реализация алгоритма построения выпуклой оболочки многомерного роя точек, находящихся в необщем положении. Этот алгоритм приведён в листинге~\ref{alg:gift}.
+
+Далее будут рассмотрены классы и процедуры разработанной реализации.
+В конце главы, будут приведены замеры тестовых запусков алгоритма.
+\subsubsection{Хранение выпуклой оболочки}
+
+Основную своиства и методы выпуклой оболочки определяют интерфейсы ICell и IFace.
+
+ICell определяет структуру $d$-мерной многогранника выпуклой оболочки. Многогранник должен хранить свое измерение и ссылку на объект класса Hyper\-plane. Также многогранник должен реализовывать метод GetPoints, для получения точек многогранника.
+
+ICell наследуется интерфейсом IFace, который, в свою очередь, дополняет структру ICell своиствами и методами для $d$-мерной выпуклой оболочки.
+В отличии от многоранника, выпуклая оболочка должна хранить списки ребер и список соседених граней.
+
+Классы ConvexHull, СonvexHull2d реализуют интерфейс IFace.
+
+ConvexHull --- класс для хранения выпуклой оболочки $d$-мерного пространства, где $d>2$. В качестве ребер от хранит список реализаций интерфейса ICell.
+
+ConvexHull2D --- класс для хранения двухмерной выпуклой оболочки. Оболочку хранит как список точек, таж же для дальнейших выислений хранит списо ребер, представленный списоком экземпляров класса Edge.
+
+Edge --- класс для хранения информации о ребре двухмерной выпуклой оболочки. Наследует интерфейс ICell. Хранит две точки и инофрмацию о плоскости в виде экземпляра класса Hyperplane.
+
+Код интерфейсов и классов выпуклой оболочки представлен в приложении \ref{}.
+
+Для каждой грани выпуклой оболочки необходимо хранить данные о ее плоскости. Для этого был реализован класс Hyperplane.
+
+Hyperplane хранит базис в виде массива векторов, опорную точку и нормаль плоскости. Класс Hyperplane имеет следующие методы:
+\begin{enumerate}[topsep=-0.5\parsep,itemsep=-0.5\parsep]
+  \item IsPointInPlane --- метод принимает точку и определяет лежит ли точка на плоскости. Результат булево занчение;
+  \item ConvertPoint --- переносит координаты точки на свой базис.
+  \item ConvertVector --- переносит вектор на свой базис;
+  \item SetOrientationNormal -- ориентирует нормаль по точке;
+\end{enumerate}
+\medskip
+\subsubsection{Классы построения выпуклой оболочки}
+Полученный алгоритм был реализован в классе GiftWrappingAlgorithm.
+
+Данный класс содержит следующие методы:
+\begin{enumerate}[topsep=-0.5\parsep,itemsep=-0.5\parsep]
+  \item FindConvexHull --- основный метод, где реализован разработанный алгоритм. Принимает массив экземпляров класса PlanePoint. Возращает экземпляр типа резулизующий интерфейс IFace.
+  \item FindConvexHull2d --- реализация алгоритма Джарвиса на плоскости. Принимает массив экземпляров класса PlanePoint. Возвращает экземпляр класса ConvexHull2D.
+  \item CreateSimplex --- метод для построения сиплекса. Принимает массив экземпляров класса PlanePoint. Возращает экземпляр типа резулизующий интерфейс IFace.
+\end{enumerate}
+\medskip
+
+Для начала работы алгоритма необходимо найти плоскость начальной грани. Для этого был реализован класс PlaneFinder. Данный класс является статическим и имеет единственный публичный метод --- FindFirstPlane, принимающий массив точек. Результатом работы метода является экземпляр класса Hyperplane.
+
+При работе метод класса PlaneFinder находит только базис плоскости начальной грани. Для дальнейшего построения плоскости вызывается метод Create класса HyperplaneBulder. HyperplaneBulder содержит методы для построения плоскости по различным входным данным.
+
+\subsubsection{Вспомогательные классы}
+При работе алгоритма возникат потребность испольховать методы вспомогательных классов.
+
+Далее в этой главе будут рассмотрены вспомогательные классы.
+
+В алгоритме необходимо выполнять вычисления с точками, векторами и матрицами. Для этого был взят уже готовые классы, разработанные научным руководителем диссертации --- Кумковым С.С.. Классы позволяют хранить данные точек, векторов и матриц и выполнять основные математические операции с ними.
+
+При уходе в аффинное подпространство для построения выпуклой оболочки грани, необходимо сохранять связь между оринальными точками и точками аффинного подпространства. Это необходимо для дальшей обработки граней.  Для этого был разработан класс PlanePoint. Он позволяет сохранять ссылку на родительскую точку. В результате, после построения выпуклой оболочки аффинного подпространства, каждая точка грани будет хранит ссылку на оригинальную. Код класса PlanePoint представлен в приложении \ref{add:PlanePoint}.
+
+Для работы алгоритма неоходимо вычислять нормаль плоскости для каждой грани. Чтобы найти нормаль, необходимо решить недоопределенныю систему алгебраических линейных уравленний.  С этой целью был разработан впомогательный класс GaussWithChoiceSolveSystem, в котором реализован метод Гаусса.
+
+В методе Гаусса используется перестановка столбцов и строк системы линейных уравнений. Явная реализация перестановки потребляет слижком много ресурсов.
+Поэтому для оптимальной работы метода Гаусcа были созданы впомогательные классы: IndexMap,IndexMatrix, IndexVector, LinearEquations, в которых пререстановка объектов массива происходит при помощи массива индексов.
 
 
-
-\newpage
 \subsubsection{Тестирование реализации}
+% Для тестирования были взяты точки трех- и четрыехмерного пространства.
+В тестировании были охвачены следующие виды наборов точек:
+\begin{enumerate}[topsep=-0.5\parsep,itemsep=-0.5\parsep]
+  \item точки в общеем пололожени:
+  \begin{enumerate}[topsep=-0.5\parsep,itemsep=-0.5\parsep]
+    \item в виде симплекса;
+    \item  в виде симплицированного многранника;
+  \end{enumerate}
+  \item точки в необщем положении:
+  \begin{enumerate}[topsep=-0.5\parsep,itemsep=-0.5\parsep]
+    \item лишних точки лежат на гранях выпуклой оболочки;
+    \item  лишние точки лежат внутри выпуклой оболочки;
+  \end{enumerate}
+\end{enumerate}
+\medskip
+
+Для тестирования необщего положения использовались наборы точкек правильных многогранников, дополненные лишними точками в количестве 100 штук.
+
+В результате измерений были получены следующие данные:
+
+Точки в общем положении:
+\begin{enumerate}[topsep=-0.5\parsep,itemsep=-0.5\parsep]
+  \item 3-мерный тетраэдер c общем положением точек --- 0ms (3770 ticks);
+  \item 4-мерный симплекс с общем положением точек --- 1ms ;
+\end{enumerate}
+\medskip
+Точки в необщем положении, без лишних точек:
+\begin{enumerate}[topsep=-0.5\parsep,itemsep=-0.5\parsep]
+        \item 3-мерный куб  --- 2ms;
+        \item 4-x мерный куб ---- 24ms.
+\end{enumerate}
+\medskip
+Точки в необщем положении, лишние точки лежат внутри выпуклой оболочки:
+\begin{enumerate}[topsep=-0.5\parsep,itemsep=-0.5\parsep]
+        \item 3-мерный тетраидер --- 22ms;
+        \item 4-мерный симплекс  --- 151ms ;
+        \item 3-мерный куб  --- 57 ms;
+        \item 4-x мерный куб ---- 512ms.
+\end{enumerate}
+Точки в необщем положении, лишние точки лежат на гранях выпуклой оболочки:
+\begin{enumerate}[topsep=-0.5\parsep,itemsep=-0.5\parsep]
+        \item 3-мерный тетраидер --- 18ms;
+        \item 4-мерный симплекс  --- 113ms ;
+        \item 3-мерный куб  --- 33ms;
+        \item 4-x мерный куб ---- 365ms.
+\end{enumerate}
+\medskip
+
+В резульате тестирования можно сделать следущие выводы.
+Наиболее сильная нагрзука возникает от размерности точек. Чем больше размерность точек, тем больше время выполнения.
 \newpage
+123123
+\newpage
+
 \section*{Заключение}
 \addcontentsline{toc}{section}{Заключение}
 В данной работе был разработан алгоритм решение задачи построения выпуклой оболочки конечного набора точек $R^n$ размерности, находящихся в необщем положении.
 
-Алгоритм не является окончательным и требует дальнейшей доработки.
+Представленные алгоритм никак не зависят от формы
+минимальной выпуклой оболочки, что делает его универсальным.
 
-Оставшиеся задачи и алгоритм будут доработаны в будущей выпускной работе.
+В ходе работы была разработана реализация алгоритма на языке C\# и проведены тесты производительности.
+
+
+Алгоритм не является окончательным и требует дальнейшей доработки.
+Был разработан для проверки идеи алгоритма на работоспостобность.
+
+
 \newpage
 
 % Список литературы
@@ -520,7 +661,233 @@
 
 \bibitem{bib:Bekl} Беклемишев Д. В. Курс аналитической геометрии и линейной алгебры.~--- М.: Наука, 2005.~--- 308~с.
 \end{thebibliography}
+\newpage
+
 
 \label{lastpage}
+\section*{Приложение 1}
+\label{add:PlanePoint}
+\addcontentsline{toc}{section}{Приложение 1}
+Класс "PlanePoint";
+
+\begin{lstlisting}[]
+public class PlanePoint:Point
+{
+    public Point OriginalPoint { get; }
+    private readonly PlanePoint _previousPoint;
+    public PlanePoint GetPoint(int dimension)
+    {
+        if (dimension == Dim) return this;
+        return _previousPoint.GetPoint(dimension) ??
+                throw new ArgumentException("There is no point of this dimension.");
+    }
+    public PlanePoint(double x, double y, double z) : base(new double[] { x, y, z })
+    {
+        OriginalPoint = new Point(new double[] {x, y, z});
+    }
+    public PlanePoint(int n, PlanePoint point) : base(n)
+    {
+        OriginalPoint = point.OriginalPoint;
+        _previousPoint = point;
+    }
+    public PlanePoint(double[] np, PlanePoint point) : base(np)
+    {
+        OriginalPoint = point.OriginalPoint;
+        _previousPoint = point;
+    }
+    public PlanePoint(Point p, PlanePoint point) : base(p)
+    {
+        OriginalPoint = point.OriginalPoint;
+        _previousPoint = point;
+    }
+    public PlanePoint(int n) : base(n)
+    {
+        OriginalPoint = new Point(n);
+    }
+    public PlanePoint(double[] np) : base(np)
+    {
+        OriginalPoint = new Point(np);
+    }
+    public PlanePoint(Point p) : base(p)
+    {
+        OriginalPoint = new Point(p);
+    }
+    public PlanePoint(PlanePoint p) : base(p)
+    {
+        OriginalPoint = p.OriginalPoint;
+        _previousPoint = p._previousPoint;
+    }
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((PlanePoint)obj);
+    }
+    public bool Equals(PlanePoint other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return OriginalPoint.Equals(other.OriginalPoint);
+    }
+    public override int GetHashCode()
+    {
+        return OriginalPoint.GetHashCode();
+    }}
+\end{lstlisting}
+\newpage
+\section*{Приложение 2}
+\label{add:PlanePoint}
+\addcontentsline{toc}{section}{Приложение 1}
+Класс "ConvexHull";
+
+\begin{lstlisting}[]
+public class PlanePoint:Point
+{
+public class ConvexHull : IFace
+{
+    public int Dimension { get; }
+    public List<ICell> AdjacentCells { get; }
+    public IFace Parent { get; set; }
+    public List<ICell> InnerCells { get; }
+    public void AddAdjacentCell(ICell cell) => AdjacentCells.Add(cell);
+    public void AddInnerCell(ICell cell)
+    {
+        cell.Parent = this;
+        InnerCells.Add(cell);
+    }
+    public Hyperplane Hyperplane { get; set; }
+    public ConvexHull(int dimension)
+    {
+        Dimension = dimension;
+        InnerCells = new List<ICell>();
+        AdjacentCells = new List<ICell>();
+    }
+    public ConvexHull(Hyperplane hyperplane)
+    {
+        Hyperplane = hyperplane;
+        Dimension = hyperplane.Dimension;
+        InnerCells = new List<ICell>();
+        AdjacentCells = new List<ICell>();
+    }
+    public ICollection<PlanePoint> GetPoints()
+    {
+        HashSet<PlanePoint> points = new HashSet<PlanePoint>();
+        foreach (ICell innerFace in InnerCells)
+        {
+            points.UnionWith(innerFace.GetPoints());
+        }
+
+        return points;
+    }
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((IFace) obj);
+    }
+    public override int GetHashCode()
+    {
+        int res = 0;
+        foreach (ICell cell in InnerCells)
+            res += cell.GetHashCode();
+
+        res += Dimension.GetHashCode();
+        return res;
+
+    }
+    public bool Equals(ICell other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        if (other.GetType() != this.GetType()) return false;
+        ConvexHull convexHull = (ConvexHull)other;
+        return Dimension == other.Dimension &&
+                InnerCells.Count == convexHull.InnerCells.Count &&
+                GetPoints().All(other.GetPoints().Contains);
+    }}
+\end{lstlisting}
+\newpage
+\section*{Приложение 2}
+\label{add:PlanePoint}
+\addcontentsline{toc}{section}{Приложение 1}
+Класс "ConvexHull2D";
+
+\begin{lstlisting}[]
+  public class ConvexHull2d:IFace
+  {
+      private readonly List<PlanePoint> _points;
+      public int Dimension => 2;
+      public List<ICell> AdjacentCells { get; }
+      public List<ICell> InnerCells { get; }
+      public Hyperplane Hyperplane { get; set; }
+      public IFace Parent { get; set; }
+      public ConvexHull2d(IEnumerable<PlanePoint> points)
+      {
+          _points = new List<PlanePoint>(points);
+          AdjacentCells = new List<ICell>();
+          InnerCells = new List<ICell>(_points.Count);
+
+          ComputeData();
+      }
+      private void ComputeData()
+      {
+          Edge edge = new Edge(_points[^1], _points[0]);
+          edge.Hyperplane = HyperplaneHelper.Create(edge.GetPoints().ToArray());
+          edge.Hyperplane.SetOrientationNormal(_points);
+          AddInnerCell(edge);
+          for (int i = 0; i < _points.Count - 1; i++)
+          {
+              edge = new Edge(_points[i], _points[i + 1]);
+              edge.Hyperplane = HyperplaneHelper.Create(edge.GetPoints().ToList());
+              edge.Hyperplane.SetOrientationNormal(_points);
+              AddInnerCell(edge);
+          }
+      }
+      private void AddInnerCell(ICell cell)
+      {
+          cell.Parent = this;
+          InnerCells.Add(cell);
+      }
+      public void AddAdjacentCell(ICell cell)
+      {
+          if (cell.Dimension == Dimension)
+          {
+              AdjacentCells.Add(cell);
+          }
+      }
+      public ICollection<PlanePoint> GetPoints()
+      {
+          return _points;
+      }
+      public bool Equals(ICell other)
+      {
+          if (ReferenceEquals(null, other)) return false;
+          if (ReferenceEquals(this, other)) return true;
+          if (other.GetType() != this.GetType()) return false;
+          ConvexHull2d convexHull = (ConvexHull2d) other;
+          return Dimension == other.Dimension &&
+                 _points.Count == convexHull._points.Count &&
+                 _points.All(convexHull._points.Contains);
+      }
+      public override bool Equals(object obj)
+      {
+          if (ReferenceEquals(null, obj)) return false;
+          if (ReferenceEquals(this, obj)) return true;
+          if (obj.GetType() != this.GetType()) return false;
+          return Equals((ConvexHull2d)obj);
+      }
+      public override int GetHashCode()
+      {
+          int res = 0;
+          foreach (PlanePoint point in _points)
+              res += point.GetHashCode();
+          res += Dimension.GetHashCode();
+          return res;
+      }}
+\end{lstlisting}
+\newpage
+
 
 \end{document}

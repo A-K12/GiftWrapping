@@ -7,7 +7,7 @@ using GiftWrapping.Structures;
 
 namespace GiftWrapping.Helpers
 {
-    public static class HyperplaneHelper
+    public static class HyperplaneBuilder
     {
         public static Hyperplane Create(IList<PlanePoint> points)
         {

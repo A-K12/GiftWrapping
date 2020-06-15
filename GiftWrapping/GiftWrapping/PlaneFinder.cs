@@ -44,7 +44,7 @@ namespace GiftWrapping
                 availablePoints[processedPoint] = true;
                 mainBasis = nextBasis;
             }
-            Hyperplane plane = HyperplaneHelper.Create(minPlanePoint, mainBasis);
+            Hyperplane plane = HyperplaneBuilder.Create(minPlanePoint, mainBasis);
             plane.SetOrientationNormal(points);
             return plane;
         }

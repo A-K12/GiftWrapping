@@ -362,7 +362,7 @@ namespace GiftWrapping
                 PlanePoint point = points[i];
                 basis[^1] = Point.ToVector(p, point);
                 Hyperplane newHyperplane =
-                    HyperplaneHelper.Create(p, basis);
+                    HyperplaneBuilder.Create(p, basis);
 
                 yield return newHyperplane;
             }
@@ -385,7 +385,7 @@ namespace GiftWrapping
             for (int i = 0; i < points.Count; i++)
             {
                 List<PlanePoint> planePoints = points.Where((_, j) => j != i).ToList();
-                Hyperplane hyperplane = HyperplaneHelper.Create(planePoints);
+                Hyperplane hyperplane = HyperplaneBuilder.Create(planePoints);
                 List<PlanePoint> convertPoints = 
                     planePoints.Select((point => hyperplane.ConvertPoint(point))).ToList();
                 IFace face = CreateSimplex(convertPoints);

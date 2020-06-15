@@ -27,7 +27,7 @@ namespace GiftWrapping.Structures
         private void ComputeData()
         {
             Edge edge = new Edge(_points[^1], _points[0]);
-            edge.Hyperplane = HyperplaneHelper.Create(edge.GetPoints().ToArray());
+            edge.Hyperplane = HyperplaneBuilder.Create(edge.GetPoints().ToArray());
            // edge.Hyperplane.OrthonormalBasis();
             edge.Hyperplane.SetOrientationNormal(_points);
             //InnerCells.Add(edge);
@@ -35,7 +35,7 @@ namespace GiftWrapping.Structures
             for (int i = 0; i < _points.Count - 1; i++)
             {
                 edge = new Edge(_points[i], _points[i + 1]);
-                edge.Hyperplane = HyperplaneHelper.Create(edge.GetPoints().ToList());
+                edge.Hyperplane = HyperplaneBuilder.Create(edge.GetPoints().ToList());
              //   edge.Hyperplane.OrthonormalBasis();
                 edge.Hyperplane.SetOrientationNormal(_points);
                // InnerCells.Add(edge);
