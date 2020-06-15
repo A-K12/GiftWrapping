@@ -11,7 +11,7 @@ namespace RunTest
     {
         static void Main(string[] args)
         {
-            PlanePoint[] points1 = PointsReader.MakeVertices(10);
+            //PlanePoint[] points1 = PointsReader.MakeVertices(10);
             //Read(@"D:\1.txt");
             //
             // List<PlanePoint> points = new List<PlanePoint> {
@@ -33,6 +33,85 @@ namespace RunTest
             //     new PlanePoint(new double[]{5, 5, 5,5}),
             //
             // };
+
+            List<PlanePoint> points = new List<PlanePoint> {
+                new PlanePoint(new double[]{0, 0, 0}),
+                new PlanePoint(new double[]{0, 10, 0}),
+                new PlanePoint(new double[]{10, 10, 0}),
+                new PlanePoint(new double[]{0, 10, 0}),
+                new PlanePoint(new double[]{0, 0, 10}),
+                new PlanePoint(new double[]{0, 10, 10}),
+                new PlanePoint(new double[]{10, 10, 10}),
+                new PlanePoint(new double[]{0, 10, 10}),
+
+                new PlanePoint(new double[]{5, 5, 5}),
+                new PlanePoint(new double[]{3, 3, 3}),
+                new PlanePoint(new double[]{3, 3, 3}),
+                new PlanePoint(new double[]{3, 3, 3}),
+                new PlanePoint(new double[]{2, 2, 2}),
+                new PlanePoint(new double[]{5.5, 5.5, 5.5}),
+                new PlanePoint(new double[]{ 3.5, 3.5, 3.5}),
+                new PlanePoint(new double[]{ 3.5, 3.5, 3.5}),
+                new PlanePoint(new double[]{ 3.5, 3.5, 3.5}),
+                new PlanePoint(new double[]{ 2.5, 2.5, 2.5}),
+            };
+
+
+            // List<PlanePoint> points = new List<PlanePoint> {
+            //     new PlanePoint(new double[]{0, 0, 0, 0}),
+            //     new PlanePoint(new double[]{10, 0, 0, 0}),
+            //     new PlanePoint(new double[]{0, 10, 0, 0}),
+            //     new PlanePoint(new double[]{0, 0, 10, 0}),
+            //     new PlanePoint(new double[]{0, 0, 0, 10}),
+            //     new PlanePoint(new double[]{1, 0, 0, 0}),
+            //     new PlanePoint(new double[]{2, 0, 0, 0}),
+            //     new PlanePoint(new double[]{3, 0, 0, 0}),
+            //     new PlanePoint(new double[]{4, 0, 0, 0}),
+            //     new PlanePoint(new double[]{5, 0, 0, 0}),
+            //     new PlanePoint(new double[]{6, 0, 0, 0}),
+            //     new PlanePoint(new double[]{7, 0, 0, 0}),
+            //     new PlanePoint(new double[]{8, 0, 0, 0}),
+            //     new PlanePoint(new double[]{8.5, 0, 0, 0}),
+            //     new PlanePoint(new double[]{8.8, 0, 0, 0}),
+            //     new PlanePoint(new double[]{9, 0, 0, 0}),
+            //
+            // };
+            // new PlanePoint(new double[] { 0, 0, 0, 0 }),
+            // new PlanePoint(new double[] { 10, 0, 0, 0 }),
+            // new PlanePoint(new double[] { 0, 10, 0, 0 }),
+            // new PlanePoint(new double[] { 10, 10, 0, 0 }),
+            // new PlanePoint(new double[] { 0, 0, 10, 0 }),
+            // new PlanePoint(new double[] { 10, 0, 10, 0 }),
+            // new PlanePoint(new double[] { 0, 10, 10, 0 }),
+            // new PlanePoint(new double[] { 10, 10, 10, 0 }),
+            // new PlanePoint(new double[] { 0, 0, 0, 10 }),
+            // new PlanePoint(new double[] { 10, 0, 0, 10 }),
+            // new PlanePoint(new double[] { 0, 10, 0, 10 }),
+            // new PlanePoint(new double[] { 10, 10, 0, 10 }),
+            // new PlanePoint(new double[] { 0, 0, 10, 10 }),
+            // new PlanePoint(new double[] { 10, 0, 10, 10 }),
+            // new PlanePoint(new double[] { 0, 10, 10, 10 }),
+            // new PlanePoint(new double[] { 10, 10, 10, 10 }),
+            // List<PlanePoint> points = new List<PlanePoint> {
+            //     new PlanePoint(new double[] { 0, 0, 0, 0 }),
+            //     new PlanePoint(new double[] { 10, 0, 0, 0 }),
+            //     new PlanePoint(new double[] { 0, 10, 0, 0 }),
+            //     new PlanePoint(new double[] { 0, 0, 10, 0 }),
+            //     new PlanePoint(new double[] { 0, 0, 0, 10 }),
+            //
+            //     new PlanePoint(new double[]{5, 5, 5, 5}),
+            //     new PlanePoint(new double[]{3, 3, 3, 3}),
+            //     new PlanePoint(new double[]{3, 3, 3, 3}),
+            //     new PlanePoint(new double[]{3, 3, 3, 3}),
+            //     new PlanePoint(new double[]{2, 2, 2, 2}),
+            //     new PlanePoint(new double[]{5.5, 5.5, 5.5, 5.5}),
+            //     new PlanePoint(new double[]{ 3.5, 3.5, 3.5, 3.5}),
+            //     new PlanePoint(new double[]{ 3.5, 3.5, 3.5, 3.5}),
+            //     new PlanePoint(new double[]{ 3.5, 3.5, 3.5, 3.5}),
+            //     new PlanePoint(new double[]{ 2.5, 2.5, 2.5, 2.5}),
+            //
+            // };
+
 
             //Random r = new Random();
             //List<PlanePoint> points = new List<PlanePoint>();
@@ -83,18 +162,18 @@ namespace RunTest
             //    points1[i] = new PlanePoint(((Point)points1[i]) + min);
             //}
 
-            GiftWrappingAlgorithm giftWrapping = new GiftWrappingAlgorithm(points1);
+            GiftWrappingAlgorithm giftWrapping = new GiftWrappingAlgorithm(points);
             Stopwatch sp = new Stopwatch();
-            // IFace result = giftWrapping.Create();
+             IFace result = giftWrapping.Create();
             Console.Out.WriteLine("Start");
             sp.Start();
             IFace result1 = giftWrapping.Create();
             sp.Stop();
             
-            Console.Out.WriteLine("Stop");
-            ((ConvexHull)result1).Convert(@"D:\", "dode21");
-            Console.Out.WriteLine("sp = {0}", sp.ElapsedMilliseconds);
-            
+             Console.Out.WriteLine("Stop");
+            // ((ConvexHull)result1).Convert(@"D:\", "dode21");
+            Console.Out.WriteLine("ms = {0}", sp.ElapsedMilliseconds);
+            Console.Out.WriteLine("t = {0}", sp.ElapsedTicks);
         }
     }
 }

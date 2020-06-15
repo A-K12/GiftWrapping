@@ -197,7 +197,8 @@ namespace GiftWrapping.Structures
               res._v[i] = 0;
           }
       }
-      res.Length = 1.0;
+         res.Length = 1.0;
+        //ComputeParameters();
       return res;
     }
 

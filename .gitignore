@@ -628,3 +628,6 @@ TSWLatexianTemp*
 
 #Папка с документами
 Documents/private/
+
+#Org files
+*.org

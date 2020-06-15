@@ -25,18 +25,20 @@ namespace GiftWrapping
                 double minCos = double.MaxValue;
                 int processedPoint = default;
                 Vector[] nextBasis = default;
+                Vector normV = default;
                 for (int j = 0; j < points.Count; j++)
                 {
                     if (availablePoints[j]) continue;
                     Vector vector = Point.ToVector(minPlanePoint, points[j]);
-                    vector = basis.GetOrthonormalVector(vector);
-                    if(Tools.EQ(vector.Length)) 
+                    Vector ortVector = basis.GetOrthonormalVector(vector);
+                    if(Tools.EQ(ortVector.Length)) 
                         continue;
-                    Vector[] tempBasis = SetVector(mainBasis, vector, i);
-                    double newCos = vector.Cos(mainVector);
+                    Vector[] tempBasis = SetVector(mainBasis, vector.Normalize(), i);
+                    double newCos = ortVector.Cos(mainVector);
                     if (Tools.GT(newCos, minCos)) continue;
                     processedPoint = j;
                     minCos = newCos;
+                    //normV = vector.Normalize();
                     nextBasis = tempBasis;
                 }
                 availablePoints[processedPoint] = true;
