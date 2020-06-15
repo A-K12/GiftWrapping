@@ -2,7 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T2A]{fontenc}
-\usepackage[russian]{babel}
+\usepackage[russian,russian]{babel}
 
 \usepackage[a4paper,vmargin=20mm,lmargin=30mm,rmargin=15mm]{geometry}
 
@@ -110,11 +110,11 @@
 \end{titlepage}
 \endgroup
 \newpage
-\setcounter{page}{1}
-\thispagestyle{empty}
 
 {
 \setstretch{1.0}
+
+\thispagestyle{empty}
 
 \section*{\centerline{РЕФЕРАТ}}
 
@@ -136,11 +136,38 @@
 \medskip
 
 \noindent
-Целью работы является разработка и реализация алгоритма построения выпуклой оболочки многомерного роя точек в случае их необщего положения. Под необщим положением точек подразумевается ситуация, когда в $(d-1)$-мерной гиперплоскости пространства $R^d$ измерения лежит больше, чем $d$ точек. Процедура реализует метод заворачивания подарка. Особенностью предлагаемой версии алгоритма является то, что после нахождения плоскости очередной гиперграни проводится построение выпуклой оболочки подроя точек, попавших в аффинное пространство этой гиперплоскости. Этот рекурсивный переход в пространство меньшей размерности проводится тогда, когда точек слишком много, чтобы образовать симплициальную гипергрань. В процессе построения гиперграни накапливается информация о её гиперрёбрах, необходимая для перехода к соседним граням. В целом, алгоритм заворачивания подарка реализует поиск в ширину в графе, в котором вершины соответствуют граням конструируемой выпуклой оболочки, а рёбра соединят вершины, соответствующие граням, имеющим общее гиперребро. Предложенный алгоритм реализован в виде программы на языке~C\#.
+Целью работы является разработка и реализация алгоритма построения выпуклой оболочки многомерного роя точек в случае их необщего положения. Под необщим положением точек подразумевается ситуация, когда в $(d-1)$-мерной гиперплоскости пространства $R^d$ лежит больше, чем $d$ точек. Процедура реализует метод заворачивания подарка. Особенностью предлагаемой версии алгоритма является то, что после нахождения плоскости очередной гиперграни проводится построение выпуклой оболочки подроя точек, попавших в аффинное пространство этой гиперплоскости. Этот рекурсивный переход в пространство меньшей размерности проводится тогда, когда точек слишком много, чтобы образовать симплициальную гипергрань. В процессе построения гиперграни накапливается информация о её гиперрёбрах, необходимая для перехода к соседним граням. В целом, алгоритм заворачивания подарка реализует поиск в ширину в графе, в котором вершины соответствуют граням конструируемой выпуклой оболочки, а рёбра соединят вершины, соответствующие граням, имеющим общее гиперребро. Предложенный алгоритм реализован в виде программы на языке~C\# для среды исполнения .NetCore.
+
+\newpage
+
+\thispagestyle{empty}
+
+\section*{\centerline{ABSTRACT}}
+
+\selectlanguage{english}
+
+{\raggedright
+
+\noindent
+Korabelnikov A. A. MULTIDIMENSIONAL ALGORITHM FOR CONVEXIFICATION OF NON-GENERALLY LOCATED COLLECTION OF POINTS, master’s dissertation: \pageref{lastpage} pages, 7~figures, 6~references.
+
+\medskip
+
+\noindent
+Keywords: CONVEX HULL, MULTIDIMENSIONAL EUKLIDEAN SPACE, NON-GENERALLY LOCATED POINTS.
+
+}
+
+\medskip
+
+\noindent
+The aim of the work is to work out and realize an algorithm for convexification of a multidimensional collection of non-generally located points. Non-general location assumes that in a $(d-1)$-dimensional hyperplane of the space~$R^d$, there are more than~$d$~points. The suggested procedure is bazed on the gift wrapping method. The peculiarity of the algorithm is that after finding the hyperplane of a next hyperface, one convexifies the subcollection of the points, which are located in the affine space of this hyperplane. This recursive transition into a subspace of a smaller dimension is applied at the situations, when the hyperface can be non-simplicial. During its construction, one accumulates information about its hyperedges, which is necessary for passing to neighbor hyperfaces. In general, the gift wrapping algorithm uses a breadth-first search in the graph, which vertices correspond to the hyperfaces of the convex hull and edges of the graph join vertices, which correspond to neighbor hyperfaces. The algorithm is realized as a computer program written in~C\# for the environment .NetCore..
 
 }
 
 \newpage
+
+\setcounter{page}{2}
 
 \def\contentsname{\centerline{СОДЕРЖАНИЕ}}
 \tableofcontents
@@ -219,7 +246,7 @@
 
 \medskip
 
-Тогда выбор первого ребра можно схематично представить шагами, изображёнными на рис.~\ref{fig:2D_1}--\ref{fig:2D_4}. Красная точка на рис.~\ref{fig:2D_1}~--- это $p_1$, лексикографически минимальная точка роя~$P$. На рис.~\ref{fig:2D_2} проведена прямая, параллельная оси $Oy$, и выбран вектор~$l_0$ (красная стрелка). yf hbc/~\ref{ig:2D_3} схематичнсо показан перебор точек роя в поисках второй вершины исходного ребра. Рис.~\ref{fig:2D_4} демонстрирует окончание этого процесса.
+Тогда выбор первого ребра можно схематично представить шагами, изображёнными на рис.~\ref{fig:2D_1}--\ref{fig:2D_4}. Красная точка на рис.~\ref{fig:2D_1}~--- это $p_1$, лексикографически минимальная точка роя~$P$. На рис.~\ref{fig:2D_2} проведена прямая, параллельная оси $Oy$, и выбран вектор~$l_0$ (красная стрелка). На рис.~\ref{fig:2D_3} схематично показан перебор точек роя в поисках второй вершины исходного ребра. Рис.~\ref{fig:2D_4} демонстрирует окончание этого процесса.
 
 \begin{figure}[t]
   {}\hfill%
