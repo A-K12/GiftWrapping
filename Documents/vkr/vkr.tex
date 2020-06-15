@@ -511,7 +511,7 @@
 Это платформа разработки общего назначения с открытым исходным кодом.
 На данной платформе можно реализовывать приложения под Windows, Linux и macOS с поддержкой процессоров x64, x86, ARM32 и ARM64. Платформа .Net Core поддерживает насколько языков программирования.
 
-В результате дипломной работы была разработана реализация алгоритма построения выпуклой оболочки многомерного роя точек, находящихся в необщем положении. Этот алгоритм приведён в листинге~\ref{alg:gift}.
+В результате дипломной работы была разработана реализация алгоритма построения выпуклой оболочки многомерного роя точек, находящихся в необщем положении.
 
 Далее будут рассмотрены классы и процедуры разработанной реализации.
 В конце главы, будут приведены замеры тестовых запусков алгоритма.
@@ -531,8 +531,6 @@ ConvexHull --- класс для хранения выпуклой оболоч�
 ConvexHull2D --- класс для хранения двухмерной выпуклой оболочки. Оболочку хранит как список точек, таж же для дальнейших выислений хранит списо ребер, представленный списоком экземпляров класса Edge.
 
 Edge --- класс для хранения информации о ребре двухмерной выпуклой оболочки. Наследует интерфейс ICell. Хранит две точки и инофрмацию о плоскости в виде экземпляра класса Hyperplane.
-
-Код интерфейсов и классов выпуклой оболочки представлен в приложении \ref{}.
 
 Для каждой грани выпуклой оболочки необходимо хранить данные о ее плоскости. Для этого был реализован класс Hyperplane.
 
@@ -566,7 +564,7 @@ Hyperplane хранит базис в виде массива векторов, 
 
 В алгоритме необходимо выполнять вычисления с точками, векторами и матрицами. Для этого был взят уже готовые классы, разработанные научным руководителем диссертации --- Кумковым С.С.. Классы позволяют хранить данные точек, векторов и матриц и выполнять основные математические операции с ними.
 
-При уходе в аффинное подпространство для построения выпуклой оболочки грани, необходимо сохранять связь между оринальными точками и точками аффинного подпространства. Это необходимо для дальшей обработки граней.  Для этого был разработан класс PlanePoint. Он позволяет сохранять ссылку на родительскую точку. В результате, после построения выпуклой оболочки аффинного подпространства, каждая точка грани будет хранит ссылку на оригинальную. Код класса PlanePoint представлен в приложении \ref{add:PlanePoint}.
+При уходе в аффинное подпространство для построения выпуклой оболочки грани, необходимо сохранять связь между оринальными точками и точками аффинного подпространства. Это необходимо для дальшей обработки граней.  Для этого был разработан класс PlanePoint. Он позволяет сохранять ссылку на родительскую точку. В результате, после построения выпуклой оболочки аффинного подпространства, каждая точка грани будет хранит ссылку на оригинальную.
 
 Для работы алгоритма неоходимо вычислять нормаль плоскости для каждой грани. Чтобы найти нормаль, необходимо решить недоопределенныю систему алгебраических линейных уравленний.  С этой целью был разработан впомогательный класс GaussWithChoiceSolveSystem, в котором реализован метод Гаусса.
 
@@ -626,8 +624,7 @@ Hyperplane хранит базис в виде массива векторов, 
 В резульате тестирования можно сделать следущие выводы.
 Наиболее сильная нагрзука возникает от размерности точек. Чем больше размерность точек, тем больше время выполнения.
 \newpage
-123123
-\newpage
+
 
 \section*{Заключение}
 \addcontentsline{toc}{section}{Заключение}
@@ -661,233 +658,7 @@ Hyperplane хранит базис в виде массива векторов, 
 
 \bibitem{bib:Bekl} Беклемишев Д. В. Курс аналитической геометрии и линейной алгебры.~--- М.: Наука, 2005.~--- 308~с.
 \end{thebibliography}
-\newpage
 
 
 \label{lastpage}
-\section*{Приложение 1}
-\label{add:PlanePoint}
-\addcontentsline{toc}{section}{Приложение 1}
-Класс "PlanePoint";
-
-\begin{lstlisting}[]
-public class PlanePoint:Point
-{
-    public Point OriginalPoint { get; }
-    private readonly PlanePoint _previousPoint;
-    public PlanePoint GetPoint(int dimension)
-    {
-        if (dimension == Dim) return this;
-        return _previousPoint.GetPoint(dimension) ??
-                throw new ArgumentException("There is no point of this dimension.");
-    }
-    public PlanePoint(double x, double y, double z) : base(new double[] { x, y, z })
-    {
-        OriginalPoint = new Point(new double[] {x, y, z});
-    }
-    public PlanePoint(int n, PlanePoint point) : base(n)
-    {
-        OriginalPoint = point.OriginalPoint;
-        _previousPoint = point;
-    }
-    public PlanePoint(double[] np, PlanePoint point) : base(np)
-    {
-        OriginalPoint = point.OriginalPoint;
-        _previousPoint = point;
-    }
-    public PlanePoint(Point p, PlanePoint point) : base(p)
-    {
-        OriginalPoint = point.OriginalPoint;
-        _previousPoint = point;
-    }
-    public PlanePoint(int n) : base(n)
-    {
-        OriginalPoint = new Point(n);
-    }
-    public PlanePoint(double[] np) : base(np)
-    {
-        OriginalPoint = new Point(np);
-    }
-    public PlanePoint(Point p) : base(p)
-    {
-        OriginalPoint = new Point(p);
-    }
-    public PlanePoint(PlanePoint p) : base(p)
-    {
-        OriginalPoint = p.OriginalPoint;
-        _previousPoint = p._previousPoint;
-    }
-    public override bool Equals(object obj)
-    {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
-        return Equals((PlanePoint)obj);
-    }
-    public bool Equals(PlanePoint other)
-    {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
-        return OriginalPoint.Equals(other.OriginalPoint);
-    }
-    public override int GetHashCode()
-    {
-        return OriginalPoint.GetHashCode();
-    }}
-\end{lstlisting}
-\newpage
-\section*{Приложение 2}
-\label{add:PlanePoint}
-\addcontentsline{toc}{section}{Приложение 1}
-Класс "ConvexHull";
-
-\begin{lstlisting}[]
-public class PlanePoint:Point
-{
-public class ConvexHull : IFace
-{
-    public int Dimension { get; }
-    public List<ICell> AdjacentCells { get; }
-    public IFace Parent { get; set; }
-    public List<ICell> InnerCells { get; }
-    public void AddAdjacentCell(ICell cell) => AdjacentCells.Add(cell);
-    public void AddInnerCell(ICell cell)
-    {
-        cell.Parent = this;
-        InnerCells.Add(cell);
-    }
-    public Hyperplane Hyperplane { get; set; }
-    public ConvexHull(int dimension)
-    {
-        Dimension = dimension;
-        InnerCells = new List<ICell>();
-        AdjacentCells = new List<ICell>();
-    }
-    public ConvexHull(Hyperplane hyperplane)
-    {
-        Hyperplane = hyperplane;
-        Dimension = hyperplane.Dimension;
-        InnerCells = new List<ICell>();
-        AdjacentCells = new List<ICell>();
-    }
-    public ICollection<PlanePoint> GetPoints()
-    {
-        HashSet<PlanePoint> points = new HashSet<PlanePoint>();
-        foreach (ICell innerFace in InnerCells)
-        {
-            points.UnionWith(innerFace.GetPoints());
-        }
-
-        return points;
-    }
-    public override bool Equals(object obj)
-    {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
-        return Equals((IFace) obj);
-    }
-    public override int GetHashCode()
-    {
-        int res = 0;
-        foreach (ICell cell in InnerCells)
-            res += cell.GetHashCode();
-
-        res += Dimension.GetHashCode();
-        return res;
-
-    }
-    public bool Equals(ICell other)
-    {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
-        if (other.GetType() != this.GetType()) return false;
-        ConvexHull convexHull = (ConvexHull)other;
-        return Dimension == other.Dimension &&
-                InnerCells.Count == convexHull.InnerCells.Count &&
-                GetPoints().All(other.GetPoints().Contains);
-    }}
-\end{lstlisting}
-\newpage
-\section*{Приложение 2}
-\label{add:PlanePoint}
-\addcontentsline{toc}{section}{Приложение 1}
-Класс "ConvexHull2D";
-
-\begin{lstlisting}[]
-  public class ConvexHull2d:IFace
-  {
-      private readonly List<PlanePoint> _points;
-      public int Dimension => 2;
-      public List<ICell> AdjacentCells { get; }
-      public List<ICell> InnerCells { get; }
-      public Hyperplane Hyperplane { get; set; }
-      public IFace Parent { get; set; }
-      public ConvexHull2d(IEnumerable<PlanePoint> points)
-      {
-          _points = new List<PlanePoint>(points);
-          AdjacentCells = new List<ICell>();
-          InnerCells = new List<ICell>(_points.Count);
-
-          ComputeData();
-      }
-      private void ComputeData()
-      {
-          Edge edge = new Edge(_points[^1], _points[0]);
-          edge.Hyperplane = HyperplaneHelper.Create(edge.GetPoints().ToArray());
-          edge.Hyperplane.SetOrientationNormal(_points);
-          AddInnerCell(edge);
-          for (int i = 0; i < _points.Count - 1; i++)
-          {
-              edge = new Edge(_points[i], _points[i + 1]);
-              edge.Hyperplane = HyperplaneHelper.Create(edge.GetPoints().ToList());
-              edge.Hyperplane.SetOrientationNormal(_points);
-              AddInnerCell(edge);
-          }
-      }
-      private void AddInnerCell(ICell cell)
-      {
-          cell.Parent = this;
-          InnerCells.Add(cell);
-      }
-      public void AddAdjacentCell(ICell cell)
-      {
-          if (cell.Dimension == Dimension)
-          {
-              AdjacentCells.Add(cell);
-          }
-      }
-      public ICollection<PlanePoint> GetPoints()
-      {
-          return _points;
-      }
-      public bool Equals(ICell other)
-      {
-          if (ReferenceEquals(null, other)) return false;
-          if (ReferenceEquals(this, other)) return true;
-          if (other.GetType() != this.GetType()) return false;
-          ConvexHull2d convexHull = (ConvexHull2d) other;
-          return Dimension == other.Dimension &&
-                 _points.Count == convexHull._points.Count &&
-                 _points.All(convexHull._points.Contains);
-      }
-      public override bool Equals(object obj)
-      {
-          if (ReferenceEquals(null, obj)) return false;
-          if (ReferenceEquals(this, obj)) return true;
-          if (obj.GetType() != this.GetType()) return false;
-          return Equals((ConvexHull2d)obj);
-      }
-      public override int GetHashCode()
-      {
-          int res = 0;
-          foreach (PlanePoint point in _points)
-              res += point.GetHashCode();
-          res += Dimension.GetHashCode();
-          return res;
-      }}
-\end{lstlisting}
-\newpage
-
-
 \end{document}
