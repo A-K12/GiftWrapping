@@ -35,24 +35,31 @@ namespace RunTest
             // };
 
             List<PlanePoint> points = new List<PlanePoint> {
-                new PlanePoint(new double[]{0, 0, 0}),
-                new PlanePoint(new double[]{ 100, 0, 0}),
-                new PlanePoint(new double[]{100, 100, 0}),
-                new PlanePoint(new double[]{0, 100, 0}),
-                new PlanePoint(new double[]{0, 0, 100}),
-                new PlanePoint(new double[]{ 100, 0, 100}),
-                new PlanePoint(new double[]{100, 100, 100}),
-                new PlanePoint(new double[]{0, 100, 100}),
-
+                new PlanePoint(new double[]{0, 0, 0, 0}),
+                new PlanePoint(new double[]{ 100, 0, 0, 0}),
+                new PlanePoint(new double[]{100, 100, 0, 0}),
+                new PlanePoint(new double[]{0, 100, 0, 0}),
+                new PlanePoint(new double[]{0, 0, 100, 0}),
+                new PlanePoint(new double[]{ 100, 0, 100, 0}),
+                new PlanePoint(new double[]{100, 100, 100, 0}),
+                new PlanePoint(new double[]{0, 100, 100, 0}),
+                new PlanePoint(new double[]{0, 0, 0, 100}),
+                new PlanePoint(new double[]{ 100, 0, 0,100}),
+                new PlanePoint(new double[]{100, 100, 0, 100}),
+                new PlanePoint(new double[]{0, 100, 0, 100}),
+                new PlanePoint(new double[]{0, 0, 100, 100}),
+                new PlanePoint(new double[]{ 100, 0, 100, 100}),
+                new PlanePoint(new double[]{100, 100, 100, 100}),
+                new PlanePoint(new double[]{0, 100, 100, 100}),
             };
 
             Random r = new Random();
-   
-            for (int i = 0; i < 100; i++)
+
+            for (int i = 0; i < 10; i++)
             {
-                points.Add(new PlanePoint(new double[] { r.Next(1,20), r.Next(1, 20), 100 }));
+                points.Add(new PlanePoint(new double[] { r.Next(1, 80), r.Next(1, 80), r.Next(1, 80), r.Next(1, 80) }));
             }
-      
+
 
             // List<PlanePoint> points = new List<PlanePoint> {
             //     new PlanePoint(new double[]{0, 0, 0, 0}),
@@ -122,7 +129,7 @@ namespace RunTest
             // new PlanePoint(new double[] { 10, 0, 10, 10 }),
             // new PlanePoint(new double[] { 0, 10, 10, 10 }),
             // new PlanePoint(new double[] { 10, 10, 10, 10 }),
-       
+
             //
             //     new PlanePoint(new double[]{5, 5, 5, 5}),
             //     new PlanePoint(new double[]{3, 3, 3, 3}),

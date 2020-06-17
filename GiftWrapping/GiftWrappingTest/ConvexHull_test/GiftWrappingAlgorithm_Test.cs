@@ -45,17 +45,17 @@ namespace GiftWrappingTest.ConvexHull_test
         [Test]
         public void FindFirstPlane_ReturnHyperplane()
         {
-            // PlanePoint[] points = new PlanePoint[] {
-            //      new PlanePoint(new double[]{1, 1, 1}),
-            //      new PlanePoint(new double[]{5, 1, 1}),
-            //      new PlanePoint(new double[]{1, 5, 1}),
-            //      new PlanePoint(new double[]{5, 5, 1}),
-            //      new PlanePoint(new double[]{1, 1, 5}),
-            //      new PlanePoint(new double[]{5, 1, 5}),
-            //      new PlanePoint(new double[]{1, 5, 5}),
-            //      new PlanePoint(new double[]{5, 5, 5}),
-            //      new PlanePoint(new double[]{3, 3, 3}),
-            //  };
+            PlanePoint[] points = new PlanePoint[] {
+                  new PlanePoint(new double[]{1, 1, 1}),
+                  new PlanePoint(new double[]{5, 1, 1}),
+                  new PlanePoint(new double[]{1, 5, 1}),
+                  new PlanePoint(new double[]{5, 5, 1}),
+                  new PlanePoint(new double[]{1, 1, 5}),
+                  new PlanePoint(new double[]{5, 1, 5}),
+                  new PlanePoint(new double[]{1, 5, 5}),
+                  new PlanePoint(new double[]{5, 5, 5}),
+                  new PlanePoint(new double[]{3, 3, 3}),
+              };
             // List<PlanePoint> points = new List<PlanePoint> {
             //      new PlanePoint(new double[]{1, 1, 1, 1}),
             //      new PlanePoint(new double[]{5, 1, 1, 1}),
@@ -81,41 +81,41 @@ namespace GiftWrappingTest.ConvexHull_test
             //     points.Add(new PlanePoint(new double[]{res,res,res,res}));
             // }
             //
-            PlanePoint[] points = new PlanePoint[]
-            {
-                new PlanePoint(new double[] {1, 1, 1, 1, 1}),
-                new PlanePoint(new double[] {5, 1, 1, 1, 1}),
-                new PlanePoint(new double[] {1, 5, 1, 1, 1}),
-                new PlanePoint(new double[] {5, 5, 1, 1, 1}),
-                new PlanePoint(new double[] {1, 1, 5, 1, 1}),
-                new PlanePoint(new double[] {5, 1, 5, 1, 1}),
-                new PlanePoint(new double[] {1, 5, 5, 1, 1}),
-                new PlanePoint(new double[] {5, 5, 5, 1, 1}),
-                new PlanePoint(new double[] {1, 1, 1, 5, 1}),
-                new PlanePoint(new double[] {5, 1, 1, 5, 1}),
-                new PlanePoint(new double[] {1, 5, 1, 5, 1}),
-                new PlanePoint(new double[] {5, 5, 1, 5, 1}),
-                new PlanePoint(new double[] {1, 1, 5, 5, 1}),
-                new PlanePoint(new double[] {5, 1, 5, 5, 1}),
-                new PlanePoint(new double[] {1, 5, 5, 5, 1}),
-                new PlanePoint(new double[] {5, 5, 5, 5, 1}),
-                new PlanePoint(new double[] {1, 1, 1, 1, 5}),
-                new PlanePoint(new double[] {5, 1, 1, 1, 5}),
-                new PlanePoint(new double[] {1, 5, 1, 1, 5}),
-                new PlanePoint(new double[] {5, 5, 1, 1, 5}),
-                new PlanePoint(new double[] {1, 1, 5, 1, 5}),
-                new PlanePoint(new double[] {5, 1, 5, 1, 5}),
-                new PlanePoint(new double[] {1, 5, 5, 1, 5}),
-                new PlanePoint(new double[] {5, 5, 5, 1, 5}),
-                new PlanePoint(new double[] {1, 1, 1, 5, 5}),
-                new PlanePoint(new double[] {5, 1, 1, 5, 5}),
-                new PlanePoint(new double[] {1, 5, 1, 5, 5}),
-                new PlanePoint(new double[] {5, 5, 1, 5, 5}),
-                new PlanePoint(new double[] {1, 1, 5, 5, 5}),
-                new PlanePoint(new double[] {5, 1, 5, 5, 5}),
-                new PlanePoint(new double[] {1, 5, 5, 5, 5}),
-                new PlanePoint(new double[] {5, 5, 5, 5, 5}),
-            };
+            //PlanePoint[] points = new PlanePoint[]
+            //{
+            //    new PlanePoint(new double[] {1, 1, 1, 1, 1}),
+            //    new PlanePoint(new double[] {5, 1, 1, 1, 1}),
+            //    new PlanePoint(new double[] {1, 5, 1, 1, 1}),
+            //    new PlanePoint(new double[] {5, 5, 1, 1, 1}),
+            //    new PlanePoint(new double[] {1, 1, 5, 1, 1}),
+            //    new PlanePoint(new double[] {5, 1, 5, 1, 1}),
+            //    new PlanePoint(new double[] {1, 5, 5, 1, 1}),
+            //    new PlanePoint(new double[] {5, 5, 5, 1, 1}),
+            //    new PlanePoint(new double[] {1, 1, 1, 5, 1}),
+            //    new PlanePoint(new double[] {5, 1, 1, 5, 1}),
+            //    new PlanePoint(new double[] {1, 5, 1, 5, 1}),
+            //    new PlanePoint(new double[] {5, 5, 1, 5, 1}),
+            //    new PlanePoint(new double[] {1, 1, 5, 5, 1}),
+            //    new PlanePoint(new double[] {5, 1, 5, 5, 1}),
+            //    new PlanePoint(new double[] {1, 5, 5, 5, 1}),
+            //    new PlanePoint(new double[] {5, 5, 5, 5, 1}),
+            //    new PlanePoint(new double[] {1, 1, 1, 1, 5}),
+            //    new PlanePoint(new double[] {5, 1, 1, 1, 5}),
+            //    new PlanePoint(new double[] {1, 5, 1, 1, 5}),
+            //    new PlanePoint(new double[] {5, 5, 1, 1, 5}),
+            //    new PlanePoint(new double[] {1, 1, 5, 1, 5}),
+            //    new PlanePoint(new double[] {5, 1, 5, 1, 5}),
+            //    new PlanePoint(new double[] {1, 5, 5, 1, 5}),
+            //    new PlanePoint(new double[] {5, 5, 5, 1, 5}),
+            //    new PlanePoint(new double[] {1, 1, 1, 5, 5}),
+            //    new PlanePoint(new double[] {5, 1, 1, 5, 5}),
+            //    new PlanePoint(new double[] {1, 5, 1, 5, 5}),
+            //    new PlanePoint(new double[] {5, 5, 1, 5, 5}),
+            //    new PlanePoint(new double[] {1, 1, 5, 5, 5}),
+            //    new PlanePoint(new double[] {5, 1, 5, 5, 5}),
+            //    new PlanePoint(new double[] {1, 5, 5, 5, 5}),
+            //    new PlanePoint(new double[] {5, 5, 5, 5, 5}),
+            //};
             //PlanePoint[] points = new PlanePoint[1000];
             //Random rnd = new Random();
             //for (int j = 0; j < points.Length; j++)
