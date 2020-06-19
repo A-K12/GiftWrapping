@@ -18,43 +18,34 @@ namespace GiftWrapping
             Vector[] mainBasis = GetFirstBasis(dim);
             bool[] availablePoints = new bool[points.Count];
             availablePoints[points.IndexOf(minPlanePoint)] = true;
+            Vector[] subBasis = mainBasis[1..^0];
+            Vector mainVector = mainBasis[0];
             for (int i = 0; i < dim - 1; i++)
             {
-                Vector[] basis = mainBasis.Where((_, i1) => i1 != i).ToArray();
-                Vector mainVector = mainBasis[i];
                 double minCos = double.MaxValue;
                 int processedPoint = default;
-                Vector[] nextBasis = default;
-                Vector normV = default;
+                Vector nextVector = default;
                 for (int j = 0; j < points.Count; j++)
                 {
                     if (availablePoints[j]) continue;
-                    Vector vector = Point.ToVector(minPlanePoint, points[j]);
-                    Vector ortVector = basis.GetOrthonormalVector(vector);
-                    if(Tools.EQ(ortVector.Length)) 
-                        continue;
-                    Vector[] tempBasis = SetVector(mainBasis, vector.Normalize(), i);
+                    Vector newVector = Point.ToVector(minPlanePoint, points[j]);
+                    Vector ortVector = subBasis.GetOrthonormalVector(newVector);
+                    if (Tools.EQ(ortVector.Length)) continue;
                     double newCos = ortVector.Cos(mainVector);
                     if (Tools.GT(newCos, minCos)) continue;
+                    nextVector = newVector;
                     processedPoint = j;
                     minCos = newCos;
-                    //normV = vector.Normalize();
-                    nextBasis = tempBasis;
                 }
                 availablePoints[processedPoint] = true;
-                mainBasis = nextBasis;
+                mainBasis[i] = nextVector;
+                if(i==dim-2) continue;
+                subBasis[i] = nextVector;
+                mainVector = subBasis.GetOrthonormalVector(mainBasis[i+1]);
             }
             Hyperplane plane = HyperplaneBuilder.Create(minPlanePoint, mainBasis);
             plane.SetOrientationNormal(points);
             return plane;
-        }
-
-        private Vector GetFirstNormal(int dimension)
-        {
-            double[] normal = new double[dimension];
-            normal[0] = -1;
-
-            return new Vector(normal);
         }
 
         private Vector[] GetFirstBasis(int dimension)
@@ -70,19 +61,5 @@ namespace GiftWrapping
             return vectors;
         }
 
-        private Vector[] SetVector(Vector[] vectors, Vector vector, int index)
-        {
-            Vector[] newVectors = (Vector[]) vectors.Clone();
-            newVectors[index] = vector;
-            return newVectors;
-        }
-
-        private Vector FindNormal(Vector[] basis)
-        {
-            Matrix leftSide = basis.ToHorizontalMatrix();
-            double[] rightSide = new double[basis.Length];
-
-            return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide);
-        }
     }
 }

@@ -35,5 +35,15 @@ namespace GiftWrapping
             }
 
         }
+
+        public static void WritePoints(this IEnumerable<PlanePoint> ch, string path, string name)
+        {
+            string writePath = Path.Combine(path, name + ".txt");
+            using StreamWriter sw = new StreamWriter(writePath, false, System.Text.Encoding.Default);
+            foreach (PlanePoint points in ch)
+            {
+                sw.WriteLine(points.ToString());
+            }
+        }
     }
 }

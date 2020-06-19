@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Transactions;
@@ -71,6 +72,11 @@ namespace GiftWrapping
             VectorComparer rere = new VectorComparer();
             while (unprocessedFaces.Any())
             {
+                //if (convexHull.InnerCells.Count > 8)
+                //{
+                //    Console.Out.WriteLine("123123");
+                //    points.WritePoints(@"D:\", "points21");
+                //}
                 (currentHull, processedPoints) = unprocessedFaces.Dequeue();
                 IEnumerable<PlanePoint> innerPoints = currentHull.GetPoints();
                 foreach (ICell cell in currentHull.InnerCells)
@@ -85,7 +91,6 @@ namespace GiftWrapping
                     }
                     double minCos = double.MaxValue;
                     Vector nextVector = default;
-                    int processedPoint = default;
                     for (int i = 0; i < points.Count; i++)
                     {
                         if(processedPoints[i]) continue;
@@ -95,7 +100,6 @@ namespace GiftWrapping
                             continue;
                         double newCos = newVector.Cos(innerVector);
                         if (Tools.GT(newCos, minCos)) continue;
-                        processedPoint = i;
                         minCos = newCos;
                         nextVector = newVector;
                     }
