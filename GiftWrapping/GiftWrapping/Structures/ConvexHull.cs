@@ -7,13 +7,11 @@ namespace GiftWrapping.Structures
     {
         public int Dimension { get; }
         public List<ICell> AdjacentCells { get; }
-        public IFace Parent { get; set; }
         public List<ICell> InnerCells { get; }
         public void AddAdjacentCell(ICell cell) => AdjacentCells.Add(cell);
 
         public void AddInnerCell(ICell cell)
         {
-            cell.Parent = this;
             InnerCells.Add(cell);
         } 
         public Hyperplane Hyperplane { get; set; }

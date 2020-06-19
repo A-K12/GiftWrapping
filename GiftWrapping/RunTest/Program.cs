@@ -53,17 +53,7 @@ namespace RunTest
                 new PlanePoint(new double[]{0, 100, 100, 100}),
             };
 
-            // List<PlanePoint> points = new List<PlanePoint> {
-            //     new PlanePoint(new double[]{0, 0, 0}),
-            //     new PlanePoint(new double[]{ 100, 0, 0}),
-            //     new PlanePoint(new double[]{100, 100, 0}),
-            //     new PlanePoint(new double[]{0, 100, 0}),
-            //     new PlanePoint(new double[]{0, 0, 100}),
-            //     new PlanePoint(new double[]{ 100, 0, 100}),
-            //     new PlanePoint(new double[]{100, 100, 100}),
-            //     new PlanePoint(new double[]{0, 100, 100}),
-            // };
-            //
+
             Random r = new Random();
             
             for (int i = 0; i < 1000; i++)

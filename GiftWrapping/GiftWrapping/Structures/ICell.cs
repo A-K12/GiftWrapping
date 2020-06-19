@@ -8,6 +8,5 @@ namespace GiftWrapping.Structures
         int Dimension { get; }
         Hyperplane Hyperplane { get; set; }
         ICollection<PlanePoint> GetPoints();
-        IFace Parent { get; set; }
     }
 }

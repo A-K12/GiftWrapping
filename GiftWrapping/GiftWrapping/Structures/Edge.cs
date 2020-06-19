@@ -9,7 +9,6 @@ namespace GiftWrapping.Structures
         private readonly PlanePoint[] _points;
         public int Dimension => 1;
         public Hyperplane Hyperplane { get; set; }
-        public IFace Parent { get; set; }
         public ICollection<PlanePoint> GetPoints()
         {
             return _points;

@@ -14,35 +14,34 @@ namespace GiftWrapping
         public Hyperplane FindFirstPlane(IList<PlanePoint> points)
         {
             int dim = points[0].Dim;
-            PlanePoint minPlanePoint = points.Min();
+            int minIndex = points.IndexOf( points.Min());
             Vector[] mainBasis = GetFirstBasis(dim);
             bool[] availableVectors = new bool[points.Count];
-            Vector[] vectors = points.Select(point => Point.ToVector(minPlanePoint, point)).ToArray();
+            Vector[] vectors = points.Select(point => Point.ToVector(points[minIndex], point)).ToArray();
+            availableVectors[minIndex] = true;
             Vector[] subBasis = mainBasis[1..^0];
             Vector mainVector = mainBasis[0];
             for (int i = 0; i < dim - 1; i++)
             {
                 double minCos = double.MaxValue;
-                int processedVector = default;
-                Vector nextVector = default;
+                int nextIndex = default;
                 for (int j = 0; j < vectors.Length; j++)
                 {
                     if (availableVectors[j]) continue;
-                    Vector ortVector = subBasis.GetOrthonormalVector(vectors[i]);
+                    Vector ortVector = subBasis.GetOrthonormalVector(vectors[j]);
                     if (Tools.EQ(ortVector.Length)) continue;
                     double newCos = ortVector.Cos(mainVector);
                     if (Tools.GT(newCos, minCos)) continue;
-                    nextVector = vectors[i];
-                    processedVector = j;
+                    nextIndex = j;
                     minCos = newCos;
                 }
-                availableVectors[processedVector] = true;
-                mainBasis[i] = nextVector;
-                if(i==dim-2) continue;
-                subBasis[i] = nextVector;
+                availableVectors[nextIndex] = true;
+                mainBasis[i] = vectors[nextIndex];
+                if (i==dim-2) continue;
+                subBasis[i] = vectors[nextIndex];
                 mainVector = subBasis.GetOrthonormalVector(mainBasis[i+1]);
             }
-            Hyperplane plane = HyperplaneBuilder.Create(minPlanePoint, mainBasis);
+            Hyperplane plane = HyperplaneBuilder.Create(points[minIndex], mainBasis);
             plane.SetOrientationNormal(points);
             return plane;
         }

@@ -15,7 +15,6 @@ namespace GiftWrapping.Structures
         public List<ICell> AdjacentCells { get; }
         public List<ICell> InnerCells { get; }
         public Hyperplane Hyperplane { get; set; }
-        public IFace Parent { get; set; }
         public ConvexHull2d(IEnumerable<PlanePoint> points)
         {
             _points = new List<PlanePoint>(points);
@@ -47,7 +46,6 @@ namespace GiftWrapping.Structures
 
         private void AddInnerCell(ICell cell)
         {
-            cell.Parent = this;
             InnerCells.Add(cell);
         }
 
