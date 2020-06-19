@@ -16,28 +16,27 @@ namespace GiftWrapping
             int dim = points[0].Dim;
             PlanePoint minPlanePoint = points.Min();
             Vector[] mainBasis = GetFirstBasis(dim);
-            bool[] availablePoints = new bool[points.Count];
-            availablePoints[points.IndexOf(minPlanePoint)] = true;
+            bool[] availableVectors = new bool[points.Count];
+            Vector[] vectors = points.Select(point => Point.ToVector(minPlanePoint, point)).ToArray();
             Vector[] subBasis = mainBasis[1..^0];
             Vector mainVector = mainBasis[0];
             for (int i = 0; i < dim - 1; i++)
             {
                 double minCos = double.MaxValue;
-                int processedPoint = default;
+                int processedVector = default;
                 Vector nextVector = default;
-                for (int j = 0; j < points.Count; j++)
+                for (int j = 0; j < vectors.Length; j++)
                 {
-                    if (availablePoints[j]) continue;
-                    Vector newVector = Point.ToVector(minPlanePoint, points[j]);
-                    Vector ortVector = subBasis.GetOrthonormalVector(newVector);
+                    if (availableVectors[j]) continue;
+                    Vector ortVector = subBasis.GetOrthonormalVector(vectors[i]);
                     if (Tools.EQ(ortVector.Length)) continue;
                     double newCos = ortVector.Cos(mainVector);
                     if (Tools.GT(newCos, minCos)) continue;
-                    nextVector = newVector;
-                    processedPoint = j;
+                    nextVector = vectors[i];
+                    processedVector = j;
                     minCos = newCos;
                 }
-                availablePoints[processedPoint] = true;
+                availableVectors[processedVector] = true;
                 mainBasis[i] = nextVector;
                 if(i==dim-2) continue;
                 subBasis[i] = nextVector;
