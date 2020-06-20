@@ -18,7 +18,7 @@ namespace GiftWrapping
             string writePath = Path.Combine(path, name + ".off");
             List<PlanePoint> points = ch.GetPoints().ToList();
             int countPoints = points.Count;
-            int countFaces = ch.InnerCells.Count();
+            int countFaces = ch.Faces.Count();
             using StreamWriter sw = new StreamWriter(writePath, false, System.Text.Encoding.Default);
             sw.WriteLine("OFF");
             sw.WriteLine(countPoints.ToString() + " " + countFaces.ToString() + " 0");
@@ -26,7 +26,7 @@ namespace GiftWrapping
             {
                 sw.WriteLine(planePoint.GetPoint(3).ToString());
             }
-            foreach (ICell cell in ch.InnerCells)
+            foreach (ICell cell in ch.Faces)
             {
                 ICollection<PlanePoint> facePoints = cell.GetPoints();
                 IEnumerable<int> indexes = facePoints.Select(point => points.IndexOf(point));

@@ -8,7 +8,7 @@ namespace GiftWrapping
 {
     public class GrahamScan2d:IAlgorithm
     {
-        public IFace FindConvexHull(IList<PlanePoint> points)
+        public IConvexHull FindConvexHull(IList<PlanePoint> points)
         {
           
             List<PlanePoint> sortPoints = points.ToList().MergeSort<PlanePoint>();

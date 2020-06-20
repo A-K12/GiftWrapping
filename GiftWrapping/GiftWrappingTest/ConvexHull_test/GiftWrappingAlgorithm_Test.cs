@@ -125,9 +125,9 @@ namespace GiftWrappingTest.ConvexHull_test
             //}
             GiftWrappingAlgorithmTestClass giftWrapping = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
             Stopwatch sp = new Stopwatch();
-            IFace result = giftWrapping.Create();
+            IConvexHull result = giftWrapping.Create();
             sp.Start();
-            IFace result1 = giftWrapping.Create();
+            IConvexHull result1 = giftWrapping.Create();
             sp.Stop();
             long first = sp.ElapsedMilliseconds;
 

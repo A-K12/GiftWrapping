@@ -5,6 +5,6 @@ namespace GiftWrapping
 {
     public interface IAlgorithm
     {
-        IFace FindConvexHull(IList<PlanePoint> points);
+        IConvexHull FindConvexHull(IList<PlanePoint> points);
     }
 }

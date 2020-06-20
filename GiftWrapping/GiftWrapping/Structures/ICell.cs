@@ -7,6 +7,7 @@ namespace GiftWrapping.Structures
     {
         int Dimension { get; }
         Hyperplane Hyperplane { get; set; }
+        List<ICell> AdjacentCells { get; }
         ICollection<PlanePoint> GetPoints();
     }
 }

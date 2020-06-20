@@ -8,60 +8,44 @@ using GiftWrapping.Helpers;
 
 namespace GiftWrapping.Structures
 {
-    public class ConvexHull2d:IFace 
+    public class ConvexHull2d:IConvexHull 
     {
+        public int Dimension { get; }
+        public List<ICell> Faces { get; }
         private readonly List<PlanePoint> _points;
-        public int Dimension => 2;
-        public List<ICell> AdjacentCells { get; set; }
-        public List<ICell> InnerCells { get; set; }
-        public Hyperplane Hyperplane { get; set; }
+
         public ConvexHull2d(IEnumerable<PlanePoint> points)
         {
+            Dimension = 2;
             _points = new List<PlanePoint>(points);
-            AdjacentCells = new List<ICell>();
-            InnerCells = new List<ICell>(_points.Count);
-            
+            Faces = new List<ICell>();
             ComputeData();
         }
         private void ComputeData()
         {
             Edge edge = new Edge(_points[^1], _points[0]);
             edge.Hyperplane = HyperplaneBuilder.Create(edge.GetPoints().ToArray());
-           // edge.Hyperplane.OrthonormalBasis();
             edge.Hyperplane.SetOrientationNormal(_points);
-            //InnerCells.Add(edge);
             AddInnerCell(edge);
             for (int i = 0; i < _points.Count - 1; i++)
             {
                 edge = new Edge(_points[i], _points[i + 1]);
                 edge.Hyperplane = HyperplaneBuilder.Create(edge.GetPoints().ToList());
-             //   edge.Hyperplane.OrthonormalBasis();
                 edge.Hyperplane.SetOrientationNormal(_points);
-               // InnerCells.Add(edge);
                 AddInnerCell(edge);
             }
-       
-
         }
-
+        
         private void AddInnerCell(ICell cell)
         {
-            InnerCells.Add(cell);
+            Faces.Add(cell);
         }
-
-        public void AddAdjacentCell(ICell cell)
-        {
-            if (cell.Dimension == Dimension)
-            {
-                AdjacentCells.Add(cell);
-            }
-        }
-
+        
         public ICollection<PlanePoint> GetPoints()
         {
             return _points;
         }
-
+        
         public bool Equals(ICell other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -72,8 +56,8 @@ namespace GiftWrapping.Structures
                    _points.Count == convexHull._points.Count &&
                    _points.All(convexHull._points.Contains);
         }
-
-
+        
+        
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -81,7 +65,7 @@ namespace GiftWrapping.Structures
             if (obj.GetType() != this.GetType()) return false;
             return Equals((ConvexHull2d)obj);
         }
-
+        
         public override int GetHashCode()
         {
             int res = 0;
@@ -89,7 +73,6 @@ namespace GiftWrapping.Structures
                 res += point.GetHashCode();
             res += Dimension.GetHashCode();
             return res;
- 
         }
     }
 }

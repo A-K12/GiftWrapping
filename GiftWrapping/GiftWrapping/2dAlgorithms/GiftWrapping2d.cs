@@ -7,7 +7,7 @@ namespace GiftWrapping
 {
     public class GiftWrapping2d:IAlgorithm
     {
-        public IFace FindConvexHull(IList<PlanePoint> points)
+        public IConvexHull FindConvexHull(IList<PlanePoint> points)
         {
             if (points.Count == 3)
             {

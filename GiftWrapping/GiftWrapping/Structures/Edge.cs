@@ -9,23 +9,24 @@ namespace GiftWrapping.Structures
         private readonly PlanePoint[] _points;
         public int Dimension => 1;
         public Hyperplane Hyperplane { get; set; }
+        public List<ICell> AdjacentCells { get; }
+
         public ICollection<PlanePoint> GetPoints()
         {
             return _points;
         }
-
-
-
         public Edge(PlanePoint p1, PlanePoint p2)
         {
             if (p1.Dim != p2.Dim) throw new ArgumentException("_points have different dimensions.");
             if (p1 == p2) throw new ArgumentException("Objects are equal.");
             _points = new[] {p1, p2};
+            AdjacentCells = new List<ICell>();
         }
 
         public Edge()
         {
             _points = new PlanePoint[2];
+            AdjacentCells = new List<ICell>();
         }
         public override int GetHashCode()
         {

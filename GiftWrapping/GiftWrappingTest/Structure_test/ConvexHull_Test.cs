@@ -39,15 +39,17 @@ namespace GiftWrappingTest.Structure_test
             ConvexHull2d c3 = p3.ToConvexHull2d();
             ConvexHull2d c4 = p4.ToConvexHull2d();
 
-            ConvexHull ch1 = new ConvexHull(3);
-            ch1.AddInnerCell(c1);
-            ch1.AddInnerCell(c2);
-
-            ConvexHull ch2 = new ConvexHull(3);
-            ch2.AddInnerCell(c3);
-            ch2.AddInnerCell(c4);
-
-            Assert.AreEqual(ch1, ch2);
+            // ConvexHull ch1 = new ConvexHull(3);
+            // ch1.Faces.Add(c1);
+            // ch1.AddInnerCell(c1);
+            // ch1.AddInnerCell(c2);
+            //
+            // ConvexHull ch2 = new ConvexHull(3);
+            // ch2.AddInnerCell(c3);
+            // ch2.AddInnerCell(c4);
+            //
+            // Assert.AreEqual(ch1, ch2);
+            Assert.Fail();
         }
 
 
@@ -67,20 +69,21 @@ namespace GiftWrappingTest.Structure_test
             ConvexHull2d c1 = p1.ToConvexHull2d();
             ConvexHull2d c2 = p2.ToConvexHull2d();
             ConvexHull ch1 = new ConvexHull(3);
-            ch1.AddInnerCell(c1);
-            ch1.AddInnerCell(c2);
-            PlanePoint[] expect = new PlanePoint[]{
-                new PlanePoint(new double[]{0, 0, 0, 0}),
-                new PlanePoint(new double[]{4, 0, 0, 0}),
-                new PlanePoint(new double[]{0, 4, 0, 0}),
-                new PlanePoint(new double[]{0, 0, 4, 0}),
-            };
-            Array.Sort(expect);
-            
-            Point[] actual = ch1.GetPoints().ToArray();
-            Array.Sort(actual);
-
-            Assert.AreEqual(expect, actual);
+            // ch1.AddInnerCell(c1);
+            // ch1.AddInnerCell(c2);
+            // PlanePoint[] expect = new PlanePoint[]{
+            //     new PlanePoint(new double[]{0, 0, 0, 0}),
+            //     new PlanePoint(new double[]{4, 0, 0, 0}),
+            //     new PlanePoint(new double[]{0, 4, 0, 0}),
+            //     new PlanePoint(new double[]{0, 0, 4, 0}),
+            // };
+            // Array.Sort(expect);
+            //
+            // Point[] actual = ch1.GetPoints().ToArray();
+            // Array.Sort(actual);
+            //
+            // Assert.AreEqual(expect, actual);
+            Assert.Fail();
         }
     }
 }

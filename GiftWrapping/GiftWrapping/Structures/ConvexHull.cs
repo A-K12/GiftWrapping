@@ -3,37 +3,15 @@ using System.Linq;
 
 namespace GiftWrapping.Structures
 {
-    public class ConvexHull : IFace
+    public class ConvexHull : IConvexHull
     {
         public int Dimension { get; }
-        public List<ICell> AdjacentCells { get; set; }
-        public List<ICell> InnerCells { get; set; }
-        public void AddAdjacentCell(ICell cell) => AdjacentCells.Add(cell);
+        public List<ICell> Faces { get; }
 
-        public void AddInnerCell(ICell cell)
-        {
-            InnerCells.Add(cell);
-        } 
-        public Hyperplane Hyperplane { get; set; }
- 
-        public ConvexHull(int dimension)
-        {
-            Dimension = dimension;
-            InnerCells = new List<ICell>();
-            AdjacentCells = new List<ICell>();
-        }
-
-        public ConvexHull(Hyperplane hyperplane)
-        {
-            Hyperplane = hyperplane;
-            Dimension = hyperplane.Dimension;
-            InnerCells = new List<ICell>();
-            AdjacentCells = new List<ICell>();
-        }
         public ICollection<PlanePoint> GetPoints()
         {
             HashSet<PlanePoint> points = new HashSet<PlanePoint>();
-            foreach (ICell innerFace in InnerCells)
+            foreach (ICell innerFace in Faces)
             {
                 points.UnionWith(innerFace.GetPoints());
             }
@@ -41,7 +19,15 @@ namespace GiftWrapping.Structures
             return points;
         }
 
-        
+        public void AddInnerCell(ICell cell)
+        {
+            Faces.Add(cell);
+        }
+        public ConvexHull(int dimension)
+        {
+            Dimension = dimension;
+            Faces = new List<ICell>();
+        }
 
         public override bool Equals(object obj)
         {
@@ -54,7 +40,7 @@ namespace GiftWrapping.Structures
         public override int GetHashCode()
         {
             int res = 0;
-            foreach (ICell cell in InnerCells)
+            foreach (ICell cell in Faces)
                 res += cell.GetHashCode();
             
             res += Dimension.GetHashCode();
@@ -69,8 +55,8 @@ namespace GiftWrapping.Structures
             if (other.GetType() != this.GetType()) return false;
             ConvexHull convexHull = (ConvexHull)other;
             return Dimension == other.Dimension &&
-                   InnerCells.Count == convexHull.InnerCells.Count &&
-                   GetPoints().All(other.GetPoints().Contains);
+                   Faces.Count == convexHull.Faces.Count &&
+            GetPoints().All(other.GetPoints().Contains);
         }
     }
 }

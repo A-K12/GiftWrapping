@@ -30,6 +30,17 @@ namespace RunTest
                 new PlanePoint(new double[]{0, 100, 100, 100}),
             };
 
+            // PlanePoint[] points = new PlanePoint[] {
+            //     new PlanePoint(new double[]{1, 1, 1}),
+            //     new PlanePoint(new double[]{5, 1, 1}),
+            //     new PlanePoint(new double[]{1, 5, 1}),
+            //     new PlanePoint(new double[]{5, 5, 1}),
+            //     new PlanePoint(new double[]{1, 1, 5}),
+            //     new PlanePoint(new double[]{5, 1, 5}),
+            //     new PlanePoint(new double[]{1, 5, 5}),
+            //     new PlanePoint(new double[]{5, 5, 5}),
+            //     new PlanePoint(new double[]{3, 3, 3}),
+            // };
 
             Random r = new Random();
             
@@ -42,7 +53,7 @@ namespace RunTest
             Stopwatch sp = new Stopwatch();
             Console.Out.WriteLine("Start");
             sp.Start();
-            IFace result1 = giftWrapping.Create();
+            IConvexHull result1 = giftWrapping.Create();
             sp.Stop();
             
              Console.Out.WriteLine("Stop");

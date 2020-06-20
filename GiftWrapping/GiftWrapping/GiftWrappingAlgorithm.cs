@@ -34,12 +34,12 @@ namespace GiftWrapping
             _points = points;
         }
 
-        public IFace Create()
+        public IConvexHull Create()
         {
             return FindConvexHull(_points);
         }
 
-        private IFace FindConvexHull(IList<PlanePoint> points)
+        private IConvexHull FindConvexHull(IList<PlanePoint> points)
         {
             int dim = points[0].Dim;
             if (dim == 2)
@@ -53,7 +53,7 @@ namespace GiftWrapping
             List<IFace> faces = new List<IFace>();
             Dictionary<Hyperplane, IFace> processedPlanes = new Dictionary<Hyperplane, IFace>(new HyperplaneComparer());
             Hyperplane firstPlane = _planeFinder.FindFirstPlane(points);
-            ConvexHull firstFace = new ConvexHull(firstPlane);
+            Face firstFace = new Face(firstPlane);
             processedPlanes.Add(firstPlane, firstFace);
             faces.Add(firstFace);
             for (int j = 0; j < faces.Count; j++)
@@ -67,24 +67,24 @@ namespace GiftWrapping
                     processedPoints[i] = true;
                     planePoints.Add(currentFace.Hyperplane.ConvertPoint(points[i]));
                 }
-                IFace newFace = FindConvexHull(planePoints);
-
+                IConvexHull newConvexHull = FindConvexHull(planePoints);
                 if (planePoints.Count == points.Count)
                 {
-                    return currentFace;
+                    return newConvexHull;
                 }
-                foreach (ICell cell in currentFace.InnerCells)
+                currentFace.ConvexHull = newConvexHull;
+                foreach (ICell cell in currentFace.ConvexHull.Faces)
                 {
                     double minCos = double.MaxValue;
                     Vector nextVector = default;
                     Hyperplane cellPlane = currentFace.Hyperplane;
                     Vector innerVector = cellPlane.ConvertVector(-cell.Hyperplane.Normal);
-                    PlanePoint mainPoint = cellPlane.MainPoint.GetPoint(dim);
+                    PlanePoint mainPoint = cell.Hyperplane.MainPoint.GetPoint(dim);
                     Vector[] edgeBasis = cell.Hyperplane.Basis.Select(cellPlane.ConvertVector).ToArray();
 
                     for (int i = 0; i < points.Count; i++)
                     {
-                        if(processedPoints[i]) continue;
+                        if (processedPoints[i]) continue;
                         Vector newVector = Point.ToVector(mainPoint, points[i]);
                         newVector = edgeBasis.GetOrthonormalVector(newVector);
                         if (Tools.EQ(newVector.Length)) continue;
@@ -101,14 +101,15 @@ namespace GiftWrapping
                     newFaceBasis[^1] = nextVector;
                     Hyperplane nextHyperplane = HyperplaneBuilder.Create(mainPoint, newFaceBasis);
                     nextHyperplane.SetOrientationNormal(planePoints);
-                    ConvexHull newConvexHull = new ConvexHull(nextHyperplane);
                     if (processedPlanes.TryGetValue(nextHyperplane,out IFace face))
                     {
                         face.AdjacentCells.Add(currentFace);
                         continue;
                     }
-                    processedPlanes.Add(nextHyperplane, newConvexHull);
-                    faces.Add(newConvexHull);
+
+                    Face newFace = new Face(nextHyperplane);
+                    processedPlanes.Add(nextHyperplane, newFace);
+                    faces.Add(newFace);
                     faces.Last().AdjacentCells.Add(currentFace);
                 }
             }
@@ -119,7 +120,7 @@ namespace GiftWrapping
             return convexHull;
         }
 
-        private IFace CreateSimplex(IList<PlanePoint> points)
+        private IConvexHull CreateSimplex(IList<PlanePoint> points)
         {
             int dim = points[0].Dim;
             if (dim == 2)
@@ -133,15 +134,15 @@ namespace GiftWrapping
                 Hyperplane hyperplane = HyperplaneBuilder.Create(planePoints);
                 List<PlanePoint> convertPoints = 
                     planePoints.Select((point => hyperplane.ConvertPoint(point))).ToList();
-                IFace face = CreateSimplex(convertPoints);
-                face.Hyperplane = hyperplane;
-                foreach (ICell f in convexHull.InnerCells)
+                Face newFace = new Face(hyperplane);
+                newFace.ConvexHull = CreateSimplex(convertPoints);
+                foreach (ICell f in newFace.ConvexHull.Faces)
                 {
-                    face.AddAdjacentCell((IFace)f);
-                    ((IFace)f).AddAdjacentCell(face);
+                    newFace.AdjacentCells.Add((IFace)f);
+                    ((IFace)f).AdjacentCells.Add(newFace);
                 }
 
-                convexHull.AddInnerCell(face);
+                convexHull.AddInnerCell(newFace);
             }
 
             return convexHull;
