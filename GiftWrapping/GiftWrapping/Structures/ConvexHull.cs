@@ -6,8 +6,8 @@ namespace GiftWrapping.Structures
     public class ConvexHull : IFace
     {
         public int Dimension { get; }
-        public List<ICell> AdjacentCells { get; }
-        public List<ICell> InnerCells { get; }
+        public List<ICell> AdjacentCells { get; set; }
+        public List<ICell> InnerCells { get; set; }
         public void AddAdjacentCell(ICell cell) => AdjacentCells.Add(cell);
 
         public void AddInnerCell(ICell cell)

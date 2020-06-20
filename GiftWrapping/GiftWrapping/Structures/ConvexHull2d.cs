@@ -12,8 +12,8 @@ namespace GiftWrapping.Structures
     {
         private readonly List<PlanePoint> _points;
         public int Dimension => 2;
-        public List<ICell> AdjacentCells { get; }
-        public List<ICell> InnerCells { get; }
+        public List<ICell> AdjacentCells { get; set; }
+        public List<ICell> InnerCells { get; set; }
         public Hyperplane Hyperplane { get; set; }
         public ConvexHull2d(IEnumerable<PlanePoint> points)
         {

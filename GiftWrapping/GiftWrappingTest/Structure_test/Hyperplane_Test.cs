@@ -26,7 +26,7 @@ namespace GiftWrappingTest.Structure_test
 
             double result = h1.Angle(h2);
 
-            Assert.AreEqual(expect, result, Constants.Esp);
+            Assert.AreEqual(expect, result, Tools.Eps);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace GiftWrappingTest.Structure_test
 
             double result = h1.Angle(h1);
 
-            Assert.AreEqual(expect, result, Constants.Esp);
+            Assert.AreEqual(expect, result, Tools.Eps);
         }
 
 

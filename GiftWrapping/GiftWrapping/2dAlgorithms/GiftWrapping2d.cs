@@ -20,10 +20,6 @@ namespace GiftWrapping
             bool[] processedPoint = new bool[points.Count];
             do
             {
-                //if (hullPoints.Count > 4)
-                //{
-
-                //}
                 hullPoints.Add(points[currentPlanePoint]);
                 double maxCos = double.MinValue;
                 double maxLen = double.MinValue;

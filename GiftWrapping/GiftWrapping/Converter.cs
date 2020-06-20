@@ -7,9 +7,9 @@ using GiftWrapping.Structures;
 
 namespace GiftWrapping
 {
-    public static class OffConverter
+    public static class Converter
     {
-        public static void Convert(this ConvexHull ch, string path, string name)
+        public static void ConvertToOff(this ConvexHull ch, string path, string name)
         {
             if (ch.Dimension != 3)
             {
@@ -36,7 +36,7 @@ namespace GiftWrapping
 
         }
 
-        public static void WritePoints(this IEnumerable<PlanePoint> ch, string path, string name)
+        public static void ConvertToTxt(this IEnumerable<PlanePoint> ch, string path, string name)
         {
             string writePath = Path.Combine(path, name + ".txt");
             using StreamWriter sw = new StreamWriter(writePath, false, System.Text.Encoding.Default);
