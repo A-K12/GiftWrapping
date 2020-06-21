@@ -40,7 +40,7 @@ namespace GiftWrappingTest.Structure_test
             ConvexHull2d c4 = p4.ToConvexHull2d();
 
             // ConvexHull ch1 = new ConvexHull(3);
-            // ch1.Faces.Add(c1);
+            // ch1.Cells.Add(c1);
             // ch1.AddInnerCell(c1);
             // ch1.AddInnerCell(c2);
             //

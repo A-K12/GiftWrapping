@@ -156,21 +156,55 @@ namespace GiftWrapping.Structures
             throw new ArgumentException("All points lie on the plane.");
         }
 
-        public void SetOrientationNormal(PlanePoint innerPoint)
+        public static Hyperplane Create(IList<PlanePoint> points)
         {
-            Vector vector = Point.ToVector(MainPoint, innerPoint);
-            double dotProduct = vector * Normal;
-            if (Tools.EQ(dotProduct)) throw new ArgumentException("The point lies on the plane.");
-            if (Tools.GT(dotProduct))
+            if (!points.HaveSameDimension())
             {
-                ReorientNormal();
+                throw new ArgumentException("Basis don't have same dimension");
             }
+            if (points.Count != points[0].Dim)
+            {
+                throw new ArgumentException("Number of points is not equal to dimension.");
+            }
+            Vector[] vectors = points.ToVectors();
+            Hyperplane hyperplane = Create(points.First(), vectors);
+
+
+            return hyperplane;
+        }
+        public static Hyperplane Create(PlanePoint point, Vector[] vectors)
+        {
+            if (!vectors.HaveSameDimension())
+            {
+                throw new ArgumentException("Vectors don't have same dimension");
+            }
+            if (point.Dim != vectors[0].Dim)
+            {
+                throw new ArgumentException("Vectors and points have different dimensions.");
+            }
+
+            Matrix leftSide = vectors.ToHorizontalMatrix();
+
+            Vector normal = ComputeNormal(leftSide);
+
+            return new Hyperplane(point, normal)
+            {
+                Basis = vectors.GetOrthonormalBasis()
+            };
         }
 
 
-        public IList<PlanePoint> FindPoints(IList<PlanePoint> points)
+        private static Vector ComputeNormal(Matrix leftSide)
         {
-            return points.Where(IsPointInPlane).Select(ConvertPoint).ToList();
+            Vector rightSide = new Vector(leftSide.Rows);
+            try
+            {
+                return GaussWithChoiceSolveSystem.FindAnswer(leftSide, rightSide);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("Vectors are linearly dependent");
+            }
         }
     }
 }

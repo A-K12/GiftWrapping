@@ -41,7 +41,7 @@ namespace GiftWrapping.Structures
         public override int GetHashCode()
         {
             int res = 0;
-            foreach (ICell cell in ConvexHull.Faces)
+            foreach (ICell cell in ConvexHull.Cells)
                 res += cell.GetHashCode();
 
             res += Dimension.GetHashCode();
@@ -56,7 +56,7 @@ namespace GiftWrapping.Structures
             if (other.GetType() != this.GetType()) return false;
             
             return Dimension == other.Dimension &&
-                   ConvexHull.Faces.Count == other.ConvexHull.Faces.Count &&
+                   ConvexHull.Cells.Count == other.ConvexHull.Cells.Count &&
                    GetPoints().All(other.GetPoints().Contains);
         }
 

@@ -6,7 +6,7 @@ namespace GiftWrapping.Structures
     public interface IConvexHull
     {
         public int Dimension { get; }
-        List<ICell> Faces { get; }
+        List<ICell> Cells { get; }
         ICollection<PlanePoint> GetPoints();
     }
 }

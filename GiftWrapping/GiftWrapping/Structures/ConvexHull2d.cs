@@ -11,26 +11,26 @@ namespace GiftWrapping.Structures
     public class ConvexHull2d:IConvexHull 
     {
         public int Dimension { get; }
-        public List<ICell> Faces { get; }
+        public List<ICell> Cells { get; }
         private readonly List<PlanePoint> _points;
 
         public ConvexHull2d(IEnumerable<PlanePoint> points)
         {
             Dimension = 2;
             _points = new List<PlanePoint>(points);
-            Faces = new List<ICell>();
+            Cells = new List<ICell>();
             ComputeData();
         }
         private void ComputeData()
         {
             Edge edge = new Edge(_points[^1], _points[0]);
-            edge.Hyperplane = HyperplaneBuilder.Create(edge.GetPoints().ToArray());
+            edge.Hyperplane = Hyperplane.Create(edge.GetPoints().ToArray());
             edge.Hyperplane.SetOrientationNormal(_points);
             AddInnerCell(edge);
             for (int i = 0; i < _points.Count - 1; i++)
             {
                 edge = new Edge(_points[i], _points[i + 1]);
-                edge.Hyperplane = HyperplaneBuilder.Create(edge.GetPoints().ToList());
+                edge.Hyperplane = Hyperplane.Create(edge.GetPoints().ToList());
                 edge.Hyperplane.SetOrientationNormal(_points);
                 AddInnerCell(edge);
             }
@@ -38,7 +38,7 @@ namespace GiftWrapping.Structures
         
         private void AddInnerCell(ICell cell)
         {
-            Faces.Add(cell);
+            Cells.Add(cell);
         }
         
         public ICollection<PlanePoint> GetPoints()

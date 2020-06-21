@@ -20,7 +20,7 @@ namespace GiftWrappingTest.Helpers_test
             Vector normal = new Vector(new double[] { -1, 0 });
             Hyperplane h2 = new Hyperplane(points[0], normal);
 
-            Hyperplane h = HyperplaneBuilder.Create(points);
+            Hyperplane h = Hyperplane.Create(points);
 
             Assert.AreEqual(h2, h);
         }
@@ -34,7 +34,7 @@ namespace GiftWrappingTest.Helpers_test
                 new PlanePoint(new double[] {1,1})
             };
 
-            Hyperplane h = HyperplaneBuilder.Create(points);
+            Hyperplane h = Hyperplane.Create(points);
 
             double y = h.Normal[0] * (-1);
             double t = 9 / y;

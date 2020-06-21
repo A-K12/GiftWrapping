@@ -6,12 +6,12 @@ namespace GiftWrapping.Structures
     public class ConvexHull : IConvexHull
     {
         public int Dimension { get; }
-        public List<ICell> Faces { get; }
+        public List<ICell> Cells { get; }
 
         public ICollection<PlanePoint> GetPoints()
         {
             HashSet<PlanePoint> points = new HashSet<PlanePoint>();
-            foreach (ICell innerFace in Faces)
+            foreach (ICell innerFace in Cells)
             {
                 points.UnionWith(innerFace.GetPoints());
             }
@@ -21,12 +21,12 @@ namespace GiftWrapping.Structures
 
         public void AddInnerCell(ICell cell)
         {
-            Faces.Add(cell);
+            Cells.Add(cell);
         }
         public ConvexHull(int dimension)
         {
             Dimension = dimension;
-            Faces = new List<ICell>();
+            Cells = new List<ICell>();
         }
 
         public override bool Equals(object obj)
@@ -40,7 +40,7 @@ namespace GiftWrapping.Structures
         public override int GetHashCode()
         {
             int res = 0;
-            foreach (ICell cell in Faces)
+            foreach (ICell cell in Cells)
                 res += cell.GetHashCode();
             
             res += Dimension.GetHashCode();
@@ -55,7 +55,7 @@ namespace GiftWrapping.Structures
             if (other.GetType() != this.GetType()) return false;
             ConvexHull convexHull = (ConvexHull)other;
             return Dimension == other.Dimension &&
-                   Faces.Count == convexHull.Faces.Count &&
+                   Cells.Count == convexHull.Cells.Count &&
             GetPoints().All(other.GetPoints().Contains);
         }
     }

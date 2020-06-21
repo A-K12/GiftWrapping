@@ -41,7 +41,7 @@ namespace GiftWrapping
                 subBasis[i] = vectors[nextIndex];
                 mainVector = subBasis.GetOrthonormalVector(mainBasis[i+1]);
             }
-            Hyperplane plane = HyperplaneBuilder.Create(points[minIndex], mainBasis);
+            Hyperplane plane = Hyperplane.Create(points[minIndex], mainBasis);
             plane.SetOrientationNormal(points);
             return plane;
         }
