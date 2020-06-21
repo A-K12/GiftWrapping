@@ -61,19 +61,11 @@ namespace GiftWrapping
         {
             int dim = points[0].Dim;
 
-            List<IFace> faces = new List<IFace>();
-            Dictionary<Hyperplane, IFace> processedPlanes = new Dictionary<Hyperplane, IFace>(new HyperplaneComparer());
-          
             Hyperplane firstPlane = _planeFinder.FindFirstPlane(points);
-            Face firstFace = new Face(firstPlane);
+            CuratorConvexHull curator = new CuratorConvexHull(firstPlane);
 
-            processedPlanes.Add(firstPlane, firstFace);
-            faces.Add(firstFace);
-          
-            for (int j = 0; j < faces.Count; j++)
+            foreach (IFace currentFace in curator.GetEmptyFaces())
             {
-                IFace currentFace = faces[j];
-
                 bool[] pointsMap = new bool[points.Count];
                 List<PlanePoint> planePoints = new List<PlanePoint>();
                 for (int i = 0; i < points.Count; i++)
@@ -114,23 +106,11 @@ namespace GiftWrapping
                     Hyperplane nextHyperplane = Hyperplane.Create(mainPoint, newFaceBasis);
                     nextHyperplane.SetOrientationNormal(planePoints);
 
-                    if (processedPlanes.TryGetValue(nextHyperplane, out IFace face))
-                    {
-                        face.AdjacentCells.Add(currentFace);
-                        continue;
-                    }
-                    Face newFace = new Face(nextHyperplane);
-                    newFace.AdjacentCells.Add(currentFace);
-
-                    processedPlanes.Add(nextHyperplane, newFace);
-                    faces.Add(newFace);
+                    curator.AddNewPlane(nextHyperplane, currentFace);
                 }
             }
 
-            ConvexHull convexHull = new ConvexHull(dim);
-            faces.ForEach((face => convexHull.AddInnerCell(face)));
-
-            return convexHull;
+            return curator.GetConvexHull();
         }
 
 
