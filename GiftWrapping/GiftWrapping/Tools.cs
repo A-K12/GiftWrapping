@@ -11,7 +11,7 @@ namespace GiftWrapping
     /// <summary>
     /// Absolute accuracy for comparison
     /// </summary>
-    static private double _eps = 1e-6;
+    static private double _eps = 1e-8;
 
     /// <summary>
     /// Property to deal with the accuracy

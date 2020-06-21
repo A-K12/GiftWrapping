@@ -16,7 +16,9 @@ namespace GiftWrappingTest.ConvexHull_test
         {
             GiftWrapping2d algorithm = new GiftWrapping2d();
 
-            return (ConvexHull2d)algorithm.FindConvexHull(points);
+            ConvexHull2d result = (ConvexHull2d)algorithm.FindConvexHull(points);
+
+            return result;
         }
 
         [Test, TestCaseSource("Get2dPoints")]
@@ -47,6 +49,7 @@ namespace GiftWrappingTest.ConvexHull_test
             ConvexHull2d expect1 = expectPoint1.ToConvexHull2d();
 
             yield return new TestCaseData(points1).SetName("{m}_When2dPoints").Returns(expect1);
+
             List<PlanePoint> points2 = new List<PlanePoint> {
                 new PlanePoint(new double[]{1, 1}),
                 new PlanePoint(new double[]{1, 5}),

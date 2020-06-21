@@ -23,7 +23,7 @@ namespace GiftWrapping
             _faces.Add(face);
         }
 
-        public IEnumerable<IFace> GetEmptyFaces()
+        public IEnumerable<IFace> GetFaces()
         {
             for (int i = 0; i < _faces.Count; i++)
             {

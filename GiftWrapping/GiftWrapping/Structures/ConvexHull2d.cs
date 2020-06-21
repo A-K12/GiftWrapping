@@ -46,18 +46,6 @@ namespace GiftWrapping.Structures
             return _points;
         }
         
-        public bool Equals(ICell other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            if (other.GetType() != this.GetType()) return false;
-            ConvexHull2d convexHull = (ConvexHull2d) other;
-            return Dimension == other.Dimension &&
-                   _points.Count == convexHull._points.Count &&
-                   _points.All(convexHull._points.Contains);
-        }
-        
-        
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -65,7 +53,19 @@ namespace GiftWrapping.Structures
             if (obj.GetType() != this.GetType()) return false;
             return Equals((ConvexHull2d)obj);
         }
-        
+
+        public bool Equals(ConvexHull2d other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            if (other.GetType() != this.GetType()) return false;
+            
+            return Dimension == other.Dimension &&
+                   _points.Count == other._points.Count &&
+                   _points.All(other._points.Contains);
+        }
+
+
         public override int GetHashCode()
         {
             int res = 0;

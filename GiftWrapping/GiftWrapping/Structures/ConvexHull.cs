@@ -34,7 +34,7 @@ namespace GiftWrapping.Structures
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((IFace) obj);
+            return Equals((ConvexHull) obj);
         }
 
         public override int GetHashCode()
@@ -48,7 +48,7 @@ namespace GiftWrapping.Structures
       
         }
 
-        public bool Equals(ICell other)
+        public bool Equals(ConvexHull other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -56,7 +56,7 @@ namespace GiftWrapping.Structures
             ConvexHull convexHull = (ConvexHull)other;
             return Dimension == other.Dimension &&
                    Cells.Count == convexHull.Cells.Count &&
-            GetPoints().All(other.GetPoints().Contains);
+            Cells.All(other.Cells.Contains);
         }
     }
 }

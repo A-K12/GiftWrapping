@@ -19,7 +19,7 @@ namespace GiftWrapping
         private readonly PlaneFinder _planeFinder;
         private readonly IAlgorithm _algorithm2d,_algorithmSimplex; 
 
-        public GiftWrappingAlgorithm(IList<PlanePoint> points)
+        public GiftWrappingAlgorithm(IList<PlanePoint> points, double eps = 1e-8)
         {
             if (points.Count < 3)
             {
@@ -30,6 +30,7 @@ namespace GiftWrapping
             {
                 throw new ArgumentException("Points have different dimensions.");
             }
+            Tools.Eps = eps;
             _planeFinder = new PlaneFinder();
             _algorithm2d = new GiftWrapping2d();
             _algorithmSimplex = new SimplexCreator();
@@ -64,7 +65,7 @@ namespace GiftWrapping
             Hyperplane firstPlane = _planeFinder.FindFirstPlane(points);
             CuratorConvexHull curator = new CuratorConvexHull(firstPlane);
 
-            foreach (IFace currentFace in curator.GetEmptyFaces())
+            foreach (IFace currentFace in curator.GetFaces())
             {
                 bool[] pointsMap = new bool[points.Count];
                 List<PlanePoint> planePoints = new List<PlanePoint>();

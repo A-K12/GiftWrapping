@@ -42,7 +42,7 @@ namespace GiftWrappingTest.ConvexHull_test
             yield return new TestCaseData(points).SetName("{m}_3dPoints");
         }
 
-        [Test]
+        [Test, Ignore("Sandbox")]
         public void FindFirstPlane_ReturnHyperplane()
         {
             PlanePoint[] points = new PlanePoint[] {
@@ -123,7 +123,7 @@ namespace GiftWrappingTest.ConvexHull_test
             //    double[] p = new double[]{rnd.Next(1,500), rnd.Next(250, 500), rnd.Next(500, 600)};
             //    points[j] = new PlanePoint(p);
             //}
-            GiftWrappingAlgorithmTestClass giftWrapping = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
+            GiftWrappingAlgorithm giftWrapping = new GiftWrappingAlgorithm(points);
             Stopwatch sp = new Stopwatch();
             IConvexHull result = giftWrapping.Create();
             sp.Start();
@@ -169,7 +169,7 @@ namespace GiftWrappingTest.ConvexHull_test
             };
             ConvexHull2d expect = expectPoint.ToConvexHull2d();
 
-            GiftWrappingAlgorithmTestClass giftWrapping = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
+            GiftWrappingAlgorithm giftWrapping = new GiftWrappingAlgorithm(points, Tools.Eps);
             
             GrahamScan2d per = new GrahamScan2d();
             
@@ -182,7 +182,7 @@ namespace GiftWrappingTest.ConvexHull_test
         [Test, TestCaseSource("Get2dPoints")]
         public ConvexHull2d FindConvexHull2D(IList<PlanePoint> points)
         {
-            GiftWrappingAlgorithmTestClass algorithm = new GiftWrappingAlgorithmTestClass(points, Tools.Eps);
+            GiftWrappingAlgorithm algorithm = new GiftWrappingAlgorithm(points, Tools.Eps);
 
             return (ConvexHull2d)algorithm.Create();
         }

@@ -57,7 +57,7 @@ namespace GiftWrapping.Structures
             
             return Dimension == other.Dimension &&
                    ConvexHull.Cells.Count == other.ConvexHull.Cells.Count &&
-                   GetPoints().All(other.GetPoints().Contains);
+                   ConvexHull.Equals(other.ConvexHull);
         }
 
     }
