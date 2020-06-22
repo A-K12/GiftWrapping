@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GiftWrapping.Structures;
 
@@ -6,11 +7,6 @@ namespace GiftWrapping.Structures
 {
     public class Face:IFace
     {
-        public bool Equals(ICell other)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public int Dimension { get; }
         public Hyperplane Hyperplane { get; set; }
         public List<ICell> AdjacentCells { get; }
@@ -25,7 +21,7 @@ namespace GiftWrapping.Structures
 
         public Face(Hyperplane hyperplane)
         {
-            Hyperplane = hyperplane;
+            Hyperplane = hyperplane ?? throw new ArgumentNullException(nameof(hyperplane));
             Dimension = hyperplane.Dimension;
             AdjacentCells = new List<ICell>();
         }
@@ -49,15 +45,15 @@ namespace GiftWrapping.Structures
 
         }
 
-        public bool Equals(Face other)
+        public bool Equals(ICell other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             if (other.GetType() != this.GetType()) return false;
             
             return Dimension == other.Dimension &&
-                   ConvexHull.Cells.Count == other.ConvexHull.Cells.Count &&
-                   ConvexHull.Equals(other.ConvexHull);
+                   ConvexHull.Cells.Count ==((Face)other).ConvexHull.Cells.Count &&
+                   ConvexHull.Equals(((Face)other).ConvexHull);
         }
 
     }

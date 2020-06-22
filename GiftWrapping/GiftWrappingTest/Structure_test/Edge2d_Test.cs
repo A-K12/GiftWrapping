@@ -78,7 +78,7 @@ namespace GiftWrappingTest.Structure_test
         }
 
         [Test]
-        public void Points_ContainsInsertedPoint()
+        public void GetPoints_ContainsInsertedPoint()
         {
             PlanePoint p1 = new PlanePoint(new double[] { 1, 1, 1, 0 });
             PlanePoint p2 = new PlanePoint(new double[] { 0, 0, 0, 0 });

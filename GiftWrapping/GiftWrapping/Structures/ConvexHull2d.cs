@@ -14,8 +14,10 @@ namespace GiftWrapping.Structures
         public List<ICell> Cells { get; }
         private readonly List<PlanePoint> _points;
 
-        public ConvexHull2d(IEnumerable<PlanePoint> points)
+        public ConvexHull2d(IList<PlanePoint> points)
         {
+            if (points == null) throw new ArgumentNullException(nameof(points));
+            if(points.Count < 3) throw  new ArgumentException("There are not enough points to build a convex hull.");
             Dimension = 2;
             _points = new List<PlanePoint>(points);
             Cells = new List<ICell>();
@@ -24,18 +26,18 @@ namespace GiftWrapping.Structures
         private void ComputeData()
         {
             Edge edge = new Edge(_points[^1], _points[0]);
-            edge.Hyperplane = Hyperplane.Create(edge.GetPoints().ToArray());
             edge.Hyperplane.SetOrientationNormal(_points);
             AddInnerCell(edge);
             for (int i = 0; i < _points.Count - 1; i++)
             {
                 edge = new Edge(_points[i], _points[i + 1]);
-                edge.Hyperplane = Hyperplane.Create(edge.GetPoints().ToList());
                 edge.Hyperplane.SetOrientationNormal(_points);
                 AddInnerCell(edge);
             }
         }
         
+        
+
         private void AddInnerCell(ICell cell)
         {
             Cells.Add(cell);

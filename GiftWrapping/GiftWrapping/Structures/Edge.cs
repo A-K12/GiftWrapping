@@ -21,6 +21,7 @@ namespace GiftWrapping.Structures
             if (p1 == p2) throw new ArgumentException("Objects are equal.");
             _points = new[] {p1, p2};
             AdjacentCells = new List<ICell>();
+            Hyperplane = Hyperplane.Create(_points);
         }
 
         public Edge()
