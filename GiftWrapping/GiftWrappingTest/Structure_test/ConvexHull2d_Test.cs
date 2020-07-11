@@ -13,10 +13,13 @@ namespace GiftWrappingTest.Structure_test
     [TestFixture]
     public class ConvexHull2d_Test
     {
-       
+        
+
+
         [Test, TestCaseSource("GetTestHulls")]
         public bool Equals_WhenCalls(ConvexHull2d ch1, ConvexHull2d ch2)
         {
+
             return ch1.Equals(ch2);
         }
 
